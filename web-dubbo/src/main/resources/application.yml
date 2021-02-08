@@ -1,0 +1,15 @@
+dubbo:
+  scan:
+    base-packages: org.cmcc.service
+  protocols:
+    dubbo:
+      name: dubbo
+      port: -1
+  registry:
+    address: spring-cloud://localhost
+  consumer:
+    timeout: 5000
+    check: off
+    retries: 0
+  cloud:
+    subscribed-services:

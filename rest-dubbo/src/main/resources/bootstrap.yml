@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: cmcc-rest-dubbo
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+      username: nacos
+      password: nacos
