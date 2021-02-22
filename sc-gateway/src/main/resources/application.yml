@@ -18,3 +18,9 @@ spring:
             - Path=/api-rest/**
           filters:
             - StripPrefix=1
+        - id: sftp
+          uri: lb://sftp-service
+          predicates:
+            - Path=/sftp-web/**
+          filters:
+            - StripPrefix=1
