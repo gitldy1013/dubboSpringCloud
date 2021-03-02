@@ -28,13 +28,17 @@ public class GatewayApp {
     @Bean
     public RouteLocator myRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route(p -> p.method(HttpMethod.GET,HttpMethod.POST).and()
-                        .path("/task/query")
-                        .filters(f -> f.addRequestHeader("Hello", "World"))
+                .route(p -> p.method(HttpMethod.GET, HttpMethod.POST).and()
+                        .path("/customerMsg/downMsg")
+//                        .filters(f -> f.addRequestHeader("Hello", "World"))
                         .uri("https://sms.liudongyang.top"))
-                .route(p -> p.method(HttpMethod.GET,HttpMethod.POST).and()
-                        .path("/task/old")
-                        .filters(f -> f.addRequestParameter("Hello", "World"))
+                .route(p -> p.method(HttpMethod.GET, HttpMethod.POST).and()
+                        .path("/customerMsg/upMsg")
+//                        .filters(f -> f.addRequestParameter("Hello", "World"))
+                        .uri("https://sms.liudongyang.top"))
+                .route(p -> p.method(HttpMethod.GET, HttpMethod.POST).and()
+                        .path("/customerMsg/upMsg1")
+//                        .filters(f -> f.addRequestParameter("Hello", "World"))
                         .uri("https://sms.liudongyang.top"))
                 .build();
     }
