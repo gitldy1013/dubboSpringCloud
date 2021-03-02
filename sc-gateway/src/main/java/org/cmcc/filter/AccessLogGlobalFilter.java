@@ -28,6 +28,9 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 记录请求日志
+ */
 @Slf4j
 @Component
 public class AccessLogGlobalFilter implements GlobalFilter {

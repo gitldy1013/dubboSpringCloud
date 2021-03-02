@@ -6,6 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 
 /**
  * @author cmcc
@@ -18,16 +19,22 @@ public class GatewayApp {
         SpringApplication.run(GatewayApp.class, args);
     }
 
+    /**
+     * 自定义转发规则 这里主要为了转发到不受nacos管理的rest服务
+     *
+     * @param builder
+     * @return
+     */
     @Bean
     public RouteLocator myRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route(p -> p
+                .route(p -> p.method(HttpMethod.GET,HttpMethod.POST).and()
                         .path("/task/query")
                         .filters(f -> f.addRequestHeader("Hello", "World"))
                         .uri("https://sms.liudongyang.top"))
-                .route(p -> p
+                .route(p -> p.method(HttpMethod.GET,HttpMethod.POST).and()
                         .path("/task/old")
-                        .filters(f -> f.addRequestHeader("Hello", "World"))
+                        .filters(f -> f.addRequestParameter("Hello", "World"))
                         .uri("https://sms.liudongyang.top"))
                 .build();
     }
