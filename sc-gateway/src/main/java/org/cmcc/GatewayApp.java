@@ -25,6 +25,10 @@ public class GatewayApp {
                         .path("/task/query")
                         .filters(f -> f.addRequestHeader("Hello", "World"))
                         .uri("https://sms.liudongyang.top"))
+                .route(p -> p
+                        .path("/task/old")
+                        .filters(f -> f.addRequestHeader("Hello", "World"))
+                        .uri("https://sms.liudongyang.top"))
                 .build();
     }
 }
