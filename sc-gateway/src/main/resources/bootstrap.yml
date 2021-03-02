@@ -1,5 +1,5 @@
 server:
-  port: 9900
+  port: 19900
 
 spring:
   application:
@@ -8,6 +8,6 @@ spring:
     allow-bean-definition-overriding: true
   cloud:
     nacos:
-      server-addr: localhost:8848
+      server-addr: 55.144.26.35:8848
       username: nacos
       password: nacos

@@ -31,15 +31,11 @@ public class GatewayApp {
                 .route(p -> p.method(HttpMethod.GET, HttpMethod.POST).and()
                         .path("/customerMsg/downMsg")
 //                        .filters(f -> f.addRequestHeader("Hello", "World"))
-                        .uri("https://sms.liudongyang.top"))
+                        .uri("http://55.144.26.35:18080"))
                 .route(p -> p.method(HttpMethod.GET, HttpMethod.POST).and()
                         .path("/customerMsg/upMsg")
 //                        .filters(f -> f.addRequestParameter("Hello", "World"))
-                        .uri("https://sms.liudongyang.top"))
-                .route(p -> p.method(HttpMethod.GET, HttpMethod.POST).and()
-                        .path("/customerMsg/upMsg1")
-//                        .filters(f -> f.addRequestParameter("Hello", "World"))
-                        .uri("https://sms.liudongyang.top"))
+                        .uri("http://55.144.26.35:18080"))
                 .build();
     }
 }
