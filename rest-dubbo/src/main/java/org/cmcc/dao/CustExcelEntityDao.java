@@ -1,6 +1,8 @@
 package org.cmcc.dao;
 
+import org.cmcc.dto.ExcelEntityDto;
 import org.cmcc.entity.ExcelEntity;
+import org.cmcc.utils.ExcelEntity2Dto;
 import org.hibernate.query.internal.NativeQueryImpl;
 import org.hibernate.query.spi.NativeQueryImplementor;
 import org.hibernate.transform.Transformers;
@@ -10,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,20 +23,19 @@ public class CustExcelEntityDao {
     private EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    public List<ExcelEntity> findTableSql(String tableName) {
+    public ExcelEntity findTableSql(String tableName) {
         String sql = "show create table " + tableName;
         //创建本地查询
         Query nativeQuery = entityManager.createNativeQuery(sql);
         List<Object[]> resultList = nativeQuery.getResultList();
-        ArrayList<ExcelEntity> excelEntities = new ArrayList<>();
         //用ExcelEntity包装
         for (Object[] objects : resultList) {
             ExcelEntity excelEntity = new ExcelEntity();
             excelEntity.setTableName((String) objects[0]);
             excelEntity.setTableSql((String) objects[1]);
-            excelEntities.add(excelEntity);
+            return excelEntity;
         }
-        return excelEntities;
+        return null;
     }
 
     @Transactional(readOnly = true)
@@ -47,5 +48,17 @@ public class CustExcelEntityDao {
                 .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         List<Map<String, Object>> resultMap = nativeQueryImplementor.getResultList();
         return resultMap;
+    }
+
+    public LinkedHashMap<String, ExcelEntityDto> showTables() {
+        String sql = "show tables";
+        //创建本地查询
+        Query nativeQuery = entityManager.createNativeQuery(sql);
+        List<String> resultList = nativeQuery.getResultList();
+        LinkedHashMap<String, ExcelEntityDto> excelEntitiesMap = new LinkedHashMap<>();
+        for (String objects : resultList) {
+            excelEntitiesMap.put(objects, ExcelEntity2Dto.excel2Dto(findTableSql(objects)));
+        }
+        return excelEntitiesMap;
     }
 }

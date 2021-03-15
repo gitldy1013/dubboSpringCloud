@@ -7,16 +7,15 @@ import org.cmcc.entity.ExcelEntity;
 import org.cmcc.utils.ExcelEntity2Dto;
 import org.cmcc.utils.ExportExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service(protocol = "rest")
 @Path("/excel")
@@ -28,18 +27,25 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     @Override
     @Path("export/{tableName}")
     @POST
-    public String excelExport(@PathParam("tableName") String tableName, @RequestParam("colms[]") String... colms) {
-        List<ExcelEntity> tableSql = custExcelEntityDao.findTableSql(tableName);
-        ExcelEntity excelEntity = tableSql.get(0);
-        ExcelEntityDto excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity);
-        LinkedHashMap<String, String> collect = (LinkedHashMap<String, String>) excelEntityDto.getColms().entrySet().stream().filter((e) -> Arrays.asList(colms).contains(e.getKey())).collect(Collectors.toMap(
-                (e) -> (String) e.getKey(),
-                Map.Entry::getValue
-        ));
-        LinkedHashMap<String, String> hashMap = collect;
-        List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColms(tableName, hashMap);
-        new ExportExcelUtil().exportData("", null, hashMap, data, "D://" + tableName + ".xls");
+    public String excelExport(@PathParam("tableName") String tableName, @RequestBody(required = false) String... colms) {
+        ExcelEntity excelEntity = custExcelEntityDao.findTableSql(tableName);
+        ExcelEntityDto excelEntityDto;
+        if (colms != null && colms.length != 0) {
+            excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity, colms);
+        } else {
+            excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity);
+        }
+        LinkedHashMap<String, String> colmsMap = excelEntityDto.getColms();
+        List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColms(tableName, colmsMap);
+        new ExportExcelUtil().exportData("", null, colmsMap, data, "D://" + tableName + ".xlsx");
         return data.toString();
+    }
+
+    @Path("/list")
+    @GET
+    public LinkedHashMap<String, ExcelEntityDto> showTables() {
+        LinkedHashMap<String, ExcelEntityDto> excelEntities = custExcelEntityDao.showTables();
+        return excelEntities;
     }
 
 }

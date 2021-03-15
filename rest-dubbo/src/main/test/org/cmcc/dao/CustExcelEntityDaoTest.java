@@ -24,12 +24,9 @@ public class CustExcelEntityDaoTest {
 
     @Test
     public void findTableSql() {
-        List<ExcelEntity> tableSql = excelEntityDao.findTableSql("excel_entity");
-        for (int i = 0; i < tableSql.size(); i++) {
-            ExcelEntity excelEntity = tableSql.get(i);
-            ExcelEntityDto excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity);
-            System.out.println(excelEntityDto);
-        }
+        ExcelEntity tableSql = excelEntityDao.findTableSql("excel_entity");
+        ExcelEntityDto excelEntityDto = ExcelEntity2Dto.excel2Dto(tableSql);
+        System.out.println(excelEntityDto);
     }
 
     @Test
@@ -43,13 +40,10 @@ public class CustExcelEntityDaoTest {
 
     @Test
     public void excelExport() {
-        List<ExcelEntity> tableSql = excelEntityDao.findTableSql("excel_entity");
+        ExcelEntity tableSql = excelEntityDao.findTableSql("excel_entity");
         LinkedHashMap<String, String> hashMap = new LinkedHashMap<>();
-        for (int i = 0; i < tableSql.size(); i++) {
-            ExcelEntity excelEntity = tableSql.get(i);
-            ExcelEntityDto excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity);
-            hashMap = excelEntityDto.getColms();
-        }
+        ExcelEntityDto excelEntityDto = ExcelEntity2Dto.excel2Dto(tableSql);
+        hashMap = excelEntityDto.getColms();
         List<Map<String, Object>> data = excelEntityDao.findByTableNameAndColms("excel_entity", hashMap);
         new ExportExcelUtil().exportData("", null, hashMap, data, "D://excel_entity.xls");
     }

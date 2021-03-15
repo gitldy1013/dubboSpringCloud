@@ -1,11 +1,14 @@
 package org.cmcc.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.cmcc.dto.ExcelEntityDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.LinkedHashMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -17,9 +20,17 @@ public class ExcelExportServiceImplTest {
 
     @Test
     public void excelExport() {
-        String[] colms = new String[1];
-        colms[0] = "table_name";
+        String[] colms = new String[3];
+        colms[0] = "id";
+        colms[1] = "table_sql";
+        colms[2] = "table_name";
         String excel_entity = excelExportService.excelExport("excel_entity", colms);
         System.out.println(excel_entity);
+    }
+
+    @Test
+    public void showTables() {
+        LinkedHashMap<String, ExcelEntityDto> s = excelExportService.showTables();
+        System.out.println(s);
     }
 }

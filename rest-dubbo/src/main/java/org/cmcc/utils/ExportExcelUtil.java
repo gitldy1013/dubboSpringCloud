@@ -136,7 +136,7 @@ public class ExportExcelUtil {
                 log.error(e.getMessage());
             }
         }
-        log.error("导出花费时间：" + (System.currentTimeMillis() - start) + "ms");
+        log.info("导出花费时间：" + (System.currentTimeMillis() - start) + "ms");
     }
 
     /**
