@@ -50,33 +50,28 @@
 </head>
 <body>
 <h2 style="text-align: center">通用表格数据导出工具</h2>
-<h4 style="text-align: center">勾选想导出的表字段（不勾选导出所有表字段）</h4>
+<h6 style="text-align: center">提示：不勾选导出所有表字段</h6>
 <div class="container">
-    <form class="form-inline">
-        <div>
-            <div class="form-group">
-                <label for="sftpUser">用户</label>
-                <input type="text" class="form-control required" id="sftpUser" placeholder="用户">
-            </div>
-            <div class="form-group">
-                <label for="sftpPwd">密码</label>
-                <input type="text" class="form-control required" id="sftpPwd" placeholder="密码">
-            </div>
-            <div class="form-group">
-                <label for="sftpDir">目录</label>
-                <input type="text" class="form-control required" id="sftpDir" placeholder="目录">
-            </div>
+    <div style="text-align: center">
+        <div class="col-xs-2">
+            <input type="text" class="form-control" id="sftpUser" placeholder="用户名">
         </div>
-        <div class="form-group">
-            <label for="sftpHost">地址</label>
-            <input type="text" class="form-control required" id="sftphost" placeholder="地址">
+        <div class="col-xs-2">
+            <input type="text" class="form-control" id="sftpPwd" placeholder="密码">
         </div>
-        <div class="form-group">
-            <label for="sftpPort">端口</label>
-            <input type="text" class="form-control required" id="sftpPort" placeholder="端口">
+        <div class="col-xs-2">
+            <input type="text" class="form-control" id="sftpDir" placeholder="目录">
         </div>
-        <button type="button" onclick="doCheck()" class="btn btn-default">连接测试</button>
-    </form>
+        <div class="col-xs-2">
+            <input type="text" class="form-control" id="sftphost" placeholder="地址">
+        </div>
+        <div class="col-xs-2">
+            <input type="text" class="form-control" id="sftpPort" placeholder="端口">
+        </div>
+        <div class="col-xs-2">
+            <button type="button" onclick="doCheck()" class="btn btn-default">连接测试</button>
+        </div>
+    </div>
     <table class="table table-hover table-expandable">
         <thead>
         <tr>
@@ -169,7 +164,7 @@
                 for (var data in result) {
                     $(".table").append("<tr id='" + result[data].tableName + "'><td>" + result[data].tableName + "</td>" +
                         "<td><div class='RadioStyle'><div id='" + result[data].tableName + "colum' class='Block PaddingL'></div></div></td>" +
-                        "<td><button type='button' class='btn btn-primary' onclick='doTab(\"" + result[data].tableName + "\")'>预览</button></td>" +
+                        "<td><button type='button' class='btn btn-info' onclick='doTab(\"" + result[data].tableName + "\")'>预览</button></td>" +
                         "<td><button type='button' class='btn btn-primary' onclick='doUp(\"" + result[data].tableName + "\")'>上传</button></td></tr>");
                     for (var colum in result[data].colms) {
                         $("#" + result[data].tableName + "colum").append(
