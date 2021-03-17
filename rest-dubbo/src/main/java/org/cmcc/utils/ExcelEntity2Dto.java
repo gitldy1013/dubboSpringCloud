@@ -33,13 +33,13 @@ public class ExcelEntity2Dto {
     public static ExcelEntityDto excel2Dto(ExcelEntity excelEntity) {
         String tableSql = excelEntity.getTableSql();
         String colmsStr = tableSql.substring(tableSql.indexOf("(") + 1, tableSql.lastIndexOf(")"));
-        String[] colms = colmsStr.split(",");
+        String[] colms = colmsStr.split(",\n");
         ExcelEntityDto excelEntityDto = new ExcelEntityDto();
         LinkedHashMap<String, String> colmsMap = new LinkedHashMap<>();
         for (int i = 0; i < colms.length; i++) {
             if (colms[i].trim().startsWith("`")) {
                 String key = colms[i].substring(colms[i].indexOf("`") + 1, colms[i].lastIndexOf("`"));
-                String value = colms[i].substring(colms[i].indexOf("'") + 1, colms[i].lastIndexOf("'"));
+                String value = colms[i].substring(colms[i].indexOf("COMMENT '") + 9, colms[i].lastIndexOf("'"));
                 colmsMap.put(key, value);
             }
         }
