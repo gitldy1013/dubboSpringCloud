@@ -1,8 +1,8 @@
 package org.cmcc.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cmcc.dto.ExcelEntityDto;
 import org.cmcc.entity.ExcelEntity;
+import org.cmcc.service.dto.ExcelEntityDto;
 
 import java.util.LinkedHashMap;
 

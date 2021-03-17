@@ -1,8 +1,8 @@
 package org.cmcc.dao;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cmcc.dto.ExcelEntityDto;
 import org.cmcc.entity.ExcelEntity;
+import org.cmcc.service.dto.ExcelEntityDto;
 import org.cmcc.utils.ExcelEntity2Dto;
 import org.cmcc.utils.ExportExcelUtil;
 import org.junit.Test;
@@ -41,9 +41,8 @@ public class CustExcelEntityDaoTest {
     @Test
     public void excelExport() {
         ExcelEntity tableSql = excelEntityDao.findTableSql("excel_entity");
-        LinkedHashMap<String, String> hashMap = new LinkedHashMap<>();
         ExcelEntityDto excelEntityDto = ExcelEntity2Dto.excel2Dto(tableSql);
-        hashMap = excelEntityDto.getColms();
+        LinkedHashMap<String, String> hashMap = excelEntityDto.getColms();
         List<Map<String, Object>> data = excelEntityDao.findByTableNameAndColms("excel_entity", hashMap);
         new ExportExcelUtil().exportData("", null, hashMap, data, "D://excel_entity.xls");
     }

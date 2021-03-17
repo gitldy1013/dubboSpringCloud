@@ -1,7 +1,7 @@
 package org.cmcc.dao;
 
-import org.cmcc.dto.ExcelEntityDto;
 import org.cmcc.entity.ExcelEntity;
+import org.cmcc.service.dto.ExcelEntityDto;
 import org.cmcc.utils.ExcelEntity2Dto;
 import org.hibernate.query.internal.NativeQueryImpl;
 import org.hibernate.query.spi.NativeQueryImplementor;
