@@ -67,7 +67,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         if (checkConn(dir, username, host, port, pwd)) {
             return "连接测试成功";
         } else {
-            return "连接测试失败:创建远程目录失败";
+            return "连接测试失败";
         }
     }
 

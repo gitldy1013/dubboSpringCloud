@@ -44,27 +44,29 @@ public class SFTPUtils {
         boolean res = true;
         try {
             sftp = new SFTPUtils();
-            sftp.connect(username, host, port, password, key);
-            if (OPERATE_UPLOAD.equals(operateType)) {
-                for (String s : fileName) {
-                    if (sftp.uploadFile(remotePath, s, localPath, s)) {
-                        log.info(s + "上传成功");
-                    } else {
-                        log.info(s + "上传失败");
-                        res = false;
+            boolean connect = sftp.connect(username, host, port, password, key);
+            if (connect) {
+                if (OPERATE_UPLOAD.equals(operateType)) {
+                    for (String s : fileName) {
+                        if (sftp.uploadFile(remotePath, s, localPath, s)) {
+                            log.info(s + "上传成功");
+                        } else {
+                            log.info(s + "上传失败");
+                            res = false;
+                        }
                     }
-                }
-            } else if (OPERATE_DOWNLOAD.equals(operateType)) {
-                for (String s : fileName) {
-                    if (sftp.downloadFile(remotePath, s, localPath, s)) {
-                        log.info(s + "下载成功");
-                    } else {
-                        log.info(s + "下载失败");
-                        res = false;
+                } else if (OPERATE_DOWNLOAD.equals(operateType)) {
+                    for (String s : fileName) {
+                        if (sftp.downloadFile(remotePath, s, localPath, s)) {
+                            log.info(s + "下载成功");
+                        } else {
+                            log.info(s + "下载失败");
+                            res = false;
+                        }
                     }
+                } else {
+                    log.info("操作类型不在已知的范围内");
                 }
-            } else {
-                log.info("操作类型不在已知的范围内");
             }
         } catch (Exception e) {
             res = false;
@@ -103,17 +105,19 @@ public class SFTPUtils {
         SFTPUtils sftp = null;
         try {
             sftp = new SFTPUtils();
-            sftp.connect(username, host, port, password, key);
-            if (OPERATE_UPLOAD.equals(operateType)) {
-                return sftp.uploadFile(remotePath, remoteFileName, localPath, localFileName);
-            } else if (OPERATE_DOWNLOAD.equals(operateType)) {
-                return sftp.downloadFile(remotePath, remoteFileName, localPath, localFileName);
-            } else if (OPERATE_MKDIR.equals(operateType)) {
-                return sftp.createDir(remotePath);
-            } else if (OPERATE_CHECK.equals(operateType)) {
-                return true;
-            } else {
-                log.info("操作类型不在已知的范围内");
+            boolean connect = sftp.connect(username, host, port, password, key);
+            if (connect) {
+                if (OPERATE_UPLOAD.equals(operateType)) {
+                    return sftp.uploadFile(remotePath, remoteFileName, localPath, localFileName);
+                } else if (OPERATE_DOWNLOAD.equals(operateType)) {
+                    return sftp.downloadFile(remotePath, remoteFileName, localPath, localFileName);
+                } else if (OPERATE_MKDIR.equals(operateType)) {
+                    return sftp.createDir(remotePath);
+                } else if (OPERATE_CHECK.equals(operateType)) {
+                    return true;
+                } else {
+                    log.info("操作类型不在已知的范围内");
+                }
             }
         } catch (Exception e) {
             log.error("异常:" + e);
@@ -168,7 +172,7 @@ public class SFTPUtils {
     /**
      * 通过SFTP连接服务器
      */
-    private void connect(String username, String host, String port, String password, String key) {
+    private boolean connect(String username, String host, String port, String password, String key) {
         try {
             JSch jsch = new JSch();
             if (StringUtils.isNotEmpty(key)) {
@@ -188,8 +192,10 @@ public class SFTPUtils {
             log.info("Opening Channel.");
             sftp = (ChannelSftp) channel;
             log.info("Connected to " + host + ".");
+            return true;
         } catch (Exception e) {
             log.error("异常:" + e);
+            return false;
         }
     }
 
