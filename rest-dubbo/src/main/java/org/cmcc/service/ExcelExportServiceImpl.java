@@ -34,7 +34,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     private CustExcelEntityDao custExcelEntityDao;
     //    private String separator = File.separator;
     private String separator = "/";
-    private String path = "D://";
+    private String path = "D://TEMP";
 
     @Override
     @Path("export/{tableName}")
@@ -80,7 +80,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         try {
             String[] tbn = {tableName + ".xlsx"};
             if (isBatchUpOrDownload(dir, username, host, port, pwd, tbn)) {
-                FileUtils.deleteDirectory(new File(tbn[0]));
+                FileUtils.deleteDirectory(new File(path));
                 return "上传成功";
             } else {
                 return "上传失败";

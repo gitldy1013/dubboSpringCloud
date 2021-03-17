@@ -41,7 +41,7 @@ public class SFTPUtils {
             String operateType,
             String... fileName) {
         SFTPUtils sftp = null;
-        boolean res = true;
+        boolean res = false;
         try {
             sftp = new SFTPUtils();
             boolean connect = sftp.connect(username, host, port, password, key);
@@ -50,18 +50,18 @@ public class SFTPUtils {
                     for (String s : fileName) {
                         if (sftp.uploadFile(remotePath, s, localPath, s)) {
                             log.info(s + "上传成功");
+                            res = true;
                         } else {
                             log.info(s + "上传失败");
-                            res = false;
                         }
                     }
                 } else if (OPERATE_DOWNLOAD.equals(operateType)) {
                     for (String s : fileName) {
                         if (sftp.downloadFile(remotePath, s, localPath, s)) {
                             log.info(s + "下载成功");
+                            res = true;
                         } else {
                             log.info(s + "下载失败");
-                            res = false;
                         }
                     }
                 } else {
