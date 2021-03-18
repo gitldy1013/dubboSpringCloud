@@ -1,0 +1,11 @@
+ul, li {
+    list-style-type: none;
+}
+
+.sortable li {
+    float: left;
+}
+
+style {
+    background-color: aqua
+}
