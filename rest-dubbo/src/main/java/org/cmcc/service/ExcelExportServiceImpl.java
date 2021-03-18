@@ -41,7 +41,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     @Path("export/{tableName}")
     @POST
     @Produces("application/json")
-    public List<Map<String, Object>> excelExport(@PathParam("tableName") String tableName, @RequestParam(value = "colms[]",required = false) String[] colms) {
+    public List<Map<String, Object>> excelExport(@PathParam("tableName") String tableName, @RequestParam(value = "colms[]", required = false) String[] colms) {
         ExcelEntity excelEntity = custExcelEntityDao.findTableSql(tableName);
         ExcelEntityDto excelEntityDto;
         if (colms != null && colms.length != 0) {
@@ -51,7 +51,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         }
         LinkedHashMap<String, String> colmsMap = excelEntityDto.getColms();
         List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColms(tableName, colmsMap);
-        new ExportExcelUtil().exportData("", null, colmsMap, data, path + tableName + ".xlsx");
+        new ExportExcelUtil().exportData("", null, colmsMap, data, path + separator + tableName + ".xlsx");
         return data;
     }
 
