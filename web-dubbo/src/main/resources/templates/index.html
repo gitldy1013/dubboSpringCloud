@@ -177,8 +177,8 @@
                         "<td><button type='button' class='btn btn-primary' onclick='doUp(\"" + result[data].tableName + "\")'>上传</button></td></tr>");
                     for (var colum in result[data].colms) {
                         $("#" + result[data].tableName + "colum").append(
-                            "<input type='checkbox' name='" + result[data].tableName + "' id='" + result[data].colms[colum] + "' value='" + colum + "'/>" +
-                            "<label for='" + result[data].colms[colum] + "'>" + result[data].colms[colum] + "</label>");
+                            "<input type='checkbox' name='" + result[data].tableName + "' id='" + result[data].tableName + colum + "' value='" + colum + "'/>" +
+                            "<label for='" + result[data].tableName + colum + "'>" + result[data].colms[colum] + "</label>");
                     }
                 }
             },

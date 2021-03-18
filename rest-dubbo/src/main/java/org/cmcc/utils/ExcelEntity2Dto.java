@@ -12,13 +12,13 @@ public class ExcelEntity2Dto {
     public static ExcelEntityDto excel2Dto(ExcelEntity excelEntity, String[] colmSort) {
         String tableSql = excelEntity.getTableSql();
         String colmsStr = tableSql.substring(tableSql.indexOf("(") + 1, tableSql.lastIndexOf(")"));
-        String[] colms = colmsStr.split(",");
+        String[] colms = colmsStr.split(",\n");
         ExcelEntityDto excelEntityDto = new ExcelEntityDto();
         LinkedHashMap<String, String> colmsMap = new LinkedHashMap<>();
         for (String s : colmSort) {
             for (String colm : colms) {
                 String key = colm.substring(colm.indexOf("`") + 1, colm.lastIndexOf("`"));
-                String value = colm.substring(colm.indexOf("'") + 1, colm.lastIndexOf("'"));
+                String value = colm.substring(colm.indexOf("COMMENT '") + 9, colm.lastIndexOf("'"));
                 if (s.equals(key)) {
                     colmsMap.put(key, value);
                     break;
