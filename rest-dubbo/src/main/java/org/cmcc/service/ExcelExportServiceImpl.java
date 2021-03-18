@@ -57,8 +57,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     }
 
     @Override
-    public byte[] getFile(String filename,String[] colms) throws IOException {
-        excelExport(filename,colms);
+    public byte[] getFile(String filename, String[] colms) throws IOException {
+        excelExport(filename, colms);
         return FileUtils.readFileToByteArray(new File(path + separator + filename + ".xlsx"));
     }
 
@@ -72,10 +72,14 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
     @Override
     public String check(String dir, String username, String host, String port, String pwd) {
-        if (checkConn(dir, username, host, port, pwd)) {
-            return "连接测试成功";
-        } else {
-            return "连接测试失败";
+        try {
+            if (checkConn(dir, username, host, port, pwd)) {
+                return "连接测试成功";
+            } else {
+                return "连接测试失败";
+            }
+        } catch (BizException e) {
+            return e.getMessage();
         }
     }
 
@@ -117,7 +121,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
                 SFTPUtils.OPERATE_MKDIR);
     }
 
-    private boolean checkConn(String dir, String userName, String host, String port, String password) {
+    private boolean checkConn(String dir, String userName, String host, String port, String password) throws BizException {
         return SFTPUtils.operatesftp(userName, host, port, password, null,
                 dir,
                 null,
