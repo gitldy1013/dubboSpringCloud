@@ -89,7 +89,12 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         log.info(maps.toString());
         //批量上传&&上传之后删除本地文件
         try {
-            createRemoteDir(dir, username, host, port, pwd);
+            boolean remoteDir = createRemoteDir(dir, username, host, port, pwd);
+            if (!remoteDir) {
+                log.info("远程目录已存在");
+            } else {
+                log.info("远程目录" + dir + "创建成功");
+            }
             String[] tbn = {tableName + ".xlsx"};
             if (isBatchUpOrDownload(dir, username, host, port, pwd, tbn)) {
                 FileUtils.deleteDirectory(new File(path));

@@ -9,7 +9,6 @@ import com.jcraft.jsch.SftpException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.cmcc.exception.bizException.BizException;
-import org.cmcc.exception.bizException.BizExceptionCode;
 import org.cmcc.exception.bizException.BizExceptionCodeEnum;
 
 import java.io.File;
@@ -168,8 +167,8 @@ public class SFTPUtils {
             this.sftp.cd(createpath);
             return true;
         } catch (SftpException e) {
-            log.error("异常:" + e);
-            throw new BizException(e.getMessage());
+            log.error("异常:" + e.getCause().getMessage());
+            throw new BizException(BizExceptionCodeEnum.MIKDIR);
         }
     }
 
