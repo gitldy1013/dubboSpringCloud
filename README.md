@@ -31,3 +31,7 @@
 >* 2.测试sftp服务器连通性时不必输入目录,这里输入的目录为文件上传到文件服务器的完整目录.
 >* 3.上传操作需要保证在sftp服务器联通测试成功的基础上执行,并且需要指定上传的目录.
 >* 4.当后台数据库表数据过多时可能需要较长时间完成导出和上传操作,请耐心等待。
+
+>* 服务页面展示
+
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/通用表格数据导出服务.jpg" alt="app"></p>
