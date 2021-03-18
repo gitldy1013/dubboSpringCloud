@@ -6,6 +6,7 @@ import org.cmcc.service.ExcelExportService;
 import org.cmcc.service.dto.ExcelEntityDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ import java.util.Map;
  * @date 2020/6/26
  */
 @Controller
+@CrossOrigin(origins = "*")
 public class WebController {
     @Autowired
     private DubboService dubboService;
