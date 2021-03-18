@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.dubbo.config.annotation.Service;
 import org.cmcc.dao.CustExcelEntityDao;
 import org.cmcc.entity.ExcelEntity;
+import org.cmcc.exception.bizException.BizException;
 import org.cmcc.service.dto.ExcelEntityDto;
 import org.cmcc.utils.ExcelEntity2Dto;
 import org.cmcc.utils.ExportExcelUtil;
@@ -75,9 +76,9 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     public String upload(String tableName, String[] colms, String dir, String username, String host, String port, String pwd) {
         List<Map<String, Object>> maps = excelExport(tableName, colms);
         log.info(maps.toString());
-        createRemoteDir(dir, username, host, port, pwd);
         //批量上传&&上传之后删除本地文件
         try {
+            createRemoteDir(dir, username, host, port, pwd);
             String[] tbn = {tableName + ".xlsx"};
             if (isBatchUpOrDownload(dir, username, host, port, pwd, tbn)) {
                 FileUtils.deleteDirectory(new File(path));
@@ -85,13 +86,13 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             } else {
                 return "上传失败";
             }
-        } catch (IOException e) {
+        } catch (BizException | IOException e) {
             log.info(e.getMessage());
             return "上传失败：" + e.getMessage();
         }
     }
 
-    private boolean isBatchUpOrDownload(String dir, String userName, String host, String port, String password, String[] fileNames) {
+    private boolean isBatchUpOrDownload(String dir, String userName, String host, String port, String password, String[] fileNames) throws BizException {
         return SFTPUtils.batchUpOrDownload(
                 userName, host, port, password, null,
                 dir + separator,
@@ -100,7 +101,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
                 fileNames);
     }
 
-    private boolean createRemoteDir(String dir, String userName, String host, String port, String password) {
+    private boolean createRemoteDir(String dir, String userName, String host, String port, String password) throws BizException {
         return SFTPUtils.operatesftp(userName, host, port, password, null,
                 dir,
                 null,

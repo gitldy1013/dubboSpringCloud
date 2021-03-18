@@ -8,6 +8,9 @@ import com.jcraft.jsch.SftpATTRS;
 import com.jcraft.jsch.SftpException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.cmcc.exception.bizException.BizException;
+import org.cmcc.exception.bizException.BizExceptionCode;
+import org.cmcc.exception.bizException.BizExceptionCodeEnum;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +42,7 @@ public class SFTPUtils {
             String remotePath,
             String localPath,
             String operateType,
-            String... fileName) {
+            String... fileName) throws BizException {
         SFTPUtils sftp = null;
         boolean res = false;
         try {
@@ -68,10 +71,10 @@ public class SFTPUtils {
                     log.info("操作类型不在已知的范围内");
                 }
             }
-        } catch (Exception e) {
-            res = false;
+        } catch (BizException e) {
             log.error("异常:" + e);
             log.info("文件操作异常：{}", operateType + "失败!");
+            throw new BizException(e.getMessage());
         } finally {
             assert sftp != null;
             sftp.disconnect();
@@ -101,7 +104,7 @@ public class SFTPUtils {
             String remoteFileName,
             String localPath,
             String localFileName,
-            String operateType) {
+            String operateType) throws BizException {
         SFTPUtils sftp = null;
         try {
             sftp = new SFTPUtils();
@@ -119,9 +122,10 @@ public class SFTPUtils {
                     log.info("操作类型不在已知的范围内");
                 }
             }
-        } catch (Exception e) {
+        } catch (BizException e) {
             log.error("异常:" + e);
             log.info("文件操作异常：{}", operateType + "失败!");
+            throw new BizException(e.getMessage());
         } finally {
             assert sftp != null;
             sftp.disconnect();
@@ -165,7 +169,7 @@ public class SFTPUtils {
             return true;
         } catch (SftpException e) {
             log.error("异常:" + e);
-            return false;
+            throw new BizException(e.getMessage());
         }
     }
 
@@ -195,7 +199,7 @@ public class SFTPUtils {
             return true;
         } catch (Exception e) {
             log.error("异常:" + e);
-            return false;
+            throw new BizException(BizExceptionCodeEnum.SFTPPARAM);
         }
     }
 

@@ -10,4 +10,4 @@ spring:
     nacos:
       server-addr: 55.144.26.35:8848
       username: nacos
-      password: nacos
+      password: qwer1234()
