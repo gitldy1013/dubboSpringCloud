@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +40,7 @@ public class WebController {
 
     @PostMapping("/excel/export")
     @ResponseBody
-    public List<Map<String, Object>> export(String tableName, @RequestParam(value = "colums[]",required = false) String[] colums) {
+    public List<Map<String, Object>> export(String tableName, @RequestParam(value = "colums[]", required = false) String[] colums) {
         return excelExportService.excelExport(tableName, colums);
     }
 
@@ -48,9 +52,24 @@ public class WebController {
 
     @PostMapping("/excel/upload")
     @ResponseBody
-    public String upload(String tableName, @RequestParam(value = "colums[]",required = false) String[] colums,
+    public String upload(String tableName, @RequestParam(value = "colums[]", required = false) String[] colums,
                          String dir, String username, String host, String port, String pwd) {
         return excelExportService.upload(tableName, colums, dir, username, host, port, pwd);
+    }
+
+    @GetMapping("/excel/down")
+    public void downExcel(HttpServletResponse response, String fileName, @RequestParam(value = "colums", required = false) String[] colums) throws Exception {
+        byte[] data = excelExportService.getFile(fileName, colums);
+        fileName = URLEncoder.encode(fileName, "UTF-8");
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + ".xlsx\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType("application/octet-stream;charset=UTF-8");
+        OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+        outputStream.write(data);
+        outputStream.flush();
+        outputStream.close();
+        response.flushBuffer();
     }
 
     @GetMapping("/excel/list")

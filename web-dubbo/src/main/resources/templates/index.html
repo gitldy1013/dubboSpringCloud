@@ -130,6 +130,14 @@
         });
     }
 
+    function doDown(tabName) {
+        var urlString = "http://localhost:8081/excel/down?fileName=" + tabName;
+        $("input[name='" + tabName + "']:checked").each(function (i) {
+            urlString += "&colums=" + $(this).val();
+        });
+        window.open(urlString)
+    }
+
     function doUp(tabName) {
         var arr = [];
         $("input[name='" + tabName + "']:checked").each(function (i) {
@@ -165,6 +173,7 @@
                     $(".table").append("<tr id='" + result[data].tableName + "'><td>" + result[data].tableName + "</td>" +
                         "<td><div class='RadioStyle'><div id='" + result[data].tableName + "colum' class='Block PaddingL'></div></div></td>" +
                         "<td><button type='button' class='btn btn-info' onclick='doTab(\"" + result[data].tableName + "\")'>预览</button></td>" +
+                        "<td><button type='button' class='btn btn-success' onclick='doDown(\"" + result[data].tableName + "\")'>下载</button></td>" +
                         "<td><button type='button' class='btn btn-primary' onclick='doUp(\"" + result[data].tableName + "\")'>上传</button></td></tr>");
                     for (var colum in result[data].colms) {
                         $("#" + result[data].tableName + "colum").append(

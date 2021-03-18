@@ -33,6 +33,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
     @Autowired
     private CustExcelEntityDao custExcelEntityDao;
+
     //    private String separator = File.separator;
     private String separator = "/";
     private String path = "D://TEMP";
@@ -53,6 +54,12 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColms(tableName, colmsMap);
         new ExportExcelUtil().exportData("", null, colmsMap, data, path + separator + tableName + ".xlsx");
         return data;
+    }
+
+    @Override
+    public byte[] getFile(String filename,String[] colms) throws IOException {
+        excelExport(filename,colms);
+        return FileUtils.readFileToByteArray(new File(path + separator + filename + ".xlsx"));
     }
 
     @Override
