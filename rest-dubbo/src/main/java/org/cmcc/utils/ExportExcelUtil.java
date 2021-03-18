@@ -112,8 +112,6 @@ public class ExportExcelUtil {
     }
 
     /**
-     * 杨光
-     *
      * @param title     导出的excel标题
      * @param sheetName sheet页名字，不传默认sheet1
      * @param headerMap 列映射关系 key对应data中需要生成的字段代码，value 列显示的列名
@@ -198,6 +196,8 @@ public class ExportExcelUtil {
                         DataFormat format = wb.createDataFormat();
                         style.setDataFormat(format.getFormat("yyyy-MM-dd"));
                         cell.setCellValue((Date) val);
+                    } else {
+                        cell.setCellValue(String.valueOf(val));
                     }
                 } catch (Exception ex) {
                     log.debug("设值 [" + row.getRowNum() + "," + colunm + "] error: " + ex.toString());
