@@ -10,7 +10,7 @@ import java.util.Map;
 public interface ExcelExportService {
     public List<Map<String, Object>> excelExport(String tableName, String... colms);
 
-    public LinkedHashMap<String, ExcelEntityDto> showTables();
+    public LinkedHashMap<String, ExcelEntityDto> showTables(String tableName);
 
     public String check(String dir, String username, String host, String port, String pwd);
 

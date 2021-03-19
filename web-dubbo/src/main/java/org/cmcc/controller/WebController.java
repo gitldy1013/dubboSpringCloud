@@ -76,8 +76,8 @@ public class WebController {
 
     @GetMapping("/excel/list")
     @ResponseBody
-    public LinkedHashMap<String, ExcelEntityDto> list() {
-        return excelExportService.showTables();
+    public LinkedHashMap<String, ExcelEntityDto> list(@RequestParam(required = false) String tableName) {
+        return excelExportService.showTables(tableName);
     }
 
     @GetMapping("/index")

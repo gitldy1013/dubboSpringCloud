@@ -74,16 +74,23 @@
     <div class="col-xs-2">
         <button type="button" onclick="doCheck()" class="btn btn-default">连接测试</button>
     </div>
-    <div style="padding-top: 50px">
+
+    <div class="col-xs-10" style="padding-top: 10px">
+        <input type="text" class="form-control" id="tableNameVal" placeholder="英文表名称">
+    </div>
+    <div class="col-xs-2" style="padding-top: 10px">
+        <button type="button" onclick="doTabList()" class="btn btn-default">表名检索</button>
+    </div>
+    <div style="padding-top: 90px">
         <table class="table table-hover table-expandable table-striped table-bordered">
             <thead>
             <tr>
-                <th style="text-align: center">表名称</th>
-                <th style="text-align: center">表字段</th>
+                <th style="text-align: center">英文表名称</th>
+                <th style="text-align: center">表字段名称或含义</th>
                 <th style="text-align: center" width="20%">操作</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="tabBody">
             </tbody>
         </table>
     </div>
@@ -168,13 +175,17 @@
     }
 
     function doTabList() {
+        var tableNameVal = $("#tableNameVal").val();
         $.ajax({
             url: "http://localhost:8081/excel/list",
             type: "get",
+            data: {tableName: tableNameVal},
             // traditional: true,
             success: function (result) {
+                let table = $("#tabBody");
+                table.html("");
                 for (var data in result) {
-                    $(".table").append("<tr id='" + result[data].tableName + "'><td>" + result[data].tableName + "</td>" +
+                    table.append("<tr id='" + result[data].tableName + "'><td>" + result[data].tableName + "</td>" +
                         "<td><div class='RadioStyle'><div id='" + result[data].tableName + "colum' class='Block PaddingL'><ul class='sortable' style='margin-bottom: 0!important;'></ul></div></div></td>" +
                         "<td><button type='button' class='btn btn-info' onclick='doTab(\"" + result[data].tableName + "\")'>预览</button>" +
                         "<button type='button' style='margin-inline: 15px;' class='btn btn-success' onclick='doDown(\"" + result[data].tableName + "\")'>下载</button>" +
@@ -197,9 +208,9 @@
                     });
                 }
             },
-            // error: function (XMLHttpRequest, textStatus, errorThrown) {
-            //     alert(textStatus, errorThrown);
-            // }
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(textStatus, errorThrown);
+            }
         });
     }
 </script>

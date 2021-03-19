@@ -66,8 +66,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     @Path("list")
     @GET
     @Produces("application/json")
-    public LinkedHashMap<String, ExcelEntityDto> showTables() {
-        return custExcelEntityDao.showTables();
+    public LinkedHashMap<String, ExcelEntityDto> showTables(String tableName) {
+        return custExcelEntityDao.showTables(tableName);
     }
 
     @Override

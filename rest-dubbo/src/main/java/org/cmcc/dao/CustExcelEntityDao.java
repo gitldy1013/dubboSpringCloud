@@ -50,8 +50,11 @@ public class CustExcelEntityDao {
         return resultMap;
     }
 
-    public LinkedHashMap<String, ExcelEntityDto> showTables() {
-        String sql = "show tables";
+    public LinkedHashMap<String, ExcelEntityDto> showTables(String tableName) {
+        if (tableName == null) {
+            tableName = "";
+        }
+        String sql = "show tables like '%" + tableName + "%'";
         //创建本地查询
         Query nativeQuery = entityManager.createNativeQuery(sql);
         List<String> resultList = nativeQuery.getResultList();
