@@ -34,4 +34,9 @@
 
 >* 服务页面展示
 
+>* 列表展示页面
+
 <p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/通用表格数据导出服务.jpg" alt="app"></p>
+
+>* 详情展示页面
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/预览详情展示页面.jpg" alt="app"></p>
