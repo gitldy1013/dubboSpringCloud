@@ -39,7 +39,12 @@ public class ExcelEntity2Dto {
         for (int i = 0; i < colms.length; i++) {
             if (colms[i].trim().startsWith("`")) {
                 String key = colms[i].substring(colms[i].indexOf("`") + 1, colms[i].lastIndexOf("`"));
-                String value = colms[i].substring(colms[i].indexOf("COMMENT '") + 9, colms[i].lastIndexOf("'"));
+                String value = "";
+                if (!colms[i].contains("COMMENT '")) {
+                    value = key;
+                } else {
+                    value = colms[i].substring(colms[i].indexOf("COMMENT '") + 9, colms[i].lastIndexOf("'"));
+                }
                 colmsMap.put(key, value);
             }
         }
