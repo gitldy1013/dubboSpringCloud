@@ -155,6 +155,8 @@
         doTabList();
     });
 
+    let baseUrl = "http://127.0.0.1:8081";
+
     function doCheck(tabName) {
         var dir = $("#sftpDir").val();
         var username = $("#sftpUser").val();
@@ -162,7 +164,7 @@
         var port = $("#sftpPort").val();
         var pwd = $("#sftpPwd").val();
         $.ajax({
-            url: "http://localhost:8081/excel/check",
+            url: baseUrl + "/excel/check",
             type: "post",
             cache: false,
             dataType: 'text',
@@ -184,7 +186,7 @@
             arr.push($(this).val());
         });
         $.ajax({
-            url: "http://localhost:8081/excel/export",
+            url: baseUrl + "/excel/export",
             type: "post",
             cache: false,
             dataType: 'json',
@@ -219,7 +221,7 @@
     }
 
     function doDown(tabName) {
-        var urlString = "http://localhost:8081/excel/down?fileName=" + tabName;
+        var urlString = baseUrl + "/excel/down?fileName=" + tabName;
         $("input[name='" + tabName + "']:checked").each(function (i) {
             urlString += "&colums=" + $(this).val();
         });
@@ -237,7 +239,7 @@
         var port = $("#sftpPort").val();
         var pwd = $("#sftpPwd").val();
         $.ajax({
-            url: "http://localhost:8081/excel/upload",
+            url: baseUrl + "/excel/upload",
             type: "post",
             cache: false,
             dataType: 'text',
@@ -256,7 +258,7 @@
     function doTabList() {
         var tableNameVal = $("#tableNameVal").val();
         $.ajax({
-            url: "http://localhost:8081/excel/list",
+            url: baseUrl + "/excel/list",
             type: "get",
             data: {tableName: tableNameVal},
             // traditional: true,
