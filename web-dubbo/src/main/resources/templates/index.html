@@ -313,6 +313,8 @@
                 }
                 if (count === 0) {
                     table.html("<tr><td colspan='3'>未查询到数据</td></tr>");
+                } else {
+                    table.append("<tr><td colspan='3'>总记录数为" + count + "条</td></tr>");
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
