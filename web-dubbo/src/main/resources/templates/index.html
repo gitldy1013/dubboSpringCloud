@@ -286,6 +286,7 @@
                 doRemLoad();
                 let table = $("#tabBody");
                 table.html("");
+                let count = 0;
                 for (var data in result) {
                     table.append("<tr id='" + result[data].tableName + "'><td>" + result[data].tableName + "</td>" +
                         "<td><div class='RadioStyle'><div id='" + result[data].tableName + "colum' class='Block PaddingL'><ul class='sortable' style='margin-bottom: 0!important;'></ul></div></div></td>" +
@@ -308,6 +309,10 @@
                             console.count("拖拽结束");
                         }
                     });
+                    count += 1;
+                }
+                if (count === 0) {
+                    table.html("<tr><td colspan='3'>未查询到数据</td></tr>");
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
