@@ -18,7 +18,12 @@ public class ExcelEntity2Dto {
         for (String s : colmSort) {
             for (String colm : colms) {
                 String key = colm.substring(colm.indexOf("`") + 1, colm.lastIndexOf("`"));
-                String value = colm.substring(colm.indexOf("COMMENT '") + 9, colm.lastIndexOf("'"));
+                String value = "";
+                if (!colm.contains("COMMENT '")) {
+                    value = key;
+                } else {
+                    value = colm.substring(colm.indexOf("COMMENT '") + 9, colm.lastIndexOf("'"));
+                }
                 if (s.equals(key)) {
                     colmsMap.put(key, value);
                     break;
