@@ -53,7 +53,7 @@
     <script src="https://www.jq22.com/jquery/jquery-ui-1.11.0.js"></script>
 </head>
 <body>
-<h2 style="text-align: center">通用表格数据导出工具</h2>
+<h2 style="text-align: center;font-family: 华文楷体">通用表格数据导出工具</h2>
 <h6 style="text-align: center">提示：不勾选导出所有表字段</h6>
 <div class="container" style="text-align: center">
     <div class="col-xs-2">
@@ -72,7 +72,9 @@
         <input type="text" class="form-control" id="sftpPort" placeholder="端口">
     </div>
     <div class="col-xs-2">
-        <button type="button" onclick="doCheck()" class="btn btn-default">连接测试</button>
+        <button type="button" onclick="doCheck()" class="btn btn-default">
+            连接测试
+        </button>
     </div>
 
     <div class="col-xs-10" style="padding-top: 10px">
@@ -95,6 +97,59 @@
         </table>
     </div>
 </div>
+
+<div class="modal fade" id="myModal" style="align-content: center" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 1140px;margin: 80px auto;">
+        <div class="modal-content" style="width:1140px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    表数据
+                </h4>
+            </div>
+            <div class="modal-body" style="overflow:scroll;">
+                <table style="min-width:1000px;"
+                       class="table table-hover table-expandable table-striped table-bordered">
+                    <thead>
+                    <tr id="modalhead">
+                    </tr>
+                    </thead>
+                    <tbody id="modalBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="msgModal" style="align-content: center" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="msgModalLabel">
+                    提示
+                </h4>
+            </div>
+            <div class="modal-body" id="msgModalBody" style="text-align: center">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         doTabList();
@@ -113,10 +168,12 @@
             dataType: 'text',
             data: {dir: dir, username: username, host: host, port: port, pwd: pwd},
             success: function (result) {
-                alert(result);
+                $("#msgModalBody").html(result);
+                $("#msgModal").modal("show");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("服务异常：" + textStatus);
+                $("#msgModalBody").html("服务异常：" + textStatus);
+                $("#msgModal").modal("show");
             }
         });
     }
@@ -133,10 +190,30 @@
             dataType: 'json',
             data: {tableName: tabName, colums: arr},
             success: function (result) {
-                alert("上传数据成功，具体数据为：" + JSON.stringify(result));
+                let myModalLabel = $("#myModalLabel");
+                myModalLabel.html(tabName + "表数据详情");
+                let modalhead = $("#modalhead");
+                let modalBody = $("#modalBody");
+                modalhead.html("");
+                modalBody.html("");
+                if (result.length > 0) {
+                    for (var columnHead in result[0]) {
+                        modalhead.append("<th style='text-align: center'>" + columnHead + "</th>");
+                    }
+                } else {
+                    myModalLabel.html(tabName + "表暂无数据");
+                }
+                for (var data in result) {
+                    modalBody.append("<tr id='modalbody_" + data + "'></tr>")
+                    for (var columnVal in result[data]) {
+                        $("#modalbody_" + data).append("<td style='text-align: center'>" + result[data][columnVal] + "</td>");
+                    }
+                }
+                $("#myModal").modal("show");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("服务异常：" + textStatus);
+                $("#myModalLabel").html("服务异常：" + textStatus);
+                $("#myModal").modal("show");
             }
         });
     }
@@ -166,10 +243,12 @@
             dataType: 'text',
             data: {tableName: tabName, colums: arr, dir: dir, username: username, host: host, port: port, pwd: pwd},
             success: function (result) {
-                alert(result);
+                $("#msgModalBody").html(result);
+                $("#msgModal").modal("show");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("服务异常：" + textStatus);
+                $("#msgModalBody").html("服务异常：" + textStatus);
+                $("#msgModal").modal("show");
             }
         });
     }
