@@ -328,10 +328,15 @@
     function doRemLoad() {
         let $active = $('.active');
         $active.removeClass();
+        let button = $('button');
+        button.removeClass('disabled');
+        button.prop('disabled', false);
     }
 
     function doload(thisid) {
-        doRemLoad();
+        let button = $('button');
+        button.addClass('disabled');
+        button.prop('disabled', true);
         let $loader = $('#spinners li[data-id="' + thisid + '"]');
         $loader.addClass('active');
     }
