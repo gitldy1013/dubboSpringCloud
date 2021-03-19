@@ -45,14 +45,50 @@
     </style>
     <title>通用表格数据导出工具</title>
     <link rel="shortcut icon" href="http://127.0.0.1:8081/static/images/favicon.ico" type="images/x-icon">
+    <link rel="stylesheet" href="http://127.0.0.1:8081/static/loaders/css/style.css">
     <link rel="stylesheet" href="http://127.0.0.1:8081/static/css/jquery-ui.css">
     <link rel="stylesheet" href="http://127.0.0.1:8081/static/css/style.css">
     <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://www.jq22.com/jquery/jquery-ui-1.11.0.js"></script>
+    <script src="http://127.0.0.1:8081/static/loaders/js/js.js"></script>
 </head>
 <body>
+<div class="jq22-container">
+    <ul id="spinners">
+        <li class="" data-id="1">
+            <div id="preloader_1">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </li>
+        <li data-id="2">
+            <div id="preloader_2">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </li>
+        <li data-id="3">
+            <div id="preloader_3"></div>
+        </li>
+        <li data-id="4">
+            <div id="preloader_4">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </li>
+    </ul>
+</div>
+
 <h2 style="text-align: center;font-family: 华文楷体">通用表格数据导出工具</h2>
 <h6 style="text-align: center">提示：不勾选导出所有表字段</h6>
 <div class="container" style="text-align: center">
@@ -169,11 +205,16 @@
             cache: false,
             dataType: 'text',
             data: {dir: dir, username: username, host: host, port: port, pwd: pwd},
+            beforeSend: function () {
+                doload(1);
+            },
             success: function (result) {
+                doRemLoad();
                 $("#msgModalBody").html(result);
                 $("#msgModal").modal("show");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
                 $("#msgModalBody").html("服务异常：" + textStatus);
                 $("#msgModal").modal("show");
             }
@@ -191,7 +232,11 @@
             cache: false,
             dataType: 'json',
             data: {tableName: tabName, colums: arr},
+            beforeSend: function () {
+                doload(2);
+            },
             success: function (result) {
+                doRemLoad();
                 let myModalLabel = $("#myModalLabel");
                 myModalLabel.html(tabName + "表数据详情");
                 let modalhead = $("#modalhead");
@@ -214,6 +259,7 @@
                 $("#myModal").modal("show");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
                 $("#myModalLabel").html("服务异常：" + textStatus);
                 $("#myModal").modal("show");
             }
@@ -244,11 +290,16 @@
             cache: false,
             dataType: 'text',
             data: {tableName: tabName, colums: arr, dir: dir, username: username, host: host, port: port, pwd: pwd},
+            beforeSend: function () {
+                doload(3);
+            },
             success: function (result) {
+                doRemLoad();
                 $("#msgModalBody").html(result);
                 $("#msgModal").modal("show");
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
                 $("#msgModalBody").html("服务异常：" + textStatus);
                 $("#msgModal").modal("show");
             }
@@ -262,7 +313,11 @@
             type: "get",
             data: {tableName: tableNameVal},
             // traditional: true,
+            beforeSend: function () {
+                doload(4);
+            },
             success: function (result) {
+                doRemLoad();
                 let table = $("#tabBody");
                 table.html("");
                 for (var data in result) {
@@ -290,9 +345,22 @@
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(textStatus, errorThrown);
+                doRemLoad();
+                $("#msgModalBody").html("服务异常：" + textStatus);
+                $("#msgModal").modal("show");
             }
         });
+    }
+
+    function doRemLoad() {
+        let $active = $('.active');
+        $active.removeClass();
+    }
+
+    function doload(thisid) {
+        doRemLoad();
+        let $loader = $('#spinners li[data-id="' + thisid + '"]');
+        $loader.addClass('active');
     }
 </script>
 </body>
