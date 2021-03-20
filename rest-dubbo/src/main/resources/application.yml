@@ -10,9 +10,9 @@ dubbo:
       port: 8080
       server: netty
   registry:
-    address: spring-cloud://localhost
+    address: spring-cloud://127.0.0.1:8848
   consumer:
-    timeout: 5000
+    timeout: 10000
     check: off
     retries: 0
   cloud:

@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" name="viewport"/>
+
+    <style type="text/css">
+        body {
+            font: 14px/150% microsoft yahei, tahoma;
+        }
+
+        .clear {
+            clear: both
+        }
+
+        .RadioStyle input {
+            display: none
+        }
+
+        .RadioStyle label {
+            border: 1px solid #CCC;
+            color: #666;
+            padding: 2px 10px 2px 5px;
+            line-height: 28px;
+            min-width: 80px;
+            text-align: center;
+            float: left;
+            margin: 2px;
+            border-radius: 4px
+        }
+
+        .RadioStyle input:checked + label {
+            background: url(http://127.0.0.1:8081/static/images/ico_checkon.svg) no-repeat right bottom;
+            border: 1px solid #00a4ff;
+            background-size: 21px 21px;
+            color: #00a4ff
+        }
+
+        .RadioStyle input:disabled + label {
+            opacity: 0.7;
+        }
+    </style>
+    <title>通用表格数据导出工具</title>
+    <link rel="shortcut icon" href="http://127.0.0.1:8081/static/images/favicon.ico" type="images/x-icon">
+    <link rel="stylesheet" href="http://127.0.0.1:8081/static/loaders/css/style.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8081/static/css/jquery-ui.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8081/static/css/style.css">
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://www.jq22.com/jquery/jquery-ui-1.11.0.js"></script>
+    <script src="http://127.0.0.1:8081/static/loaders/js/js.js"></script>
+</head>
+<body style="background-color: #fff0">
+<h2 style="text-align: center;font-family: 华文楷体">通用表格数据导出工具</h2>
+<h6 style="text-align: center">提示：不勾选导出所有表字段</h6>
+<div class="container" style="text-align: center">
+    <div class="col-xs-2">
+        <input type="text" class="form-control" id="sftpUser" placeholder="用户名">
+    </div>
+    <div class="col-xs-2">
+        <input type="password" class="form-control" id="sftpPwd" placeholder="密码">
+    </div>
+    <div class="col-xs-2">
+        <input type="text" class="form-control" id="sftpDir" placeholder="目录">
+    </div>
+    <div class="col-xs-2">
+        <input type="text" class="form-control" id="sftphost" placeholder="地址">
+    </div>
+    <div class="col-xs-2">
+        <input type="text" class="form-control" id="sftpPort" placeholder="端口">
+    </div>
+    <div class="col-xs-2">
+        <button type="button" onclick="doCheck()" class="btn btn-default">
+            连接测试
+        </button>
+    </div>
+
+    <div class="col-xs-10" style="padding-top: 10px">
+        <input type="text" class="form-control" id="tableNameVal" placeholder="英文表名称">
+    </div>
+    <div class="col-xs-2" style="padding-top: 10px">
+        <button type="button" onclick="doTabList()" class="btn btn-default">表名检索</button>
+    </div>
+    <div style="padding-top: 90px">
+        <table class="table table-hover table-expandable table-striped table-bordered">
+            <thead>
+            <tr>
+                <th style="text-align: center">英文表名称</th>
+                <th style="text-align: center">表字段名称或含义</th>
+                <th style="text-align: center" width="20%">操作</th>
+            </tr>
+            </thead>
+            <tbody id="tabBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" style="align-content: center" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 1140px;margin: 80px auto;">
+        <div class="modal-content" style="width:1140px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    表数据
+                </h4>
+            </div>
+            <div class="modal-body" style="overflow:scroll;">
+                <table style="min-width:1000px;"
+                       class="table table-hover table-expandable table-striped table-bordered">
+                    <thead>
+                    <tr id="modalhead">
+                    </tr>
+                    </thead>
+                    <tbody id="modalBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="msgModal" style="align-content: center" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="msgModalLabel">
+                    提示
+                </h4>
+            </div>
+            <div class="modal-body" id="msgModalBody" style="text-align: center">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        doTabList();
+    });
+
+    let baseUrl = "http://127.0.0.1:8081";
+
+    function doCheck(tabName) {
+        var dir = $("#sftpDir").val();
+        var username = $("#sftpUser").val();
+        var host = $("#sftphost").val();
+        var port = $("#sftpPort").val();
+        var pwd = $("#sftpPwd").val();
+        $.ajax({
+            url: baseUrl + "/excel/check",
+            type: "post",
+            cache: false,
+            dataType: 'text',
+            data: {dir: dir, username: username, host: host, port: port, pwd: pwd},
+            beforeSend: function () {
+                doload(1);
+            },
+            success: function (result) {
+                doRemLoad();
+                $("#msgModalBody").html(result);
+                $("#msgModal").modal("show");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
+                $("#msgModalBody").html("服务异常：" + textStatus);
+                $("#msgModal").modal("show");
+            }
+        });
+    }
+
+    function doTab(tabName) {
+        var arr = [];
+        $("input[name='" + tabName + "']:checked").each(function (i) {
+            arr.push($(this).val());
+        });
+        $.ajax({
+            url: baseUrl + "/excel/export",
+            type: "post",
+            cache: false,
+            dataType: 'json',
+            data: {tableName: tabName, colums: arr},
+            beforeSend: function () {
+                doload(2);
+            },
+            success: function (result) {
+                doRemLoad();
+                let myModalLabel = $("#myModalLabel");
+                myModalLabel.html(tabName + "表数据详情");
+                let modalhead = $("#modalhead");
+                let modalBody = $("#modalBody");
+                modalhead.html("");
+                modalBody.html("");
+                if (result.length > 0) {
+                    for (var columnHead in result[0]) {
+                        modalhead.append("<th style='text-align: center'>" + columnHead + "</th>");
+                    }
+                } else {
+                    myModalLabel.html(tabName + "表暂无数据");
+                }
+                for (var data in result) {
+                    modalBody.append("<tr id='modalbody_" + data + "'></tr>")
+                    for (var columnVal in result[data]) {
+                        $("#modalbody_" + data).append("<td style='text-align: center'>" + result[data][columnVal] + "</td>");
+                    }
+                }
+                $("#myModal").modal("show");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
+                $("#myModalLabel").html("服务异常：" + textStatus);
+                $("#myModal").modal("show");
+            }
+        });
+    }
+
+    function doDown(tabName) {
+        var urlString = baseUrl + "/excel/down?fileName=" + tabName;
+        $("input[name='" + tabName + "']:checked").each(function (i) {
+            urlString += "&colums=" + $(this).val();
+        });
+        window.open(urlString)
+    }
+
+    function doUp(tabName) {
+        var arr = [];
+        $("input[name='" + tabName + "']:checked").each(function (i) {
+            arr.push($(this).val());
+        });
+        var dir = $("#sftpDir").val();
+        var username = $("#sftpUser").val();
+        var host = $("#sftphost").val();
+        var port = $("#sftpPort").val();
+        var pwd = $("#sftpPwd").val();
+        $.ajax({
+            url: baseUrl + "/excel/upload",
+            type: "post",
+            cache: false,
+            dataType: 'text',
+            data: {tableName: tabName, colums: arr, dir: dir, username: username, host: host, port: port, pwd: pwd},
+            beforeSend: function () {
+                doload(3);
+            },
+            success: function (result) {
+                doRemLoad();
+                $("#msgModalBody").html(result);
+                $("#msgModal").modal("show");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
+                $("#msgModalBody").html("服务异常：" + textStatus);
+                $("#msgModal").modal("show");
+            }
+        });
+    }
+
+    function doTabList() {
+        var tableNameVal = $("#tableNameVal").val();
+        $.ajax({
+            url: baseUrl + "/excel/list",
+            type: "get",
+            data: {tableName: tableNameVal},
+            // traditional: true,
+            beforeSend: function () {
+                doload(4);
+            },
+            success: function (result) {
+                doRemLoad();
+                let table = $("#tabBody");
+                table.html("");
+                let count = 0;
+                for (var data in result) {
+                    table.append("<tr id='" + result[data].tableName + "'><td>" + result[data].tableName + "</td>" +
+                        "<td><div class='RadioStyle'><div id='" + result[data].tableName + "colum' class='Block PaddingL'><ul class='sortable' style='margin-bottom: 0!important;'></ul></div></div></td>" +
+                        "<td><button type='button' class='btn btn-info' onclick='doTab(\"" + result[data].tableName + "\")'>预览</button>" +
+                        "<button type='button' style='margin-inline: 15px;' class='btn btn-success' onclick='doDown(\"" + result[data].tableName + "\")'>下载</button>" +
+                        "<button type='button' class='btn btn-primary' onclick='doUp(\"" + result[data].tableName + "\")'>上传</button></td></tr>");
+                    let columRow = $("#" + result[data].tableName + "colum > ul");
+                    for (var colum in result[data].colms) {
+                        columRow.append(
+                            "<li class='colum_list'>" +
+                            "<input type='checkbox' name='" + result[data].tableName + "' id='" + result[data].tableName + colum + "' value='" + colum + "'/>" +
+                            "<label for='" + result[data].tableName + colum + "'>" + result[data].colms[colum] + "</label></li>");
+                    }
+                    columRow.sortable({
+                        start: function (event, ui) {
+
+                        },
+                        stop: function (event, ui) {
+                            //结束时触发
+                            console.count("拖拽结束");
+                        }
+                    });
+                    count += 1;
+                }
+                if (count === 0) {
+                    table.html("<tr><td colspan='3'>未查询到数据</td></tr>");
+                } else {
+                    table.append("<tr><td colspan='3'>总记录数为" + count + "条</td></tr>");
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
+                $("#msgModalBody").html("服务异常：" + textStatus);
+                $("#msgModal").modal("show");
+            }
+        });
+    }
+
+    function doRemLoad() {
+        let $active = $('.active');
+        $active.removeClass();
+        let button = $('button');
+        button.removeClass('disabled');
+        button.prop('disabled', false);
+    }
+
+    function doload(thisid) {
+        let button = $('button');
+        button.addClass('disabled');
+        button.prop('disabled', true);
+        let $loader = $('#spinners li[data-id="' + thisid + '"]');
+        $loader.addClass('active');
+    }
+</script>
+<div class="jq22-container">
+    <ul id="spinners">
+        <li class="" data-id="1">
+            <div id="preloader_1">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </li>
+        <li data-id="2">
+            <div id="preloader_2">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </li>
+        <li data-id="3">
+            <div id="preloader_3"></div>
+        </li>
+        <li data-id="4">
+            <div id="preloader_4">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
