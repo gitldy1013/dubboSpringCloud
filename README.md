@@ -12,6 +12,8 @@
 
 ### 通用表格数据导出服务
 
+>* [演示地址](http://nacos.liudongyang.top/cmcc-web-dubbo/index)
+
 >* 主体功能
 
 - [x] 展示mysql数据库中的所有表信息,包含表名称及表字段;
