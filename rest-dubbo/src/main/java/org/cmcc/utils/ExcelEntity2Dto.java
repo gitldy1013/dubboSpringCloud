@@ -2,6 +2,7 @@ package org.cmcc.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cmcc.entity.ExcelEntity;
+import org.cmcc.service.dto.EntitySftpSqlDto;
 import org.cmcc.service.dto.ExcelEntityDto;
 
 import java.util.LinkedHashMap;
@@ -9,7 +10,7 @@ import java.util.LinkedHashMap;
 @Slf4j
 public class ExcelEntity2Dto {
 
-    public static ExcelEntityDto excel2Dto(ExcelEntity excelEntity, String[] colmSort) {
+    public static ExcelEntityDto excel2Dto(ExcelEntity excelEntity, EntitySftpSqlDto entitySftpSqlDto, String[] colmSort) {
         String tableSql = excelEntity.getTableSql();
         String colmsStr = tableSql.substring(tableSql.indexOf("(") + 1, tableSql.lastIndexOf(")"));
         String[] colms = colmsStr.split(",\n");
@@ -31,11 +32,12 @@ public class ExcelEntity2Dto {
             }
         }
         excelEntityDto.setTableName(excelEntity.getTableName());
+        excelEntityDto.setEntitySftpSqlDto(entitySftpSqlDto);
         excelEntityDto.setColms(colmsMap);
         return excelEntityDto;
     }
 
-    public static ExcelEntityDto excel2Dto(ExcelEntity excelEntity) {
+    public static ExcelEntityDto excel2Dto(ExcelEntity excelEntity, EntitySftpSqlDto entitySftpSqlDto) {
         String tableSql = excelEntity.getTableSql();
         String colmsStr = tableSql.substring(tableSql.indexOf("(") + 1, tableSql.lastIndexOf(")"));
         String[] colms = colmsStr.split(",\n");
@@ -54,6 +56,7 @@ public class ExcelEntity2Dto {
             }
         }
         excelEntityDto.setTableName(excelEntity.getTableName());
+        excelEntityDto.setEntitySftpSqlDto(entitySftpSqlDto);
         excelEntityDto.setColms(colmsMap);
         return excelEntityDto;
     }

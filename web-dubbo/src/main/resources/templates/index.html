@@ -33,7 +33,7 @@
         }
 
         .RadioStyle input:checked + label {
-            background: url(http://127.0.0.1:8081/static/images/ico_checkon.svg) no-repeat right bottom;
+            background: url(http://nacos.liudongyang.top:8081/static/images/ico_checkon.svg) no-repeat right bottom;
             border: 1px solid #00a4ff;
             background-size: 21px 21px;
             color: #00a4ff
@@ -44,15 +44,15 @@
         }
     </style>
     <title>通用表格数据导出工具</title>
-    <link rel="shortcut icon" href="http://127.0.0.1:8081/static/images/favicon.ico" type="images/x-icon">
-    <link rel="stylesheet" href="http://127.0.0.1:8081/static/loaders/css/style.css">
-    <link rel="stylesheet" href="http://127.0.0.1:8081/static/css/jquery-ui.css">
-    <link rel="stylesheet" href="http://127.0.0.1:8081/static/css/style.css">
+    <link rel="shortcut icon" href="http://nacos.liudongyang.top:8081/static/images/favicon.ico" type="images/x-icon">
+    <link rel="stylesheet" href="http://nacos.liudongyang.top:8081/static/loaders/css/style.css">
+    <link rel="stylesheet" href="http://nacos.liudongyang.top:8081/static/css/jquery-ui.css">
+    <link rel="stylesheet" href="http://nacos.liudongyang.top:8081/static/css/style.css">
     <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://www.jq22.com/jquery/jquery-ui-1.11.0.js"></script>
-    <script src="http://127.0.0.1:8081/static/loaders/js/js.js"></script>
+    <script src="http://nacos.liudongyang.top:8081/static/loaders/js/js.js"></script>
 </head>
 <body style="background-color: #fff0">
 <h2 style="text-align: center;font-family: 华文楷体">通用表格数据导出工具</h2>
@@ -91,7 +91,8 @@
             <tr>
                 <th style="text-align: center">英文表名称</th>
                 <th style="text-align: center">表字段名称或含义</th>
-                <th style="text-align: center" width="20%">操作</th>
+                <th style="text-align: center">查询SQL</th>
+                <th style="text-align: center" width="24%">操作</th>
             </tr>
             </thead>
             <tbody id="tabBody">
@@ -157,7 +158,8 @@
         doTabList();
     });
 
-    let baseUrl = "http://127.0.0.1:8081";
+    // let baseUrl = "http://nacos.liudongyang.top:8081";
+    let baseUrl = "http://localhost:8081";
 
     function doCheck(tabName) {
         var dir = $("#sftpDir").val();
@@ -165,6 +167,45 @@
         var host = $("#sftphost").val();
         var port = $("#sftpPort").val();
         var pwd = $("#sftpPwd").val();
+        $.ajax({
+            url: baseUrl + "/excel/check",
+            type: "post",
+            cache: false,
+            dataType: 'text',
+            data: {dir: dir, username: username, host: host, port: port, pwd: pwd},
+            beforeSend: function () {
+                doload(1);
+            },
+            success: function (result) {
+                doRemLoad();
+                $("#msgModalBody").html(result);
+                $("#msgModal").modal("show");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
+                $("#msgModalBody").html("服务异常：" + textStatus);
+                $("#msgModal").modal("show");
+            }
+        });
+    }
+
+    function doFill(params) {
+        let sftpDir = $("#sftpDir");
+        let sftpUsername = $("#sftpUser");
+        let sftpHost = $("#sftphost");
+        let sftpPort = $("#sftpPort");
+        let sftpPwd = $("#sftpPwd");
+        let obj = eval('(' + params + ')');
+        sftpDir.val(obj["sftpDir"]);
+        sftpUsername.val(obj["sftpUsername"]);
+        sftpHost.val(obj["sftpHost"]);
+        sftpPort.val(obj["sftpPort"]);
+        sftpPwd.val(obj["sftpPwd"]);
+        var dir = sftpDir.val();
+        var username = sftpUsername.val();
+        var host = sftpHost.val();
+        var port = sftpPort.val();
+        var pwd = sftpPwd.val();
         $.ajax({
             url: baseUrl + "/excel/check",
             type: "post",
@@ -290,9 +331,11 @@
                 for (var data in result) {
                     table.append("<tr id='" + result[data].tableName + "'><td>" + result[data].tableName + "</td>" +
                         "<td><div class='RadioStyle'><div id='" + result[data].tableName + "colum' class='Block PaddingL'><ul class='sortable' style='margin-bottom: 0!important;'></ul></div></div></td>" +
-                        "<td><button type='button' class='btn btn-info' onclick='doTab(\"" + result[data].tableName + "\")'>预览</button>" +
-                        "<button type='button' style='margin-inline: 15px;' class='btn btn-success' onclick='doDown(\"" + result[data].tableName + "\")'>下载</button>" +
-                        "<button type='button' class='btn btn-primary' onclick='doUp(\"" + result[data].tableName + "\")'>上传</button></td></tr>");
+                        "<td>" + result[data]["entitySftpSqlDto"]["sftpSql"] + "</td>" +
+                        "<td><button type='button' style='margin-inline: 5px;' class='btn btn-info' onclick='doTab(\"" + result[data].tableName + "\")'>预览</button>" +
+                        "<button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doFill(&apos;" + JSON.stringify(result[data]["entitySftpSqlDto"])+ "&apos;)'>测试</button>" +
+                        "<button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doDown(\"" + result[data].tableName + "\")'>下载</button>" +
+                        "<button type='button' style='margin-inline: 5px;' class='btn btn-primary' onclick='doUp(\"" + result[data].tableName + "\")'>上传</button></td></tr>");
                     let columRow = $("#" + result[data].tableName + "colum > ul");
                     for (var colum in result[data].colms) {
                         columRow.append(
@@ -312,9 +355,9 @@
                     count += 1;
                 }
                 if (count === 0) {
-                    table.html("<tr><td colspan='3'>未查询到数据</td></tr>");
+                    table.html("<tr><td colspan='4'>未查询到数据</td></tr>");
                 } else {
-                    table.append("<tr><td colspan='3'>总记录数为" + count + "条</td></tr>");
+                    table.append("<tr><td colspan='4'>总记录数为" + count + "条</td></tr>");
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {

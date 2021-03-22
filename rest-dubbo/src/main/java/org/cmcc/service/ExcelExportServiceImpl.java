@@ -4,12 +4,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.dubbo.config.annotation.Service;
 import org.cmcc.dao.CustExcelEntityDao;
+import org.cmcc.dao.EntitySftpSqlDao;
+import org.cmcc.entity.EntitySftpSql;
 import org.cmcc.entity.ExcelEntity;
 import org.cmcc.exception.bizException.BizException;
+import org.cmcc.service.dto.EntitySftpSqlDto;
 import org.cmcc.service.dto.ExcelEntityDto;
 import org.cmcc.utils.ExcelEntity2Dto;
 import org.cmcc.utils.ExportExcelUtil;
 import org.cmcc.utils.SFTPUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +38,9 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     @Autowired
     private CustExcelEntityDao custExcelEntityDao;
 
+    @Autowired
+    private EntitySftpSqlDao entitySftpSqlDao;
+
     //    private String separator = File.separator;
     private String separator = "/";
     private String path = "D://TEMP";
@@ -44,14 +51,19 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     @Produces("application/json")
     public List<Map<String, Object>> excelExport(@PathParam("tableName") String tableName, @RequestParam(value = "colms[]", required = false) String[] colms) {
         ExcelEntity excelEntity = custExcelEntityDao.findTableSql(tableName);
+        EntitySftpSql entitySftpSqlByTableName = entitySftpSqlDao.findEntitySftpSqlByTableName(tableName);
+        EntitySftpSqlDto entitySftpSqlDto = new EntitySftpSqlDto();
+        if (entitySftpSqlByTableName != null) {
+            BeanUtils.copyProperties(entitySftpSqlByTableName, entitySftpSqlDto);
+        }
         ExcelEntityDto excelEntityDto;
         if (colms != null && colms.length != 0) {
-            excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity, colms);
+            excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity, entitySftpSqlDto, colms);
         } else {
-            excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity);
+            excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity, entitySftpSqlDto);
         }
         LinkedHashMap<String, String> colmsMap = excelEntityDto.getColms();
-        List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColms(tableName, colmsMap);
+        List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColmsAndSql(tableName, entitySftpSqlDto.getSftpSql(), colmsMap);
         new ExportExcelUtil().exportData("", null, colmsMap, data, path + separator + tableName + ".xlsx");
         return data;
     }

@@ -1,5 +1,5 @@
 server:
-  port: 19900
+  port: 80
 
 spring:
   application:
@@ -10,4 +10,4 @@ spring:
     nacos:
       server-addr: 127.0.0.1:8848
       username: nacos
-      password: qwer1234()
+      password: nacos

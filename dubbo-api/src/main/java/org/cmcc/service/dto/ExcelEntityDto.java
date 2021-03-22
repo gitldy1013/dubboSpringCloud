@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
 public class ExcelEntityDto implements Serializable {
     private String tableName;
 
+    private EntitySftpSqlDto entitySftpSqlDto;
+
     private LinkedHashMap<String, String> colms;
 
 }
