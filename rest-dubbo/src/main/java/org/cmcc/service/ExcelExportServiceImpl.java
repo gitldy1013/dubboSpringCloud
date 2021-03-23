@@ -83,6 +83,11 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     }
 
     @Override
+    public List<String> tableList(String tableName) {
+        return custExcelEntityDao.tableList(tableName);
+    }
+
+    @Override
     public String check(String dir, String username, String host, String port, String pwd) {
         try {
             if (checkConn(dir, username, host, port, pwd)) {

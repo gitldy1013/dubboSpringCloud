@@ -47,13 +47,13 @@ public class CustExcelEntityDao {
     }
 
     @Transactional(readOnly = true)
-    public List<Map<String, Object>> findByTableNameAndColmsAndSql(String tableName, String SftpSql, Map<String, String> colms) {
+    public List<Map<String, Object>> findByTableNameAndColmsAndSql(String tableName, String sftpSql, Map<String, String> colms) {
         String colmsStr = colms.keySet().toString().replace("[", "").replace("]", "");
         String sql;
-        if (StringUtils.isEmpty(SftpSql)) {
+        if (StringUtils.isEmpty(sftpSql)) {
             sql = "select " + colmsStr + " from " + tableName;
         } else {
-            sql = SftpSql;
+            sql = sftpSql;
         }
         //创建本地查询
         Query nativeQuery = entityManager.createNativeQuery(sql);
@@ -88,5 +88,15 @@ public class CustExcelEntityDao {
             excelEntitiesMap.put(tName, ExcelEntity2Dto.excel2Dto(findTableSql(tName), entitySftpSqlDto));
         }
         return excelEntitiesMap;
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> tableList(String tableName) {
+        if (tableName == null) {
+            tableName = "";
+        }
+        String sql = "show tables like '%" + tableName + "%'";
+        //创建本地查询
+        return entityManager.createNativeQuery(sql).getResultList();
     }
 }

@@ -55,8 +55,8 @@
     <script src="http://nacos.liudongyang.top:8081/static/loaders/js/js.js"></script>
 </head>
 <body style="background-color: #fff0">
-<h2 style="text-align: center;font-family: 华文楷体">通用表格数据导出工具</h2>
-<h6 style="text-align: center">提示：不勾选导出所有表字段 | <a href="/sftp/index">sftp管理服务</a></h6>
+<h2 style="text-align: center;font-family: 华文楷体">文件服务器管理</h2>
+<h6 style="text-align: center">提示：同步关联文件导出上传服务 | <a href="/index">上传服务</a></h6>
 <div class="container" style="text-align: center">
     <div class="col-xs-2">
         <input type="text" class="form-control" id="sftpUser" placeholder="用户名">
@@ -75,60 +75,40 @@
     </div>
     <div class="col-xs-2">
         <button type="button" onclick="doCheck()" class="btn btn-default">
-            连接测试
+            测试服务
         </button>
     </div>
 
-    <div class="col-xs-10" style="padding-top: 10px">
-        <input type="text" class="form-control" id="tableNameVal" placeholder="英文表名称">
+    <div class="col-xs-2" style="padding-top: 10px">
+        <select id="tableName" name="role" class="form-control selectpicker" title="请选择表名">
+        </select>
+    </div>
+    <div class="col-xs-8" style="padding-top: 10px">
+        <input type="text" class="form-control" id="sftpSql" placeholder="SQL">
     </div>
     <div class="col-xs-2" style="padding-top: 10px">
-        <button type="button" onclick="doTabList()" class="btn btn-default">表名检索</button>
+        <button type="button" onclick="doAdd()" class="btn btn-default">
+            编辑新增
+        </button>
     </div>
+
     <div style="padding-top: 90px">
         <table class="table table-hover table-expandable table-striped table-bordered">
             <thead>
             <tr>
-                <th style="text-align: center">英文表名称</th>
-                <th style="text-align: center">表字段名称或含义</th>
-                <th style="text-align: center">查询SQL</th>
-                <th style="text-align: center" width="24%">操作</th>
+                <th style="text-align: center">表名</th>
+                <th style="text-align: center">用户名</th>
+                <th style="text-align: center">密码</th>
+                <th style="text-align: center">目录</th>
+                <th style="text-align: center">地址</th>
+                <th style="text-align: center">端口</th>
+                <th style="text-align: center">SQL</th>
+                <th style="text-align: center" width="15%">操作</th>
             </tr>
             </thead>
             <tbody id="tabBody">
             </tbody>
         </table>
-    </div>
-</div>
-
-<div class="modal fade" id="myModal" style="align-content: center" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width: 1140px;margin: 80px auto;">
-        <div class="modal-content" style="width:1140px">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                    表数据
-                </h4>
-            </div>
-            <div class="modal-body" style="overflow:scroll;">
-                <table style="min-width:1000px;"
-                       class="table table-hover table-expandable table-striped table-bordered">
-                    <thead>
-                    <tr id="modalhead">
-                    </tr>
-                    </thead>
-                    <tbody id="modalBody">
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                </button>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -156,12 +136,68 @@
 <script>
     $(document).ready(function () {
         doTabList();
+        initSel();
     });
 
     // let baseUrl = "http://nacos.liudongyang.top:8081";
     let baseUrl = "http://localhost:8081";
 
-    function doCheck(tabName) {
+    function initSel() {
+        $.ajax({
+            type: 'GET',
+            url: baseUrl + '/excel/tabs',
+            dataType: "json",
+            success: function (data) {
+                //拼接下拉框
+                let tableName = $("#tableName");
+                tableName.html("");
+                for (var i in data) {
+                    tableName.append("<option value='" + data[i] + "'>" + data[i] + "</option>");
+                }
+            }
+        });
+    }
+
+    function doAdd() {
+        var tableName = $("#tableName").val();
+        var dir = $("#sftpDir").val();
+        var username = $("#sftpUser").val();
+        var host = $("#sftphost").val();
+        var port = $("#sftpPort").val();
+        var pwd = $("#sftpPwd").val();
+        var sql = $("#sftpSql").val();
+        $.ajax({
+            url: baseUrl + "/sftp/add",
+            type: "post",
+            cache: false,
+            dataType: 'text',
+            data: {
+                tableName: tableName,
+                sftpDir: dir,
+                sftpUsername: username,
+                sftpHost: host,
+                sftpPort: port,
+                sftpPwd: pwd,
+                sftpSql: sql
+            },
+            beforeSend: function () {
+                doload(1);
+            },
+            success: function (result) {
+                doRemLoad();
+                $("#msgModalBody").html(result);
+                $("#msgModal").modal("show");
+                doTabList();
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
+                $("#msgModalBody").html("服务异常：" + textStatus);
+                $("#msgModal").modal("show");
+            }
+        });
+    }
+
+    function doCheck() {
         var dir = $("#sftpDir").val();
         var username = $("#sftpUser").val();
         var host = $("#sftphost").val();
@@ -190,17 +226,21 @@
     }
 
     function doFill(params) {
+        var tableName = $("#tableName");
         let sftpDir = $("#sftpDir");
         let sftpUsername = $("#sftpUser");
         let sftpHost = $("#sftphost");
         let sftpPort = $("#sftpPort");
         let sftpPwd = $("#sftpPwd");
+        let sftpSql = $("#sftpSql");
         let obj = eval('(' + params + ')');
+        tableName.val(obj["tableName"]);
         sftpDir.val(obj["sftpDir"]);
         sftpUsername.val(obj["sftpUsername"]);
         sftpHost.val(obj["sftpHost"]);
         sftpPort.val(obj["sftpPort"]);
         sftpPwd.val(obj["sftpPwd"]);
+        sftpSql.val(obj["sftpSql"]);
         var dir = sftpDir.val();
         var username = sftpUsername.val();
         var host = sftpHost.val();
@@ -228,95 +268,10 @@
         });
     }
 
-    function doTab(tabName) {
-        var arr = [];
-        $("input[name='" + tabName + "']:checked").each(function (i) {
-            arr.push($(this).val());
-        });
-        $.ajax({
-            url: baseUrl + "/excel/export",
-            type: "post",
-            cache: false,
-            dataType: 'json',
-            data: {tableName: tabName, colums: arr},
-            beforeSend: function () {
-                doload(2);
-            },
-            success: function (result) {
-                doRemLoad();
-                let myModalLabel = $("#myModalLabel");
-                myModalLabel.html(tabName + "表数据详情");
-                let modalhead = $("#modalhead");
-                let modalBody = $("#modalBody");
-                modalhead.html("");
-                modalBody.html("");
-                if (result.length > 0) {
-                    for (var columnHead in result[0]) {
-                        modalhead.append("<th style='text-align: center'>" + columnHead + "</th>");
-                    }
-                } else {
-                    myModalLabel.html(tabName + "表暂无数据");
-                }
-                for (var data in result) {
-                    modalBody.append("<tr id='modalbody_" + data + "'></tr>")
-                    for (var columnVal in result[data]) {
-                        $("#modalbody_" + data).append("<td style='text-align: center'>" + result[data][columnVal] + "</td>");
-                    }
-                }
-                $("#myModal").modal("show");
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                doRemLoad();
-                $("#myModalLabel").html("服务异常：" + textStatus);
-                $("#myModal").modal("show");
-            }
-        });
-    }
-
-    function doDown(tabName) {
-        var urlString = baseUrl + "/excel/down?fileName=" + tabName;
-        $("input[name='" + tabName + "']:checked").each(function (i) {
-            urlString += "&colums=" + $(this).val();
-        });
-        window.open(urlString)
-    }
-
-    function doUp(tabName) {
-        var arr = [];
-        $("input[name='" + tabName + "']:checked").each(function (i) {
-            arr.push($(this).val());
-        });
-        var dir = $("#sftpDir").val();
-        var username = $("#sftpUser").val();
-        var host = $("#sftphost").val();
-        var port = $("#sftpPort").val();
-        var pwd = $("#sftpPwd").val();
-        $.ajax({
-            url: baseUrl + "/excel/upload",
-            type: "post",
-            cache: false,
-            dataType: 'text',
-            data: {tableName: tabName, colums: arr, dir: dir, username: username, host: host, port: port, pwd: pwd},
-            beforeSend: function () {
-                doload(3);
-            },
-            success: function (result) {
-                doRemLoad();
-                $("#msgModalBody").html(result);
-                $("#msgModal").modal("show");
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                doRemLoad();
-                $("#msgModalBody").html("服务异常：" + textStatus);
-                $("#msgModal").modal("show");
-            }
-        });
-    }
-
     function doTabList() {
         var tableNameVal = $("#tableNameVal").val();
         $.ajax({
-            url: baseUrl + "/excel/list",
+            url: baseUrl + "/sftp/list",
             type: "get",
             data: {tableName: tableNameVal},
             // traditional: true,
@@ -330,35 +285,61 @@
                 let count = 0;
                 for (var data in result) {
                     table.append("<tr id='" + result[data].tableName + "'><td>" + result[data].tableName + "</td>" +
-                        "<td><div class='RadioStyle'><div id='" + result[data].tableName + "colum' class='Block PaddingL'><ul class='sortable' style='margin-bottom: 0!important;'></ul></div></div></td>" +
-                        "<td>" + ((result[data]["entitySftpSqlDto"]["sftpSql"] !== null)? result[data]["entitySftpSqlDto"]["sftpSql"] : '') + "</td>" +
-                        "<td><button type='button' style='margin-inline: 5px;' class='btn btn-info' onclick='doTab(\"" + result[data].tableName + "\")'>预览</button>" +
-                        "<button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doFill(&apos;" + JSON.stringify(result[data]["entitySftpSqlDto"])+ "&apos;)'>测试</button>" +
-                        "<button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doDown(\"" + result[data].tableName + "\")'>下载</button>" +
-                        "<button type='button' style='margin-inline: 5px;' class='btn btn-primary' onclick='doUp(\"" + result[data].tableName + "\")'>上传</button></td></tr>");
-                    let columRow = $("#" + result[data].tableName + "colum > ul");
-                    for (var colum in result[data].colms) {
-                        columRow.append(
-                            "<li class='colum_list'>" +
-                            "<input type='checkbox' name='" + result[data].tableName + "' id='" + result[data].tableName + colum + "' value='" + colum + "'/>" +
-                            "<label for='" + result[data].tableName + colum + "'>" + result[data].colms[colum] + "</label></li>");
-                    }
-                    columRow.sortable({
-                        start: function (event, ui) {
-
-                        },
-                        stop: function (event, ui) {
-                            //结束时触发
-                            console.count("拖拽结束");
-                        }
-                    });
+                        "<td>" + result[data].sftpUsername + "</td>" +
+                        "<td>" + result[data].sftpPwd + "</td>" +
+                        "<td>" + result[data].sftpDir + "</td>" +
+                        "<td>" + result[data].sftpHost + "</td>" +
+                        "<td>" + result[data].sftpPort + "</td>" +
+                        "<td>" + ((result[data].sftpSql !== null)? result[data].sftpSql : '') + "</td>" +
+                        "<td><button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doFill(&apos;" + JSON.stringify(result[data]) + "&apos;)'>测试</button>" +
+                        "<button type='button' style='margin-inline: 5px;' class='btn btn-primary' onclick='doDel(&apos;" + JSON.stringify(result[data]) + "&apos;)'>删除</button></td></tr>");
                     count += 1;
                 }
                 if (count === 0) {
-                    table.html("<tr><td colspan='4'>未查询到数据</td></tr>");
+                    table.html("<tr><td colspan='8'>未查询到数据</td></tr>");
                 } else {
-                    table.append("<tr><td colspan='4'>总记录数为" + count + "条</td></tr>");
+                    table.append("<tr><td colspan='8'>总记录数为" + count + "条</td></tr>");
                 }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                doRemLoad();
+                $("#msgModalBody").html("服务异常：" + textStatus);
+                $("#msgModal").modal("show");
+            }
+        });
+    }
+
+    function doDel(params) {
+        let obj = eval('(' + params + ')');
+        var dir = obj["sftpDir"];
+        var username = obj["sftpUsername"];
+        var host = obj["sftpHost"];
+        var port = obj["sftpPort"];
+        var pwd = obj["sftpPwd"];
+        var sql = obj["sftpSql"];
+        var tableName = obj["tableName"];
+        $.ajax({
+            url: baseUrl + "/sftp/del",
+            type: "post",
+            cache: false,
+            dataType: 'text',
+            data: {
+                tableName: tableName,
+                sftpDir: dir,
+                sftpUsername: username,
+                sftpHost: host,
+                sftpPort: port,
+                sftpPwd: pwd,
+                sftpSql: sql
+            },
+            beforeSend: function () {
+                doload(3);
+            },
+            success: function (result) {
+                doRemLoad();
+                $("#msgModalBody").html(result);
+                $("#msgModal").modal("show");
+                doTabList();
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 doRemLoad();

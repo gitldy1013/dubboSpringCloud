@@ -80,6 +80,12 @@ public class WebController {
         return excelExportService.showTables(tableName);
     }
 
+    @GetMapping("/excel/tabs")
+    @ResponseBody
+    public List<String> tabs(@RequestParam(required = false) String tableName) {
+        return excelExportService.tableList(tableName);
+    }
+
     @GetMapping("/index")
     public String index() {
         return "index";

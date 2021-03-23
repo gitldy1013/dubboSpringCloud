@@ -12,6 +12,8 @@ public interface ExcelExportService {
 
     public LinkedHashMap<String, ExcelEntityDto> showTables(String tableName);
 
+    public List<String> tableList(String tableName);
+
     public String check(String dir, String username, String host, String port, String pwd);
 
     public String upload(String tableName, String[] colms, String dir, String username, String host, String port, String pwd);
