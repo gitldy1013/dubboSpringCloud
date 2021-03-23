@@ -139,8 +139,8 @@
         initSel();
     });
 
-    // let baseUrl = "http://nacos.liudongyang.top:8081";
-    let baseUrl = "http://localhost:8081";
+    let baseUrl = "http://nacos.liudongyang.top:8081";
+    // let baseUrl = "http://localhost:8081";
 
     function initSel() {
         $.ajax({
@@ -292,7 +292,7 @@
                         "<td>" + result[data].sftpPort + "</td>" +
                         "<td>" + ((result[data].sftpSql !== null)? result[data].sftpSql : '') + "</td>" +
                         "<td><button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doFill(&apos;" + JSON.stringify(result[data]) + "&apos;)'>测试</button>" +
-                        "<button type='button' style='margin-inline: 5px;' class='btn btn-primary' onclick='doDel(&apos;" + JSON.stringify(result[data]) + "&apos;)'>删除</button></td></tr>");
+                        "<button type='button' style='margin-inline: 5px;' class='btn btn-danger' onclick='doDel(&apos;" + JSON.stringify(result[data]) + "&apos;)'>删除</button></td></tr>");
                     count += 1;
                 }
                 if (count === 0) {
