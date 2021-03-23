@@ -333,7 +333,7 @@
                         "<td><div class='RadioStyle'><div id='" + result[data].tableName + "colum' class='Block PaddingL'><ul class='sortable' style='margin-bottom: 0!important;'></ul></div></div></td>" +
                         "<td>" + ((result[data]["entitySftpSqlDto"]["sftpSql"] !== null)? result[data]["entitySftpSqlDto"]["sftpSql"] : '') + "</td>" +
                         "<td><button type='button' style='margin-inline: 5px;' class='btn btn-info' onclick='doTab(\"" + result[data].tableName + "\")'>预览</button>" +
-                        "<button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doFill(&apos;" + JSON.stringify(result[data]["entitySftpSqlDto"])+ "&apos;)'>测试</button>" +
+                        "<button type='button' style='margin-inline: 5px;' class='btn btn-warning' onclick='doFill(&apos;" + JSON.stringify(result[data]["entitySftpSqlDto"])+ "&apos;)'>测试</button>" +
                         "<button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doDown(\"" + result[data].tableName + "\")'>下载</button>" +
                         "<button type='button' style='margin-inline: 5px;' class='btn btn-primary' onclick='doUp(\"" + result[data].tableName + "\")'>上传</button></td></tr>");
                     let columRow = $("#" + result[data].tableName + "colum > ul");
