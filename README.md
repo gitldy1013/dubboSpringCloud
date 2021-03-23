@@ -8,7 +8,7 @@
 * Spring Cloud Hoxton.SR5
 * Spring Cloud Alibaba 2.2.1.RELEASE
 
-## 综合能力微服务平台具体服务介绍
+## 微服务综合能力平台具体服务介绍
 
 ### 通用表格数据导出服务
 

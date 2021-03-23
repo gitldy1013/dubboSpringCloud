@@ -86,9 +86,14 @@ public class WebController {
         return excelExportService.tableList(tableName);
     }
 
-    @GetMapping("/index")
+    @GetMapping({"/","index",""})
     public String index() {
         return "index";
+    }
+
+    @GetMapping("/excel/index")
+    public String excel() {
+        return "excel";
     }
 
 
