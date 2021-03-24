@@ -79,11 +79,11 @@
   }
 
   window.changeFrameHeight = function(iframe) {
-    iframe.height =  document.documentElement.clientHeight - defaultSetting.bottom;
+    iframe.height =  document.documentElement.clientHeight - defaultSetting.bottom + 40;
   }
 
   window.onresize = function() {
-      $(".tab-iframe").height(document.documentElement.clientHeight - defaultSetting.bottom);
+      $(".tab-iframe").height(document.documentElement.clientHeight - defaultSetting.bottom + 40);
   }
 
   var TabManager = {

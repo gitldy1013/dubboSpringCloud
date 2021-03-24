@@ -7,7 +7,44 @@
   <link rel="shortcut icon" href="/static/images/favicon.ico" type="images/x-icon">
   <link rel="stylesheet" href="/static/jquery-tab/js/waves-0.7.5/waves.min.css">
   <link rel="stylesheet" href="/static/jquery-tab/css/jquery-tab.css">
+  <link href="/static/jQuery-nav/css/jquery-accordion-menu.css" rel="stylesheet" type="text/css" />
+  <link href="/static/jQuery-nav/css/font-awesome.css" rel="stylesheet" type="text/css" />
+  <script src="/static/jQuery-nav/js/jquery-1.11.2.min.js" type="text/javascript"></script>
+  <script src="/static/jQuery-nav/js/jquery-accordion-menu.js" type="text/javascript"></script>
 </head>
+<script type="text/javascript">
+  jQuery(document).ready(function () {
+    jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
+
+  });
+
+  $(function(){
+    //顶部导航切换
+    $("#nav li").click(function(){
+      $("#nav li.active").removeClass("active");
+      $(this).addClass("active");
+    })
+  })
+</script>
+<style type="text/css">
+  .filterinput{
+    background-color:rgba(249, 244, 244, 0);
+    border-radius:15px;
+    width:90%;
+    height:30px;
+    border:thin solid #222222;
+    text-indent:0.5em;
+    font-weight:bold;
+    color: #0a0a0a;
+  }
+  #nav a{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    white-space:nowrap;
+    width:100%;
+  }
+</style>
 <body>
   <nav class="navbar navbar-inverse">
       <div class="container-fluid">
@@ -17,7 +54,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">综合能力微服务平台</a>
+          <a class="navbar-brand" href="#">微服务综合能力平台</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -30,20 +67,40 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav" id="nav">
-            <li><a href="javascript:;" data-url="/excel/index">上传数据管理</a></li>
-            <li><a href="javascript:;" data-url="/sftp/index">文件服务管理</a></li>
-          </ul>
+          <div id="jquery-accordion-menu" class="jquery-accordion-menu red">
+            <div class="jquery-accordion-menu-header" id="form"></div>
+            <ul id="nav">
+              <li><a href="javascript:;" data-url="https://blog.liudongyang.top/"><i class="fa fa-user"></i> 个人主页</a></li>
+              <li><a href="javascript:;"><i class="fa fa-suitcase"></i> 通用表格数据导出服务</a>
+                <ul class="submenu">
+                  <li><a href="javascript:;" data-url="/excel/index">上传数据管理</a></li>
+                  <li><a href="javascript:;" data-url="/sftp/index">文件服务管理</a></li>
+                </ul>
+              </li>
+              <li><a href="javascript:;"><i class="fa fa-home"></i> 综合爬取网站数据服务</a>
+                <ul class="submenu">
+                  <li><a href="javascript:;" data-url="http://nacos.liudongyang.top:8080/">爬取网站</a></li>
+                  <li><a href="javascript:;" data-url="http://nacos.liudongyang.top:8080/task/">短信验证码服务</a></li>
+                </ul>
+              </li>
+              </ul>
+            <div class="jquery-accordion-menu-footer">
+              cmcc
+            </div>
+          </div>
+<!--          <ul class="nav" id="nav">-->
+<!--            <li><a href="javascript:;" data-url="/excel/index">上传数据管理</a></li>-->
+<!--            <li><a href="javascript:;" data-url="/sftp/index">文件服务管理</a></li>-->
+<!--          </ul>-->
         </div>
         <div class="col-sm-9  col-md-10 main">
               <div id="tab-container"></div>
         </div>
       </div>
     </div>
-<script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
 <script src="/static/jquery-tab/js/waves-0.7.5/waves.min.js"></script>
 <script src="/static/jquery-tab/js/BootstrapMenu/BootstrapMenu.min.js"></script>
-<script src="/static/jquery-tab/js//jquery-tab.js"></script>
+<script src="/static/jquery-tab/js/jquery-tab.js"></script>
 <script>
     $(function() {
       $("#tab-container").tab({
@@ -57,5 +114,42 @@
       });
     });
 </script>
+
+  <script type="text/javascript">
+    (function($) {
+      $.expr[":"].Contains = function(a, i, m) {
+        return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+      };
+      function filterList(header, list) {
+        //@header 头部元素
+        //@list 无需列表
+        //创建一个搜素表单
+        var form = $("<form>").attr({
+          "class":"filterform",
+          action:"#"
+        }), input = $("<input>").attr({
+          "class":"filterinput",
+          type:"text"
+        });
+        $(form).append(input).appendTo(header);
+        $(input).change(function() {
+          var filter = $(this).val();
+          if (filter) {
+            $matches = $(list).find("a:Contains(" + filter + ")").parent();
+            $("li", list).not($matches).slideUp();
+            $matches.slideDown();
+          } else {
+            $(list).find("li").slideDown();
+          }
+          return false;
+        }).keyup(function() {
+          $(this).change();
+        });
+      }
+      $(function() {
+        filterList($("#form"), $("#nav"));
+      });
+    })(jQuery);
+  </script>
 </body>
 </html>
