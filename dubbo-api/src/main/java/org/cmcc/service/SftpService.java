@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface SftpService {
 
+    public EntitySftpSqlDto getEntitySftpSql(String tableName);
     public List<EntitySftpSqlDto> getList();
     public void add(EntitySftpSqlDto entitySftpSqlDto);
     public void del(EntitySftpSqlDto entitySftpSqlDto);

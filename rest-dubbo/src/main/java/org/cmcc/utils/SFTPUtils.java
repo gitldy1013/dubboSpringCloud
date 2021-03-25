@@ -167,7 +167,7 @@ public class SFTPUtils {
             this.sftp.cd(createpath);
             return true;
         } catch (SftpException e) {
-            log.error("异常:" + e.getCause().getMessage());
+            e.printStackTrace();
             throw new BizException(BizExceptionCodeEnum.MIKDIR);
         }
     }

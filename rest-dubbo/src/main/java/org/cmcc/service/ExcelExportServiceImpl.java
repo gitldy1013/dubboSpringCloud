@@ -1,5 +1,8 @@
 package org.cmcc.service;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.dubbo.config.annotation.Service;
@@ -44,6 +47,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     //    private String separator = File.separator;
     private String separator = "/";
     private String path = "D://TEMP";
+    private String upPath = "D://UPLOAD";
 
     @Override
     @Path("export/{tableName}")
@@ -66,6 +70,36 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColmsAndSql(tableName, entitySftpSqlDto.getSftpSql(), colmsMap);
         new ExportExcelUtil().exportData("", null, colmsMap, data, path + separator + tableName + ".xlsx");
         return data;
+    }
+
+    @Override
+    public List<Map<String, Object>> excelExportCus(String tableName, String fileName, String[] colms) {
+        ExcelEntity excelEntity = custExcelEntityDao.findTableSql(tableName);
+        EntitySftpSql entitySftpSqlByTableName = entitySftpSqlDao.findEntitySftpSqlByTableName(tableName);
+        EntitySftpSqlDto entitySftpSqlDto = new EntitySftpSqlDto();
+        if (entitySftpSqlByTableName != null) {
+            BeanUtils.copyProperties(entitySftpSqlByTableName, entitySftpSqlDto);
+        }
+        ExcelEntityDto excelEntityDto;
+        if (colms != null && colms.length != 0) {
+            excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity, entitySftpSqlDto, colms);
+        } else {
+            excelEntityDto = ExcelEntity2Dto.excel2Dto(excelEntity, entitySftpSqlDto);
+        }
+        LinkedHashMap<String, String> colmsMap = excelEntityDto.getColms();
+        List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColmsAndSql(tableName, entitySftpSqlDto.getSftpSql(), colmsMap);
+        doFillExcel(fileName, data);
+        return data;
+    }
+
+    public void doFillExcel(String fileName, List<Map<String, Object>> data) {
+        //向已上传的模板中写入数据
+        File file = new File("D://UPLOAD//" + fileName);
+        ExcelWriter excelWriter = EasyExcel.write("D://UPLOAD//fill" + fileName).withTemplate(file).build();
+        WriteSheet writeSheet = EasyExcel.writerSheet().build();
+        excelWriter.fill(data, writeSheet);
+        // 千万别忘记关闭流
+        excelWriter.finish();
     }
 
     @Override
@@ -113,7 +147,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
                 log.info("远程目录" + dir + "创建成功");
             }
             String[] tbn = {tableName + ".xlsx"};
-            if (isBatchUpOrDownload(dir, username, host, port, pwd, tbn)) {
+            if (isBatchUpOrDownload(dir, username, host, port, pwd, tbn, path)) {
                 FileUtils.deleteDirectory(new File(path));
                 return "上传成功";
             } else {
@@ -125,7 +159,32 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         }
     }
 
-    private boolean isBatchUpOrDownload(String dir, String userName, String host, String port, String password, String[] fileNames) throws BizException {
+    @Override
+    public String upload(String[] fileNames, String dir, String username, String host, String port, String pwd) {
+        //批量上传&&上传之后删除本地文件
+        try {
+            boolean remoteDir = createRemoteDir(dir, username, host, port, pwd);
+            if (!remoteDir) {
+                log.info("远程目录已存在");
+            } else {
+                log.info("远程目录" + dir + "创建成功");
+            }
+            if (isBatchUpOrDownload(dir, username, host, port, pwd, fileNames, upPath)) {
+                return "上传成功";
+            } else {
+                return "上传失败";
+            }
+        } catch (BizException e) {
+            log.info(e.getMessage());
+            return "上传失败：" + e.getMessage();
+        } finally {
+            for (String fileName : fileNames) {
+                FileUtils.deleteQuietly(new File(upPath + separator + fileName));
+            }
+        }
+    }
+
+    private boolean isBatchUpOrDownload(String dir, String userName, String host, String port, String password, String[] fileNames, String path) throws BizException {
         return SFTPUtils.batchUpOrDownload(
                 userName, host, port, password, null,
                 dir + separator,

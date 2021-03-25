@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface ExcelExportService {
-    public List<Map<String, Object>> excelExport(String tableName, String... colms);
+    public List<Map<String, Object>> excelExport(String tableName, String[] colms);
+
+    public List<Map<String, Object>> excelExportCus(String tableName, String fileName, String[] colms);
 
     public LinkedHashMap<String, ExcelEntityDto> showTables(String tableName);
 
@@ -17,6 +19,8 @@ public interface ExcelExportService {
     public String check(String dir, String username, String host, String port, String pwd);
 
     public String upload(String tableName, String[] colms, String dir, String username, String host, String port, String pwd);
+
+    public String upload(String[] fileNames, String dir, String username, String host, String port, String pwd);
 
     public byte[] getFile(String filename, String[] colms) throws IOException;
 

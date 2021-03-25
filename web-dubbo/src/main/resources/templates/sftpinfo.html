@@ -78,7 +78,7 @@
     </div>
 
     <div class="col-xs-2" style="padding-top: 10px">
-        <select id="tableName" name="role" class="form-control selectpicker" title="请选择表名">
+        <select id="tableName" name="role" onchange="fillParam()" class="form-control selectpicker" title="请选择表名">
         </select>
     </div>
     <div class="col-xs-8" style="padding-top: 10px">
@@ -90,7 +90,16 @@
         </button>
     </div>
 
-    <div style="padding-top: 100px">
+    <div class="col-xs-10" style="padding-top: 10px">
+        <input type="file" class="form-control" id="file" placeholder="模板">
+    </div>
+    <div class="col-xs-2" style="padding-top: 10px">
+        <button type="button" onclick="doCusUpload()" class="btn btn-default">
+            定制上传
+        </button>
+    </div>
+
+    <div style="padding-top: 145px">
         <table class="table table-hover table-expandable table-striped table-bordered">
             <thead>
             <tr>
@@ -153,6 +162,71 @@
                 for (var i in data) {
                     tableName.append("<option value='" + data[i] + "'>" + data[i] + "</option>");
                 }
+                fillParam();
+            }
+        });
+    }
+
+    String.prototype.endWith = function (endStr) {
+        var d = this.length - endStr.length;
+        return (d >= 0 && this.lastIndexOf(endStr) === d);
+    };
+
+    function doCusUpload() {
+        let $file = $("#file");
+        if ($file[0].files.length === 0) {
+            doRemLoad();
+            $("#msgModalBody").html("请先选择有效文件。");
+            $("#msgModal").modal("show");
+        } else if (!($file[0].files[0].name).endsWith("xlsx")) {
+            doRemLoad();
+            $("#msgModalBody").html("请先选择有效格式类型为xlsx的文件。");
+            $("#msgModal").modal("show");
+        } else {
+            let tableName = $("#tableName option:selected").val();
+            var file = $file[0].files[0];//获取指定ID的文件信息
+            var formData = new FormData();//创建FormData对象，将所需的信息封装到内部，以键值对的方式
+            formData.append("file", file);//参数封装格式,可以是文件，亦可以是普通的字符串
+            formData.append("tableName", tableName);
+            $.ajax({
+                type: 'POST',
+                url: baseUrl + '/uploadFileAndSubmit',
+                async: false,
+                cache: false,
+                data: formData,
+                contentType: false,//由于提交的对象是FormData,所以要在这里更改上传参数的类型
+                processData: false,//提交对象是FormData,不需要对数据做任何处理
+                success: function (data) {
+                    doRemLoad();
+                    $("#msgModalBody").html("文件 " + data.fileName + "已上传。<//br>" + data.msg);
+                    $("#msgModal").modal("show");
+                },
+                complete: function () {
+                }
+            });
+        }
+    }
+
+    function fillParam() {
+        let tableName = $("#tableName option:selected").val();
+        $.ajax({
+            type: 'GET',
+            url: baseUrl + '/sftp/sftpInfo?tableName=' + tableName,
+            dataType: "json",
+            success: function (data) {
+                //拼接下拉框
+                let sftpDir = $("#sftpDir");
+                let sftpUsername = $("#sftpUser");
+                let sftpHost = $("#sftphost");
+                let sftpPort = $("#sftpPort");
+                let sftpPwd = $("#sftpPwd");
+                let sftpSql = $("#sftpSql");
+                sftpDir.val(data.sftpDir);
+                sftpUsername.val(data.sftpUsername);
+                sftpHost.val(data.sftpHost);
+                sftpPort.val(data.sftpPort);
+                sftpPwd.val(data.sftpPwd);
+                sftpSql.val(data.sftpSql);
             }
         });
     }
@@ -289,7 +363,7 @@
                         "<td>" + result[data].sftpDir + "</td>" +
                         "<td>" + result[data].sftpHost + "</td>" +
                         "<td>" + result[data].sftpPort + "</td>" +
-                        "<td>" + ((result[data].sftpSql !== null)? result[data].sftpSql : '') + "</td>" +
+                        "<td>" + ((result[data].sftpSql !== null) ? result[data].sftpSql : '') + "</td>" +
                         "<td><button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doFill(&apos;" + JSON.stringify(result[data]) + "&apos;)'>测试</button>" +
                         "<button type='button' style='margin-inline: 5px;' class='btn btn-danger' onclick='doDel(&apos;" + JSON.stringify(result[data]) + "&apos;)'>删除</button></td></tr>");
                     count += 1;

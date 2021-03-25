@@ -1,6 +1,7 @@
 package org.cmcc.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.dubbo.config.annotation.Service;
 import org.cmcc.dao.EntitySftpSqlDao;
 import org.cmcc.entity.EntitySftpSql;
@@ -17,6 +18,26 @@ public class SftpServiceImpl implements SftpService {
 
     @Autowired
     private EntitySftpSqlDao entitySftpSqlDao;
+
+    /**
+     * 通过表名字查询
+     *
+     * @param tableName
+     * @return
+     */
+    @Override
+    public EntitySftpSqlDto getEntitySftpSql(String tableName) {
+        EntitySftpSqlDto entitySftpSqlDto = new EntitySftpSqlDto();
+        if (StringUtils.isEmpty(tableName)) {
+            return entitySftpSqlDto;
+        } else {
+            EntitySftpSql entitySftpSql = entitySftpSqlDao.findEntitySftpSqlByTableName(tableName);
+            if (entitySftpSql != null) {
+                BeanUtils.copyProperties(entitySftpSql, entitySftpSqlDto);
+            }
+            return entitySftpSqlDto;
+        }
+    }
 
     /**
      * 列表

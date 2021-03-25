@@ -24,6 +24,12 @@ public class SftpController {
     @Reference(protocol = "dubbo")
     private SftpService sftpService;
 
+    @GetMapping("/sftp/sftpInfo")
+    @ResponseBody
+    public EntitySftpSqlDto sftpInfo(String tableName) {
+        return sftpService.getEntitySftpSql(tableName);
+    }
+
     @GetMapping("/sftp/list")
     @ResponseBody
     public List<EntitySftpSqlDto> list() {
