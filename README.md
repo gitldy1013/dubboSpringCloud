@@ -41,7 +41,22 @@
 
 >* 列表展示页面
 
-<p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/通用表格数据导出服务.jpg" alt="app"></p>
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/通用表格数据导出服务.jpg" alt="通用表格数据导出服务"></p>
 
 >* 详情展示页面
-<p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/预览详情展示页面.jpg" alt="app"></p>
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/预览详情展示页面.jpg" alt="预览详情展示页面"></p>
+
+>* 上传服务管理
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/上传服务管理.jpg" alt="上传服务管理"></p>
+
+>* 内网部署环境
+
+|涉及spring的资产IP|所涉及系统的端口|归属部门|归属系统|
+|---|---|---|---|
+|172.24.26.30|8081|技术创新中心|支付清算协会|
+|172.24.26.34|18080|技术创新中心|大数据接口平台|
+|172.24.26.35|18080|技术创新中心|大数据接口平台|
+|55.144.17.35|8866|技术创新中心|湖南中石化|
+|55.144.17.35|19090|技术创新中心|统一网关服务|
+|55.144.26.35|8888|技术创新中心|sftp 文件扫描服务|
+|55.144.26.35|19090|技术创新中心|统一网关服务|
