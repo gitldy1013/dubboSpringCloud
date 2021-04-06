@@ -12,4 +12,4 @@ dubbo:
     check: off
     retries: 0
   cloud:
-    subscribed-services: "cmcc-rest-dubbo"
+    subscribed-services: "cmcc-rest-dubbo,cmcc-cron-dubbo"

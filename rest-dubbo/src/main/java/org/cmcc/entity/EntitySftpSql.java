@@ -33,6 +33,9 @@ public class EntitySftpSql {
     private String sftpDir;
 
     @Column
+    private String cron;;
+
+    @Column
     private String sftpSql;
 }
 

@@ -3,6 +3,9 @@ package org.cmcc.controller;
 import org.apache.dubbo.config.annotation.Reference;
 import org.cmcc.service.DubboService;
 import org.cmcc.service.ExcelExportService;
+import org.cmcc.service.QuartzService;
+import org.cmcc.service.bean.QuartzTaskInformations;
+import org.cmcc.service.common.uitl.ResultEnum;
 import org.cmcc.service.dto.ExcelEntityDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author cmcc
@@ -33,6 +37,9 @@ public class WebController {
 
     @Reference(protocol = "dubbo")
     private ExcelExportService excelExportService;
+
+    @Reference(protocol = "dubbo")
+    private QuartzService quartzService;
 
     @GetMapping("/test/{p}")
     @ResponseBody
@@ -56,6 +63,23 @@ public class WebController {
     @ResponseBody
     public String upload(String tableName, @RequestParam(value = "colums[]", required = false) String[] colums,
                          String dir, String username, String host, String port, String pwd) {
+        //记录任务
+        QuartzTaskInformations task = new QuartzTaskInformations();
+        task.setTaskno(tableName);
+        task.setTaskname(tableName);
+        task.setFrozenstatus(ResultEnum.FROZEN.getMessage());
+        task.setLastmodifytime(System.currentTimeMillis());
+        task.setFrozentime(System.currentTimeMillis());
+        task.setVersion(1);
+        task.setCreatetime(System.currentTimeMillis());
+        task.setExecuteparamter(tableName+".xlsx");
+        task.setExecutorno("cmcc");
+        task.setUnfrozentime(0L);
+        task.setSchedulerrule("*/5 * * * * ?");
+        task.setSendtype(ResultEnum.SFTP.getMessage());
+        task.setUrl(host + ":" + port);
+        task.setTimekey("");
+        quartzService.addTask(task);
         return excelExportService.upload(tableName, colums, dir, username, host, port, pwd);
     }
 

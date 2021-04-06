@@ -81,8 +81,11 @@
         <select id="tableName" name="role" onchange="fillParam()" class="form-control selectpicker" title="请选择表名">
         </select>
     </div>
-    <div class="col-xs-8" style="padding-top: 10px">
+    <div class="col-xs-4" style="padding-top: 10px">
         <input type="text" class="form-control" id="sftpSql" placeholder="SQL">
+    </div>
+    <div class="col-xs-4" style="padding-top: 10px">
+        <input type="text" class="form-control" id="cron" placeholder="定时任务表达式">
     </div>
     <div class="col-xs-2" style="padding-top: 10px">
         <button type="button" onclick="doAdd()" class="btn btn-default">
@@ -91,7 +94,7 @@
     </div>
 
     <div class="col-xs-10" style="padding-top: 10px">
-        <input type="file" class="form-control" id="file" placeholder="模板">
+        <input type="file" class="form-control" id="file" placeholder="上传模板">
     </div>
     <div class="col-xs-2" style="padding-top: 10px">
         <button type="button" onclick="doCusUpload()" class="btn btn-default">
@@ -109,6 +112,7 @@
                 <th style="text-align: center">目录</th>
                 <th style="text-align: center">地址</th>
                 <th style="text-align: center">端口</th>
+                <th style="text-align: center">定时表达式</th>
                 <th style="text-align: center">SQL</th>
                 <th style="text-align: center" width="15%">操作</th>
             </tr>
@@ -221,12 +225,14 @@
                 let sftpPort = $("#sftpPort");
                 let sftpPwd = $("#sftpPwd");
                 let sftpSql = $("#sftpSql");
+                let cron = $("cron");
                 sftpDir.val(data.sftpDir);
                 sftpUsername.val(data.sftpUsername);
                 sftpHost.val(data.sftpHost);
                 sftpPort.val(data.sftpPort);
                 sftpPwd.val(data.sftpPwd);
                 sftpSql.val(data.sftpSql);
+                cron.val(data.cron);
             }
         });
     }
@@ -239,6 +245,7 @@
         var port = $("#sftpPort").val();
         var pwd = $("#sftpPwd").val();
         var sql = $("#sftpSql").val();
+        var cron = $("#cron").val();
         $.ajax({
             url: baseUrl + "/sftp/add",
             type: "post",
@@ -251,7 +258,8 @@
                 sftpHost: host,
                 sftpPort: port,
                 sftpPwd: pwd,
-                sftpSql: sql
+                sftpSql: sql,
+                cron: cron
             },
             beforeSend: function () {
                 doload(1);
@@ -306,6 +314,7 @@
         let sftpPort = $("#sftpPort");
         let sftpPwd = $("#sftpPwd");
         let sftpSql = $("#sftpSql");
+        let cron = $("#cron");
         let obj = eval('(' + params + ')');
         tableName.val(obj["tableName"]);
         sftpDir.val(obj["sftpDir"]);
@@ -313,7 +322,7 @@
         sftpHost.val(obj["sftpHost"]);
         sftpPort.val(obj["sftpPort"]);
         sftpPwd.val(obj["sftpPwd"]);
-        sftpSql.val(obj["sftpSql"]);
+        cron.val(obj["cron"]);
         var dir = sftpDir.val();
         var username = sftpUsername.val();
         var host = sftpHost.val();
@@ -363,6 +372,7 @@
                         "<td>" + result[data].sftpDir + "</td>" +
                         "<td>" + result[data].sftpHost + "</td>" +
                         "<td>" + result[data].sftpPort + "</td>" +
+                        "<td>" + result[data].cron + "</td>" +
                         "<td>" + ((result[data].sftpSql !== null) ? result[data].sftpSql : '') + "</td>" +
                         "<td><button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doFill(&apos;" + JSON.stringify(result[data]) + "&apos;)'>测试</button>" +
                         "<button type='button' style='margin-inline: 5px;' class='btn btn-danger' onclick='doDel(&apos;" + JSON.stringify(result[data]) + "&apos;)'>删除</button></td></tr>");
@@ -390,6 +400,7 @@
         var port = obj["sftpPort"];
         var pwd = obj["sftpPwd"];
         var sql = obj["sftpSql"];
+        var cron = obj["cron"];
         var tableName = obj["tableName"];
         $.ajax({
             url: baseUrl + "/sftp/del",
@@ -403,7 +414,8 @@
                 sftpHost: host,
                 sftpPort: port,
                 sftpPwd: pwd,
-                sftpSql: sql
+                sftpSql: sql,
+                cron: cron,
             },
             beforeSend: function () {
                 doload(3);

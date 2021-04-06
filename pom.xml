@@ -53,6 +53,7 @@
         <module>dubbo-api</module>
         <module>web-dubbo</module>
         <module>rest-dubbo</module>
+        <module>quartz</module>
         <module>sc-gateway</module>
     </modules>
 </project>

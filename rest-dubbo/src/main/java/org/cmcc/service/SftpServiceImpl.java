@@ -86,4 +86,5 @@ public class SftpServiceImpl implements SftpService {
         BeanUtils.copyProperties(entitySftpSqlDto, s);
         entitySftpSqlDao.saveAndFlush(s);
     }
+
 }

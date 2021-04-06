@@ -11,6 +11,7 @@ CREATE TABLE `entity_sftp_sql` (
   `sftp_username` varchar(50) DEFAULT NULL COMMENT 'sftp文件服务器用户名',
   `sftp_pwd` varchar(50) DEFAULT NULL COMMENT 'sftp文件服务器密码',
   `sftp_dir` varchar(100) DEFAULT NULL COMMENT 'sftp文件服务器上传目录',
+  `cron` varchar(100) DEFAULT NULL COMMENT '定时上传表达式',
   `sftp_sql` text COMMENT '数据筛选sql',
   PRIMARY KEY (`table_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='数据信息关联表'
