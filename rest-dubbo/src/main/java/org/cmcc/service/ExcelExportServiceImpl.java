@@ -88,18 +88,29 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         }
         LinkedHashMap<String, String> colmsMap = excelEntityDto.getColms();
         List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColmsAndSql(tableName, entitySftpSqlDto.getSftpSql(), colmsMap);
-        doFillExcel(fileName, data);
+        boolean b = doFillExcel(fileName, data);
         return data;
     }
 
-    public void doFillExcel(String fileName, List<Map<String, Object>> data) {
-        //向已上传的模板中写入数据
-        File file = new File("D://UPLOAD//" + fileName);
-        ExcelWriter excelWriter = EasyExcel.write("D://UPLOAD//fill" + fileName).withTemplate(file).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet().build();
-        excelWriter.fill(data, writeSheet);
-        // 千万别忘记关闭流
-        excelWriter.finish();
+    public boolean doFillExcel(String fileName, List<Map<String, Object>> data) {
+        ExcelWriter excelWriter = null;
+        boolean fill = false;
+        try {
+            //向已上传的模板中写入数据
+            File file = new File("D://UPLOAD//" + fileName);
+            excelWriter = EasyExcel.write("D://UPLOAD//fill" + fileName).withTemplate(file).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet().build();
+            excelWriter.fill(data, writeSheet);
+            fill = true;
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+        } finally {
+            // 千万别忘记关闭流
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
+        return fill;
     }
 
     @Override

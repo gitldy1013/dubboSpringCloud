@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface QuartzTaskErrorsMapper {
     int deleteByPrimaryKey(Long id);
 
+    int deleteByTaskNo(String taskNo);
+
     int insert(QuartzTaskErrors record);
 
     int insertSelective(QuartzTaskErrors record);

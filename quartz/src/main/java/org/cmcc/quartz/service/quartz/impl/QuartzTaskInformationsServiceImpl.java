@@ -35,6 +35,10 @@ public class QuartzTaskInformationsServiceImpl implements QuartzTaskInformations
         Integer count = quartzTaskInformationsMapper.selectByTaskNo(taskNo);
         //判断是否重复任务编号
         if (count > 0) {
+            QuartzTaskInformations taskByTaskNo = quartzTaskInformationsMapper.getTaskByTaskNo(taskNo);
+            quartzTaskInformations.setId(taskByTaskNo.getId());
+            quartzTaskInformations.setVersion(taskByTaskNo.getVersion());
+            updateTask(quartzTaskInformations);
             return ResultUtil.success(ResultEnum.TASKNO_EXIST.getCode(), ResultEnum.TASKNO_EXIST.getMessage());
         }
         int insert = quartzTaskInformationsMapper.insert(quartzTaskInformations);

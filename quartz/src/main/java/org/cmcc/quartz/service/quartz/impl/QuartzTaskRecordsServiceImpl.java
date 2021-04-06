@@ -37,6 +37,11 @@ public class QuartzTaskRecordsServiceImpl implements QuartzTaskRecordsService {
         return quartzTaskRecordsMapper.getTaskRecordsByTaskNo(taskNo);
     }
 
+    @Override
+    public Integer delTaskRecords(String taskno) {
+        return quartzTaskRecordsMapper.deleteByTaskNo(taskno);
+    }
+
     ;
 
 }

@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS `quartz_task_errors`;
 CREATE TABLE `quartz_task_errors` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `taskExecuteRecordId` varchar(64) NOT NULL COMMENT '任务执行记录Id',
-  `errorKey` varchar(1024) NOT NULL COMMENT '信息关键字',
+  `errorKey` varchar(10240) NOT NULL COMMENT '信息关键字',
   `errorValue` text COMMENT '信息内容',
   `createTime` bigint(13) NOT NULL COMMENT '创建时间',
   `lastModifyTime` bigint(13) DEFAULT NULL COMMENT '最近修改时间',

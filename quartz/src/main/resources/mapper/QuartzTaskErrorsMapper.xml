@@ -129,4 +129,8 @@
         <include refid="Base_Column_List_With_ErrorValue"/>
         from quartz_task_errors where taskExecuteRecordId = #{recordId}
     </select>
+    <delete id="deleteByTaskNo" parameterType="java.lang.String">
+        delete from quartz_task_errors
+        where taskNo = #{taskNo,jdbcType=VARCHAR}
+    </delete>
 </mapper>

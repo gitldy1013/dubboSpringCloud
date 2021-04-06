@@ -21,4 +21,6 @@ public interface QuartzTaskRecordsMapper {
     int updateByPrimaryKey(QuartzTaskRecords record);
 
     List<QuartzTaskRecords> getTaskRecordsByTaskNo(String taskNo);
+
+    int deleteByTaskNo(String taskno);
 }

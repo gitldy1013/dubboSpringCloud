@@ -25,6 +25,11 @@ public class QuartzTaskErrorsServiceImpl implements QuartzTaskErrorsService {
     }
 
     @Override
+    public Integer delTaskErrorRecord(String taskNo) {
+        return quartzTaskErrorsMapper.deleteByTaskNo(taskNo);
+    }
+
+    @Override
     public QuartzTaskErrors detailTaskErrors(String recordId) {
         return quartzTaskErrorsMapper.detailTaskErrors(recordId);
     }

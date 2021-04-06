@@ -12,4 +12,5 @@ public interface QuartzTaskRecordsService {
 
     List<QuartzTaskRecords> listTaskRecordsByTaskNo(String taskNo);
 
+    Integer delTaskRecords(String taskno);
 }

@@ -146,4 +146,8 @@
         <include refid="Base_Column_List"/>
         from quartz_task_records where taskNo = #{taskNo} order by createTime desc;
     </select>
+    <delete id="deleteByTaskNo" parameterType="java.lang.String">
+        delete from quartz_task_records
+        where taskNo = #{taskNo,jdbcType=VARCHAR}
+    </delete>
 </mapper>

@@ -130,7 +130,7 @@ public class FileController {
         task.setFrozenstatus(ResultEnum.FROZEN.getMessage());
         task.setLastmodifytime(System.currentTimeMillis());
         task.setFrozentime(System.currentTimeMillis());
-        task.setVersion(1);
+        task.setVersion(2);
         task.setCreatetime(System.currentTimeMillis());
         task.setExecuteparamter(fileName);
         task.setExecutorno("cmcc");

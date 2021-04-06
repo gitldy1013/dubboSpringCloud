@@ -114,6 +114,8 @@ public class QuartzServiceImpl implements QuartzService, InitializingBean {
         if (taskByTaskNo.getFrozenstatus().equals(ResultEnum.UNFROZEN.getMessage())) {
             startOrStopJob(quartzTaskInformations.getTaskno());
         }
+        quartzTaskErrorsService.delTaskErrorRecord(quartzTaskInformations.getTaskno());
+        quartzTaskRecordsService.delTaskRecords(quartzTaskInformations.getTaskno());
         return quartzTaskInformationsService.remove(quartzTaskInformations);
     }
 
