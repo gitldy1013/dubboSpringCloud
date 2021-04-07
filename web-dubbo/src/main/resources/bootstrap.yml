@@ -28,12 +28,24 @@ spring:
 file:
   upload-dir: D://UPLOAD
 
+#management:
+#  health:
+#    mail:
+#      enabled: false
+#  endpoints:
+#    web:
+#      base-path: /manage
+#      exposure:
+#        include: ["*"]
+
 management:
-  health:
-    mail:
-      enabled: false
   endpoints:
     web:
-      base-path: /manage
       exposure:
-        include: ["*"]
+        # can be accessed without requiring authentication
+        include: "health,info,shutdown,offline,status,metrics,prometheus"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always

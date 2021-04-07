@@ -217,14 +217,14 @@
         from quartz_task_informations
         <if test="taskNo != null">
             <where>
-                taskNo = #{taskNo}
+                taskNo like concat('%',#{taskNo},'%')
             </where>
         </if>
         order by id desc limit #{startIndex},10;
     </select>
 
     <select id="selectByTaskNo" parameterType="java.lang.String" resultType="java.lang.Integer">
-    select count(*) from quartz_task_informations where taskNo=#{taskNo}
+    select count(*) from quartz_task_informations where taskNo = #{taskNo}
   </select>
 
     <select id="getTaskByTaskNo" parameterType="java.lang.String"

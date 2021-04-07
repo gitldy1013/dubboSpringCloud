@@ -7,6 +7,7 @@ import org.cmcc.service.dto.EntitySftpSqlDto;
 import org.cmcc.service.dto.ExcelEntityDto;
 import org.cmcc.utils.ExcelEntity2Dto;
 import org.hibernate.query.internal.NativeQueryImpl;
+import org.hibernate.query.spi.NativeQueryImplementor;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +52,19 @@ public class CustExcelEntityDao {
         String colmsStr = colms.keySet().toString().replace("[", "").replace("]", "");
         String sql;
         if (StringUtils.isEmpty(sftpSql)) {
-            sql = "select " + colmsStr + " from " + tableName;
+            if (StringUtils.isEmpty(colmsStr)) {
+                sql = "select * from " + tableName;
+            } else {
+                sql = "select " + colmsStr + " from " + tableName;
+            }
         } else {
             sql = sftpSql;
         }
         //创建本地查询
-        return (List<Map<String, Object>>) entityManager.createNativeQuery(sql).unwrap(NativeQueryImpl.class)
-                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).getResultList();
+        Query nativeQuery = entityManager.createNativeQuery(sql);
+        NativeQueryImplementor<Map<String, Object>> nativeQueryImplementor = nativeQuery.unwrap(NativeQueryImpl.class)
+                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        return nativeQueryImplementor.getResultList();
 
     }
 
@@ -76,7 +83,7 @@ public class CustExcelEntityDao {
         //创建本地查询
         Query nativeQuery = entityManager.createNativeQuery(sql);
         LinkedHashMap<String, ExcelEntityDto> excelEntitiesMap = new LinkedHashMap<>();
-        for (String tName : (List<String>)nativeQuery.getResultList()) {
+        for (String tName : (List<String>) nativeQuery.getResultList()) {
             EntitySftpSql entitySftpSqlByTableName = entitySftpSqlDao.findEntitySftpSqlByTableName(tName);
             EntitySftpSqlDto entitySftpSqlDto = new EntitySftpSqlDto();
             if (entitySftpSqlByTableName != null) {

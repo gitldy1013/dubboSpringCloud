@@ -1,16 +1,13 @@
 package org.cmcc.quartz.service.quartz.impl;
 
 
-import org.cmcc.quartz.job.QuartzMainJobFactory;
-import org.apache.dubbo.config.annotation.Service;
-import org.cmcc.service.ExcelExportService;
-import org.cmcc.service.common.uitl.CommonUtil;
-import org.cmcc.quartz.util.HttpClientUtil;
-import org.cmcc.service.common.uitl.ResultEnum;
-import org.cmcc.service.common.uitl.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.Service;
+import org.cmcc.quartz.job.QuartzMainJobFactory;
+import org.cmcc.quartz.util.HttpClientUtil;
+import org.cmcc.service.ExcelExportService;
 import org.cmcc.service.QuartzService;
 import org.cmcc.service.QuartzTaskErrorsService;
 import org.cmcc.service.QuartzTaskInformationsService;
@@ -19,6 +16,9 @@ import org.cmcc.service.SftpService;
 import org.cmcc.service.bean.QuartzTaskErrors;
 import org.cmcc.service.bean.QuartzTaskInformations;
 import org.cmcc.service.bean.QuartzTaskRecords;
+import org.cmcc.service.common.uitl.CommonUtil;
+import org.cmcc.service.common.uitl.ResultEnum;
+import org.cmcc.service.common.uitl.ResultUtil;
 import org.cmcc.service.dto.EntitySftpSqlDto;
 import org.cmcc.service.dto.QuartzTaskRecordsVo;
 import org.quartz.CronScheduleBuilder;
@@ -114,7 +114,6 @@ public class QuartzServiceImpl implements QuartzService, InitializingBean {
         if (taskByTaskNo.getFrozenstatus().equals(ResultEnum.UNFROZEN.getMessage())) {
             startOrStopJob(quartzTaskInformations.getTaskno());
         }
-        quartzTaskErrorsService.delTaskErrorRecord(quartzTaskInformations.getTaskno());
         quartzTaskRecordsService.delTaskRecords(quartzTaskInformations.getTaskno());
         return quartzTaskInformationsService.remove(quartzTaskInformations);
     }

@@ -104,9 +104,10 @@ public class QuartzMainJobFactory implements Job {
                 String port = entitySftpSql.getSftpPort();
                 String pwd = entitySftpSql.getSftpPwd();
                 String sql = entitySftpSql.getSftpSql();
-                excelExportService.excelExport(taskNo, executeParameter.split(","));
+                String[] colums = executeParameter == null ? null : executeParameter.split(",");
+                excelExportService.excelExport(taskNo, colums);
                 //上传到sftp文件服务器
-                String upload = excelExportService.upload(taskNo, executeParameter.split(","), dir, username, host, port, pwd);
+                String upload = excelExportService.upload(taskNo, colums, dir, username, host, port, pwd);
                 logger.info("taskNo={},sendtype={} sftp推送任务:{}", taskNo, sendType, upload);
             } else if (ResultEnum.SFTP_TEMP.getMessage().equals(sendType)) {
                 EntitySftpSqlDto entitySftpSql = sftpService.getEntitySftpSql(taskNo);

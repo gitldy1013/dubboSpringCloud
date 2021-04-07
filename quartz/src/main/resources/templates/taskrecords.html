@@ -46,7 +46,7 @@
                             </td>
                             <td th:text="${task.failcount}"/>
                             <td >
-                                <span th:if="${task.taskstatus eq 'FAIL'} or ${task.taskstatus eq 'INIT'}" >
+                                <span th:if="${task.taskstatus eq 'FAIL'}" >
                                      <input type="button" class="btn btn-3d btn-danger" th:onclick="detailTaskErrors([[${task.id}]])" value="查看"/>
                                 </span>
                             </td>
@@ -60,6 +60,7 @@
             </div>
         </div>
     </div>
+    <input type="button" class="btn btn-3d btn-danger" th:onclick="'history.go(-1);'" align="right" value="关闭"/>
 </div>
 
 <script type="text/javascript" th:inline="javascript">
