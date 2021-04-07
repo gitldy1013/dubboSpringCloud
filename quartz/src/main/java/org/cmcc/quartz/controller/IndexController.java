@@ -26,6 +26,7 @@ public class IndexController {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
     @Autowired
+    @SuppressWarnings("all")
     private QuartzService quartzService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -34,7 +35,7 @@ public class IndexController {
         try {
             List<QuartzTaskInformations> taskList = quartzService.getTaskList(taskNo, currentPage);
             int current = Integer.parseInt(currentPage);
-            Page<QuartzTaskInformations> page = new Page(taskList, taskList.size(), current);
+            Page<QuartzTaskInformations> page = new Page<QuartzTaskInformations>(taskList, taskList.size(), current);
             model.addAttribute("taskList", taskList);
             model.addAttribute("size", taskList.size());
             model.addAttribute("currentPage", page.getCurrentPage());

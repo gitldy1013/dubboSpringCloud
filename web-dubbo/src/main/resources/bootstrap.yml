@@ -27,3 +27,13 @@ spring:
 
 file:
   upload-dir: D://UPLOAD
+
+management:
+  health:
+    mail:
+      enabled: false
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: ["*"]

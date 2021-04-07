@@ -12,23 +12,23 @@ import com.google.gson.Gson;
  */
 public class ResultUtil<T> {
 
-    public static String success() {
-        Result result = new Result(ResultEnum.SUCCESS);
+    public static <T> String success() {
+        Result<T> result = new Result<T>(ResultEnum.SUCCESS);
         return new Gson().toJson(result);
     }
 
-    public static String success(Object obj) {
-        Result result = new Result(ResultEnum.SUCCESS, obj);
+    public static <T> String success(T obj) {
+        Result<T> result = new Result<T>(ResultEnum.SUCCESS, obj);
         return new Gson().toJson(result);
     }
 
-    public static String fail() {
-        Result result = new Result(ResultEnum.FAIL);
+    public static <T> String fail() {
+        Result<T> result = new Result<T>(ResultEnum.FAIL);
         return new Gson().toJson(result);
     }
 
-    public static String success(Integer code, String message) {
-        Result result = new Result(code, message);
+    public static <T> String success(Integer code, String message) {
+        Result<T> result = new Result<T>(code, message);
         return new Gson().toJson(result);
     }
 
