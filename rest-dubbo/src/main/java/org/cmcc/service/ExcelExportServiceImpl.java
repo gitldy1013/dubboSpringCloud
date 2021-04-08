@@ -5,7 +5,7 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.cmcc.dao.CustExcelEntityDao;
 import org.cmcc.dao.EntitySftpSqlDao;
 import org.cmcc.entity.EntitySftpSql;
@@ -32,7 +32,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service(protocol = {"dubbo", "rest"})
+@DubboService(protocol = {"dubbo", "rest"})
 @Path("/excel")
 @CrossOrigin(origins = "*")
 @Slf4j

@@ -1,8 +1,8 @@
 package org.cmcc.service;
 
+import com.alibaba.cloud.commons.lang.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.cmcc.dao.EntitySftpSqlDao;
 import org.cmcc.entity.EntitySftpSql;
 import org.cmcc.service.dto.EntitySftpSqlDto;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.LinkedList;
 import java.util.List;
 
-@Service(protocol = {"dubbo"})
+@DubboService(protocol = {"dubbo"})
 @Slf4j
 public class SftpServiceImpl implements SftpService {
 

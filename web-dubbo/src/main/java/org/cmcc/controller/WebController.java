@@ -1,6 +1,6 @@
 package org.cmcc.controller;
 
-import org.apache.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.cmcc.service.DubboService;
 import org.cmcc.service.ExcelExportService;
 import org.cmcc.service.QuartzService;
@@ -36,10 +36,10 @@ public class WebController {
     @SuppressWarnings("all")
     private DubboService dubboService;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private ExcelExportService excelExportService;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private QuartzService quartzService;
 
     @GetMapping("/test/{p}")
@@ -73,7 +73,7 @@ public class WebController {
         task.setFrozentime(System.currentTimeMillis());
         task.setVersion(1);
         task.setCreatetime(System.currentTimeMillis());
-        task.setExecuteparamter((colums == null) ? null : Arrays.toString(colums).substring(1,Arrays.toString(colums).length()-1));
+        task.setExecuteparamter((colums == null) ? null : Arrays.toString(colums).substring(1, Arrays.toString(colums).length() - 1));
         task.setExecutorno("cmcc");
         task.setUnfrozentime(0L);
         task.setSchedulerrule("*/59 * * * * ?");

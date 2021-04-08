@@ -1,0 +1,42 @@
+nacos:
+    config:
+        auto-refresh: true
+        bootstrap:
+            enable: true
+            log-enable: true
+        config-long-poll-timeout: 46000
+        config-retry-time: 2333
+        data-id: ETLMonitor-pro
+        enable-remote-sync-config: true
+        group: DEFAULT_GROUP
+        max-retry: 10
+        namespace: 88d74fba-4272-46d1-9560-5dc64a2430b6
+#        namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+        password: qwer1234()
+        remote-first: true
+        server-addr: 55.144.26.35:8848
+        type: yaml
+        username: nacos
+    discovery:
+        server-addr: 55.144.26.35:8848
+server:
+    port: 8888
+spring:
+    application:
+        name: sftp-service
+
+dubbo:
+    scan:
+        base-packages: com.cmcc.sftp.dubbo
+    protocols:
+        dubbo:
+            name: dubbo
+            port: -1
+    registry:
+        address: spring-cloud://55.144.26.35:8848
+    consumer:
+        timeout: 10000
+        check: off
+        retries: 0
+    cloud:
+        subscribed-services:

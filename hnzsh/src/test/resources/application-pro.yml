@@ -1,0 +1,160 @@
+server:
+  port: 8866
+#spring:
+#  #数据源
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://172.27.132.77/rhdb?&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+#    username: rhuser
+#    password: Zaq@wsx123
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  mvc:
+#    throw-exception-if-no-handler-found: true
+spring:
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  #数据源
+  mvc:
+    throw-exception-if-no-handler-found: true
+  datasource:
+    dynamic:
+      primary: mysql
+      datasource:
+        mysql:
+          url: jdbc:mysql://172.27.132.77/rhdb?&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+          username: rhuser
+          password: Zaq@wsx123
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        oracle:
+          url: jdbc:oracle:thin:@//172.27.0.11:1521/intdb
+          username: REPORT
+          password: Qwer1@#$
+          driverClassName: oracle.jdbc.OracleDriver
+      druid: #以下是全局默认值，可以全局更改
+        #监控统计拦截的filters
+        filters: stat
+        #配置初始化大小/最小/最大
+        initial-size: 1
+        min-idle: 1
+        max-active: 20
+        #获取连接等待超时时间
+        max-wait: 60000
+        #间隔多久进行一次检测，检测需要关闭的空闲连接
+        time-between-eviction-runs-millis: 60000
+        #一个连接在池中最小生存的时间
+        min-evictable-idle-time-millis: 300000
+        validation-query: SELECT 'x'
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+        pool-prepared-statements: false
+        max-pool-prepared-statement-per-connection-size: 20
+        stat:
+          merge-sql: true
+          log-slow-sql: true
+          slow-sql-millis: 2000
+
+#mybatis配置
+mybatis:
+  #配置mapper.xml文件所在路径
+  mapperLocations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+
+sftp:
+  host: 172.27.132.71
+  port: 22
+  username: hncssh_uap
+  password: Zuap!123
+  remoteHost: 172.16.21.84
+  remotePort: 22
+  remoteUsername: hncssh_uap
+  remotePassword: Hncssh@uap47
+  keyPath:
+  modDir: /wls/iwc/hnzsh/download/
+  remotePathUpload: /home/hncssh_uap/send/
+  remotePathDownload: /home/hncssh_uap/send/
+  fileNames:
+    - city: changsha
+      mercId: 888073118180189
+      mercNm: 中国石化销售有限公司湖南长沙石油分公司
+    - city: gaosu
+      mercId: 888200400342382
+      mercNm: 中国石化销售股份有限公司湖南石油高速分公司
+    - city: changde
+      mercId: 888200400344590
+      mercNm: 中国石化销售股份有限公司湖南常德石油分公司
+    - city: yueyang
+      mercId: 888200400344471
+      mercNm: 中国石化销售股份有限公司湖南岳阳石油分公司
+    - city: loudi
+      mercId: 888200400343969
+      mercNm: 中国石化销售股份有限公司湖南娄底石油分公司
+    - city: shaoyang
+      mercId: 888073118180189
+      mercNm: 中国石化销售股份有限公司湖南邵阳石油分公司
+    - city: zhangjiajie
+      mercId: 888200400343942
+      mercNm: 中国石化销售股份有限公司湖南张家界石油分公司
+    - city: xiangxi
+      mercId: 888200400344921
+      mercNm: 中国石化销售股份有限公司湖南湘西石油分公司
+    - city: huaihua
+      mercId: 888200400343517
+      mercNm: 中国石化销售股份有限公司湖南怀化石油分公司
+    - city: xiangtan
+      mercId: 888200400292480
+      mercNm: 中国石化销售股份有限公司湖南湘潭石油分公司
+    - city: yiyang
+      mercId: 888200400344193
+      mercNm: 中国石化销售股份有限公司湖南益阳石油分公司
+    - city: zhuzhou
+      mercId: 888200400313404
+      mercNm: 中国石化销售股份有限公司湖南株洲石油分公司
+    - city: yongzhou
+      mercId: 888201200419289
+      mercNm: 中国石化销售股份有限公司湖南永州石油分公司
+    - city: hengyang
+      mercId: 888201200418294
+      mercNm: 中国石化销售股份有限公司湖南衡阳石油分公司
+    - city: chenzhou
+      mercId: 888201100413446
+      mercNm: 中国石化销售股份有限公司湖南郴州石油分公司
+hbsftp:
+#和包券sftp配置
+  hbqTemplateFilePath: /wls/iwc/hnzsh/template/和包券委托付款结算单template.xlsx
+  hbqFileNameSuffix: 和包券委托付款结算单.xlsx
+  hbqTargetFilePath: /wls/iwc/hnzsh/template/hbq/
+  hbqFileDir: /home/hncssh_uap/shenzhen/EXCEL/HBQ/
+#  hbqRemoteFileDir: /inf_data/output/shenzhen/HBQ/
+  hbqRemoteFileDir: /home/shenzhen/EXCEL/HBQ/
+#和包红包sftp配置
+  hbhbTemplateFilePath: /wls/iwc/hnzsh/template/和包红包委托付款结算单template.xlsx
+  hbhbFileNameSuffix: 和包红包委托付款结算单.xlsx
+  hbhbTargetFilePath: /wls/iwc/hnzsh/template/hbhb/
+  hbhbFileDir: /home/hncssh_uap/shenzhen/EXCEL/HBHB/
+#  hbhbRemoteFileDir: /inf_data/output/shenzhen/HBHB/
+  hbhbRemoteFileDir: /home/shenzhen/EXCEL/HBHB/
+#71服务器配置
+  host: 172.27.132.71
+  port: 22
+  username: hncssh_uap
+  password: Zuap!123
+#78服务器配置
+#  remoteHost: 172.27.132.78
+#  remotePort: 22
+#  remoteUsername: iwc
+#  remotePassword: Zaq@wsx123
+#深圳sftp服务器
+  remoteHost: 172.20.128.105
+  remotePort: 22
+  remoteUsername: shenzhen
+  remotePassword: Gab73*M4_
+
+
+
+
+

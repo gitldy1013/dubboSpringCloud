@@ -1,0 +1,25 @@
+nacos:
+    config:
+        auto-refresh: true
+        bootstrap:
+            enable: true
+            log-enable: true
+        config-long-poll-timeout: 46000
+        config-retry-time: 2333
+        data-id: ETLMonitor-pro
+        enable-remote-sync-config: true
+        group: DEFAULT_GROUP
+        max-retry: 10
+        namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+        password: nacos
+        remote-first: true
+        server-addr: 127.0.0.1:8848
+        type: yaml
+        username: nacos
+    discovery:
+        server-addr: 127.0.0.1:8848
+server:
+    port: 8888
+spring:
+    application:
+        name: sftp-service

@@ -1,7 +1,7 @@
 package org.cmcc.quartz.job;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.cmcc.quartz.service.quartz.impl.QuartzServiceImpl;
 import org.cmcc.quartz.util.ApplicationContextHolder;
 import org.cmcc.quartz.util.HttpClientUtil;
@@ -37,10 +37,10 @@ public class QuartzMainJobFactory implements Job {
 
     private AtomicInteger atomicInteger;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private SftpService sftpService;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private ExcelExportService excelExportService;
 
     @Override

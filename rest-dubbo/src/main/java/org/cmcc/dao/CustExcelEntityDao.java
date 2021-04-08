@@ -1,6 +1,6 @@
 package org.cmcc.dao;
 
-import org.apache.commons.lang.StringUtils;
+import com.alibaba.cloud.commons.lang.StringUtils;
 import org.cmcc.entity.EntitySftpSql;
 import org.cmcc.entity.ExcelEntity;
 import org.cmcc.service.dto.EntitySftpSqlDto;

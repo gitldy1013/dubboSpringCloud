@@ -1,8 +1,8 @@
 package org.cmcc.quartz.dao;
 
 
-import org.cmcc.service.bean.QuartzTaskErrors;
 import org.apache.ibatis.annotations.Mapper;
+import org.cmcc.service.bean.QuartzTaskErrors;
 
 @Mapper
 public interface QuartzTaskErrorsMapper {

@@ -1,8 +1,8 @@
 package org.cmcc.controller;
 
+import com.alibaba.cloud.commons.lang.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
-import org.apache.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.cmcc.service.ExcelExportService;
 import org.cmcc.service.QuartzService;
 import org.cmcc.service.SftpService;
@@ -39,13 +39,13 @@ public class FileController {
 
     private final StorageService storageService;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private SftpService sftpService;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private ExcelExportService excelExportService;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private QuartzService quartzService;
 
     public FileController(StorageService storageService) {
@@ -135,7 +135,7 @@ public class FileController {
         task.setExecuteparamter(fileName);
         task.setExecutorno("cmcc");
         task.setUnfrozentime(0L);
-        task.setSchedulerrule(StringUtils.isEmpty(entitySftpSql.getCron())? "*/30 * * * * ?" : entitySftpSql.getCron());
+        task.setSchedulerrule(StringUtils.isEmpty(entitySftpSql.getCron()) ? "*/30 * * * * ?" : entitySftpSql.getCron());
         task.setSendtype(ResultEnum.SFTP_TEMP.getMessage());
         task.setUrl(entitySftpSql.getSftpHost() + ":" + entitySftpSql.getSftpPort());
         task.setTimekey("");

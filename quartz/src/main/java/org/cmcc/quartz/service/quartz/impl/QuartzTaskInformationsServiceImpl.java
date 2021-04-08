@@ -1,12 +1,12 @@
 package org.cmcc.quartz.service.quartz.impl;
 
 
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
+import org.cmcc.quartz.dao.QuartzTaskInformationsMapper;
 import org.cmcc.service.QuartzTaskInformationsService;
+import org.cmcc.service.bean.QuartzTaskInformations;
 import org.cmcc.service.common.uitl.ResultEnum;
 import org.cmcc.service.common.uitl.ResultUtil;
-import org.cmcc.service.bean.QuartzTaskInformations;
-import org.cmcc.quartz.dao.QuartzTaskInformationsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import java.util.Map;
  * @Date 2019/1/3
  * Version  1.0
  */
-@Service(protocol = {"dubbo"})
+@DubboService(protocol = {"dubbo"})
 public class QuartzTaskInformationsServiceImpl implements QuartzTaskInformationsService {
 
     @Autowired

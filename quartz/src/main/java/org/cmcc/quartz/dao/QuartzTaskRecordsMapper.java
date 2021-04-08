@@ -1,8 +1,8 @@
 package org.cmcc.quartz.dao;
 
 
-import org.cmcc.service.bean.QuartzTaskRecords;
 import org.apache.ibatis.annotations.Mapper;
+import org.cmcc.service.bean.QuartzTaskRecords;
 
 import java.util.List;
 

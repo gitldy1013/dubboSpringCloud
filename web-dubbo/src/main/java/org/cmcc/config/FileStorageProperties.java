@@ -1,7 +1,6 @@
 package org.cmcc.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 @ConfigurationProperties(prefix = "file")
 public class FileStorageProperties {

@@ -3,8 +3,8 @@ package org.cmcc.quartz.service.quartz.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.dubbo.config.annotation.Reference;
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.cmcc.quartz.job.QuartzMainJobFactory;
 import org.cmcc.quartz.util.HttpClientUtil;
 import org.cmcc.service.ExcelExportService;
@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Date 2019/1/3
  * Version  1.0
  */
-@Service(protocol = {"dubbo"})
+@DubboService(protocol = {"dubbo"})
 @Slf4j
 public class QuartzServiceImpl implements QuartzService, InitializingBean {
 
@@ -75,10 +75,10 @@ public class QuartzServiceImpl implements QuartzService, InitializingBean {
     @Autowired
     private SchedulerFactoryBean schedulerBean;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private SftpService sftpService;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private ExcelExportService excelExportService;
 
     /**

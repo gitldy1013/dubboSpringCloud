@@ -1,7 +1,7 @@
 package org.cmcc.quartz.service.quartz.impl;
 
+import org.apache.dubbo.config.annotation.DubboService;
 import org.cmcc.quartz.dao.QuartzTaskErrorsMapper;
-import org.apache.dubbo.config.annotation.Service;
 import org.cmcc.service.QuartzTaskErrorsService;
 import org.cmcc.service.bean.QuartzTaskErrors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Date 2019/1/3
  * Version  1.0
  */
-@Service(protocol = {"dubbo"})
+@DubboService(protocol = {"dubbo"})
 public class QuartzTaskErrorsServiceImpl implements QuartzTaskErrorsService {
 
     @Autowired

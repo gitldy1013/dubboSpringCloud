@@ -1,0 +1,74 @@
+server:
+  port: 8080
+
+#mybatis配置
+mybatis:
+  #配置mapper.xml文件所在路径
+  mapperLocations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+
+sftp:
+  host: 101.200.86.90
+  port: 9000
+  username: foo
+  password: class1013
+  remoteHost: 101.200.86.90
+  remotePort: 9000
+  remoteUsername: foo
+  remotePassword: class1013
+  keyPath:
+  modDir: D:/temp/
+  remotePathUpload: /upload/test/
+  remotePathDownload: /upload/test/
+  fileNames:
+    - city: changsha
+      mercId: 888073118180189
+      mercNm: 中国石化销售有限公司湖南长沙石油分公司
+    - city: gaosu
+      mercId: 888200400342382
+      mercNm: 中国石化销售股份有限公司湖南石油高速分公司
+    - city: changde
+      mercId: 888200400344590
+      mercNm: 中国石化销售股份有限公司湖南常德石油分公司
+    - city: yueyang
+      mercId: 888200400344471
+      mercNm: 中国石化销售股份有限公司湖南岳阳石油分公司
+    - city: loudi
+      mercId: 888200400343969
+      mercNm: 中国石化销售股份有限公司湖南娄底石油分公司
+    - city: shaoyang
+      mercId: 888073118180189
+      mercNm: 中国石化销售股份有限公司湖南邵阳石油分公司
+    - city: zhangjiajie
+      mercId: 888200400343942
+      mercNm: 中国石化销售股份有限公司湖南张家界石油分公司
+    - city: xiangxi
+      mercId: 888200400344921
+      mercNm: 中国石化销售股份有限公司湖南湘西石油分公司
+    - city: huaihua
+      mercId: 888200400343517
+      mercNm: 中国石化销售股份有限公司湖南怀化石油分公司
+    - city: xiangtan
+      mercId: 888200400292480
+      mercNm: 中国石化销售股份有限公司湖南湘潭石油分公司
+    - city: yiyang
+      mercId: 888200400344193
+      mercNm: 中国石化销售股份有限公司湖南益阳石油分公司
+    - city: zhuzhou
+      mercId: 888200400313404
+      mercNm: 中国石化销售股份有限公司湖南株洲石油分公司
+    - city: yongzhou
+      mercId: 888201200419289
+      mercNm: 中国石化销售股份有限公司湖南永州石油分公司
+    - city: hengyang
+      mercId: 888201200418294
+      mercNm: 中国石化销售股份有限公司湖南衡阳石油分公司
+    - city: chenzhou
+      mercId: 888201100413446
+      mercNm: 中国石化销售股份有限公司湖南郴州石油分公司
+spring:
+  profiles:
+    active: pro
