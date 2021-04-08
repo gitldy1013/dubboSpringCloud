@@ -10,8 +10,8 @@
     <groupId>com.cmcc</groupId>
     <artifactId>sftp</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>ETLMonitor</name>
-    <description>Spring Boot</description>
+    <name>sftp</name>
+    <description>Spring Boot sftp</description>
 
     <properties>
         <java.version>1.8</java.version>
