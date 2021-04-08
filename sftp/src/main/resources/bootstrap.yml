@@ -1,0 +1,51 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: sftp-service
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      config:
+        namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+        refresh-enabled: true
+        config-long-poll-timeout: 46000
+        config-retry-time: 2333
+        enable-remote-sync-config: true
+        group: DEFAULT_GROUP
+        max-retry: 10
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+        file-extension: yaml
+        name: "ETLMonitor-pro"
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+        group: sftp
+
+dubbo:
+  scan:
+    base-packages: org.cmcc.service
+  protocols:
+    dubbo:
+      name: dubbo
+      port: -1
+    rest:
+      name: rest
+      port: 8082
+      server: netty
+  registry:
+    address: spring-cloud://127.0.0.1:8848
+    group: sftp
+  consumer:
+    timeout: 10000
+    check: off
+    retries: 0
+  cloud:
+    subscribed-services: "*"

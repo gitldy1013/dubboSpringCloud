@@ -1,5 +1,16 @@
+server:
+  port: 80
+
 spring:
+  application:
+    name: sc-gateway
+  main:
+    allow-bean-definition-overriding: true
   cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
     gateway:
       discovery:
         locator:
@@ -22,5 +33,11 @@ spring:
           uri: lb://sftp-service
           predicates:
             - Path=/sftp-web/**
+          filters:
+            - StripPrefix=1
+        - id: hnzsh
+          uri: lb://hnzsh-service
+          predicates:
+            - Path=/hnzsh-web/**
           filters:
             - StripPrefix=1

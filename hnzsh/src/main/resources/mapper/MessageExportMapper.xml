@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.cmcc.service.hnzsh.business.dao.MessageExportMapper">
+
+    <resultMap id="hnzsh" type="org.cmcc.service.hnzsh.pojo.Hnzsh">
+        <result column="date_cd" property="dateCd"/>
+        <result column="city" property="city"/>
+        <result column="start_dt" property="startDt"/>
+        <result column="end_dt" property="endDt"/>
+        <result column="merc_id" property="mercId"/>
+        <result column="trd_tm" property="trdTm"/>
+        <result column="trd_acc_no" property="trdAccNo"/>
+        <result column="merc_nm" property="mercNm"/>
+        <result column="acrcv_amt" property="acrcvAmt"/>
+        <result column="p_day_id" property="pDayId"/>
+    </resultMap>
+
+    <select id="getMessageInfo" resultMap="hnzsh" parameterType="Map">
+        SELECT * FROM tw_evn_hn_sinopec_chk_trd_d where date_cd = #{dateCd} and city = #{city};
+    </select>
+
+    <select id="getTest" resultType="java.util.List">
+        select * from tm_msp_wtmktsett_d a;
+    </select>
+
+</mapper>

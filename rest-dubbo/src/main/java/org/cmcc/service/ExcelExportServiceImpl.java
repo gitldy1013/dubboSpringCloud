@@ -5,7 +5,7 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.cmcc.dao.CustExcelEntityDao;
 import org.cmcc.dao.EntitySftpSqlDao;
 import org.cmcc.entity.EntitySftpSql;
@@ -32,7 +32,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service(protocol = {"dubbo", "rest"})
+@DubboService(protocol = {"dubbo", "rest"})
 @Path("/excel")
 @CrossOrigin(origins = "*")
 @Slf4j
@@ -88,18 +88,29 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         }
         LinkedHashMap<String, String> colmsMap = excelEntityDto.getColms();
         List<Map<String, Object>> data = custExcelEntityDao.findByTableNameAndColmsAndSql(tableName, entitySftpSqlDto.getSftpSql(), colmsMap);
-        doFillExcel(fileName, data);
+        boolean b = doFillExcel(fileName, data);
         return data;
     }
 
-    public void doFillExcel(String fileName, List<Map<String, Object>> data) {
-        //向已上传的模板中写入数据
-        File file = new File("D://UPLOAD//" + fileName);
-        ExcelWriter excelWriter = EasyExcel.write("D://UPLOAD//fill" + fileName).withTemplate(file).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet().build();
-        excelWriter.fill(data, writeSheet);
-        // 千万别忘记关闭流
-        excelWriter.finish();
+    public boolean doFillExcel(String fileName, List<Map<String, Object>> data) {
+        ExcelWriter excelWriter = null;
+        boolean fill = false;
+        try {
+            //向已上传的模板中写入数据
+            File file = new File("D://UPLOAD//" + fileName);
+            excelWriter = EasyExcel.write("D://UPLOAD//fill" + fileName).withTemplate(file).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet().build();
+            excelWriter.fill(data, writeSheet);
+            fill = true;
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+        } finally {
+            // 千万别忘记关闭流
+            if (excelWriter != null) {
+                excelWriter.finish();
+            }
+        }
+        return fill;
     }
 
     @Override

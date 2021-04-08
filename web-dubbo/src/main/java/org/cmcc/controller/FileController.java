@@ -1,10 +1,14 @@
 package org.cmcc.controller;
 
+import com.alibaba.cloud.commons.lang.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.cmcc.service.ExcelExportService;
+import org.cmcc.service.QuartzService;
 import org.cmcc.service.SftpService;
 import org.cmcc.service.StorageService;
+import org.cmcc.service.bean.QuartzTaskInformations;
+import org.cmcc.service.common.uitl.ResultEnum;
 import org.cmcc.service.dto.EntitySftpSqlDto;
 import org.cmcc.vo.UploadFileResponse;
 import org.springframework.core.io.Resource;
@@ -35,11 +39,14 @@ public class FileController {
 
     private final StorageService storageService;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private SftpService sftpService;
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private ExcelExportService excelExportService;
+
+    @DubboReference(protocol = "dubbo")
+    private QuartzService quartzService;
 
     public FileController(StorageService storageService) {
         this.storageService = storageService;
@@ -110,7 +117,28 @@ public class FileController {
         String pwd = entitySftpSql.getSftpPwd();
         String sql = entitySftpSql.getSftpSql();
         excelExportService.excelExportCus(tableName, fileName, null);
+        saveTask(tableName, fileName, entitySftpSql);
         //上传到sftp文件服务器
         return excelExportService.upload(new String[]{"fill" + fileName}, dir, username, host, port, pwd);
+    }
+
+    public void saveTask(String tableName, String fileName, EntitySftpSqlDto entitySftpSql) {
+        //记录任务
+        QuartzTaskInformations task = new QuartzTaskInformations();
+        task.setTaskno(tableName);
+        task.setTaskname(tableName);
+        task.setFrozenstatus(ResultEnum.FROZEN.getMessage());
+        task.setLastmodifytime(System.currentTimeMillis());
+        task.setFrozentime(System.currentTimeMillis());
+        task.setVersion(2);
+        task.setCreatetime(System.currentTimeMillis());
+        task.setExecuteparamter(fileName);
+        task.setExecutorno("cmcc");
+        task.setUnfrozentime(0L);
+        task.setSchedulerrule(StringUtils.isEmpty(entitySftpSql.getCron()) ? "*/30 * * * * ?" : entitySftpSql.getCron());
+        task.setSendtype(ResultEnum.SFTP_TEMP.getMessage());
+        task.setUrl(entitySftpSql.getSftpHost() + ":" + entitySftpSql.getSftpPort());
+        task.setTimekey("");
+        quartzService.addTask(task);
     }
 }

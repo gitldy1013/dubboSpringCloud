@@ -1,6 +1,6 @@
 package org.cmcc.dao;
 
-import org.apache.commons.lang.StringUtils;
+import com.alibaba.cloud.commons.lang.StringUtils;
 import org.cmcc.entity.EntitySftpSql;
 import org.cmcc.entity.ExcelEntity;
 import org.cmcc.service.dto.EntitySftpSqlDto;
@@ -35,23 +35,28 @@ public class CustExcelEntityDao {
         String sql = "show create table " + tableName;
         //创建本地查询
         Query nativeQuery = entityManager.createNativeQuery(sql);
-        List<Object[]> resultList = nativeQuery.getResultList();
         //用ExcelEntity包装
-        for (Object[] objects : resultList) {
+        for (Object objects : nativeQuery.getResultList()) {
+            Object[] object = (Object[]) objects;
             ExcelEntity excelEntity = new ExcelEntity();
-            excelEntity.setTableName((String) objects[0]);
-            excelEntity.setTableSql((String) objects[1]);
+            excelEntity.setTableName((String) object[0]);
+            excelEntity.setTableSql((String) object[1]);
             return excelEntity;
         }
         return null;
     }
 
     @Transactional(readOnly = true)
+    @SuppressWarnings("unchecked")
     public List<Map<String, Object>> findByTableNameAndColmsAndSql(String tableName, String sftpSql, Map<String, String> colms) {
         String colmsStr = colms.keySet().toString().replace("[", "").replace("]", "");
         String sql;
         if (StringUtils.isEmpty(sftpSql)) {
-            sql = "select " + colmsStr + " from " + tableName;
+            if (StringUtils.isEmpty(colmsStr)) {
+                sql = "select * from " + tableName;
+            } else {
+                sql = "select " + colmsStr + " from " + tableName;
+            }
         } else {
             sql = sftpSql;
         }
@@ -59,8 +64,7 @@ public class CustExcelEntityDao {
         Query nativeQuery = entityManager.createNativeQuery(sql);
         NativeQueryImplementor<Map<String, Object>> nativeQueryImplementor = nativeQuery.unwrap(NativeQueryImpl.class)
                 .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-        List<Map<String, Object>> resultMap = nativeQueryImplementor.getResultList();
-        return resultMap;
+        return nativeQueryImplementor.getResultList();
 
     }
 
@@ -70,6 +74,7 @@ public class CustExcelEntityDao {
     }
 
     @Transactional(readOnly = true)
+    @SuppressWarnings("unchecked")
     public LinkedHashMap<String, ExcelEntityDto> showTables(String tableName) {
         if (tableName == null) {
             tableName = "";
@@ -77,9 +82,8 @@ public class CustExcelEntityDao {
         String sql = "show tables like '%" + tableName + "%'";
         //创建本地查询
         Query nativeQuery = entityManager.createNativeQuery(sql);
-        List<String> resultList = nativeQuery.getResultList();
         LinkedHashMap<String, ExcelEntityDto> excelEntitiesMap = new LinkedHashMap<>();
-        for (String tName : resultList) {
+        for (String tName : (List<String>) nativeQuery.getResultList()) {
             EntitySftpSql entitySftpSqlByTableName = entitySftpSqlDao.findEntitySftpSqlByTableName(tName);
             EntitySftpSqlDto entitySftpSqlDto = new EntitySftpSqlDto();
             if (entitySftpSqlByTableName != null) {
@@ -91,12 +95,13 @@ public class CustExcelEntityDao {
     }
 
     @Transactional(readOnly = true)
+    @SuppressWarnings("unchecked")
     public List<String> tableList(String tableName) {
         if (tableName == null) {
             tableName = "";
         }
         String sql = "show tables like '%" + tableName + "%'";
         //创建本地查询
-        return entityManager.createNativeQuery(sql).getResultList();
+        return (List<String>) entityManager.createNativeQuery(sql).getResultList();
     }
 }

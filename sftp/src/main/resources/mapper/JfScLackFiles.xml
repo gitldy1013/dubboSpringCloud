@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cmcc.service.sftp.mapper.JfScLackFilesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.cmcc.service.bean.JfscLackFiles">
+        <id column="check_id" property="checkId"/>
+        <result column="req_seq" property="reqSeq"/>
+        <result column="lack_file_name" property="lackFileName"/>
+        <result column="check_time" property="checkTime"/>
+        <result column="creat_time" property="creatTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        check_id, req_seq, lack_file_name, check_time, creat_time
+    </sql>
+
+</mapper>

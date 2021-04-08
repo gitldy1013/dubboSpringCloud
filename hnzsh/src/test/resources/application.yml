@@ -1,0 +1,51 @@
+server:
+  port: 8866
+spring:
+  application:
+    name: hnzsh
+  profiles:
+    active: pro
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      config:
+        namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
+        refresh-enabled: true
+        config-long-poll-timeout: 46000
+        config-retry-time: 2333
+        enable-remote-sync-config: true
+        group: DEFAULT_GROUP
+        max-retry: 10
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+        file-extension: yaml
+        prefix: ${spring.application.name}
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+
+dubbo:
+  scan:
+    base-packages: org.cmcc.service
+  protocols:
+    dubbo:
+      name: dubbo
+      port: -1
+    rest:
+      name: rest
+      port: 8082
+      server: netty
+  registry:
+    address: spring-cloud://127.0.0.1:8848
+  consumer:
+    timeout: 10000
+    check: off
+    retries: 0
+  cloud:
+    subscribed-services:

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.cmcc.service.hnzsh.business.dao.MspWtmktsettHbqMapper">
+
+    <resultMap id="BaseResultMap" type="org.cmcc.service.hnzsh.pojo.HbqDto">
+        <result column="row_num" property="rowNum"/>
+        <result column="prov_nm" property="provNm"/>
+        <result column="stat_dt" property="statDt"/>
+        <result column="payment_dt" property="paymentDt"/>
+        <result column="payment_amt" property="paymentAmt"/>
+        <result column="adjust_payment_amt" property="adjustPaymentAmt"/>
+        <result column="real_payment_amt" property="realPaymentAmt"/>
+        <result column="cm_go" property="comeAndGo"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        rownum as row_num,a.prov_nm,a.stat_dt,a.payment_dt,a.payment_amt,a.adjust_payment_amt,a.real_payment_amt,b.cm_go
+    </sql>
+
+    <select id="getHbqInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT <include refid="Base_Column_List"/> FROM REPORT.v_tm_msp_wtmktsett_d a
+        left join REPORT.DIM_DEPT_NOLIST b on a.PROV_NM=b.PROV_NM where STAT_DT = #{statDt}
+    </select>
+
+
+
+</mapper>

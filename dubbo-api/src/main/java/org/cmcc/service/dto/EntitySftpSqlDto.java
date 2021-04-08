@@ -20,5 +20,7 @@ public class EntitySftpSqlDto implements Serializable {
 
     private String sftpDir;
 
+    private String cron;
+
     private String sftpSql;
 }

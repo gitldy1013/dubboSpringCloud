@@ -1,7 +1,7 @@
 package org.cmcc.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.Reference;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.cmcc.service.SftpService;
 import org.cmcc.service.dto.EntitySftpSqlDto;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 public class SftpController {
 
-    @Reference(protocol = "dubbo")
+    @DubboReference(protocol = "dubbo")
     private SftpService sftpService;
 
     @GetMapping("/sftp/sftpInfo")

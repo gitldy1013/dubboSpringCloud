@@ -1,0 +1,30 @@
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  application:
+    name: sftp-service
+  mvc:
+    throw-exception-if-no-handler-found: true
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: smsuser
+    password: Zaq@wsx123
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://172.27.132.77/smsdb?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT&serverTimezone=Asia/Shanghai
+
+logging:
+  config: classpath:logback.xml
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+sftp:
+  host: 172.24.164.67
+  port: 22
+  username: shmerc_uap
+  password: SHMerc@123
+  modDir: /home/shmerc_uap/recv/
+  filePath: /app/bdp/ETLMonitor/list.txt
+  localDir: /app/bdp/ETLMonitor/

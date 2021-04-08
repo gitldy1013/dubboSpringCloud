@@ -1,0 +1,8 @@
+1.测试环境相关
+测试环境地址：172.16.48.226:8080  用户名密码wls/1qaz@wsX
+项目路径：/home/wls/app/sftp/sftp-jdk7-0.0.1-SNAPSHOT.jar
+
+
+生产环境相关
+生产环境地址：172.27.132.80:8080   4A登录，用户名：iwc
+项目路径：/inf-data/user_zl/sftp-jdk7-0.0.1-SNAPSHOT.jar
