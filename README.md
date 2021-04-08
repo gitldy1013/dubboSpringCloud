@@ -1,12 +1,21 @@
 #  dubbo整合spring cloud gateway
-[Dubbo想要个网关怎么办？试试整合微服务统一网关解决方案：Spring Cloud Gateway](https://blog.liudongyang.top/zh/spring-boot-nacos/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%9F%E4%B8%80%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3%E6%90%AD%E5%BB%BA.html)
+
+> - [x] [Dubbo想要个网关怎么办？试试整合微服务统一网关解决方案：Spring Cloud Gateway](https://blog.liudongyang.top/zh/spring-boot-nacos/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%9F%E4%B8%80%E6%9C%8D%E5%8A%A1%E7%BD%91%E5%85%B3%E6%90%AD%E5%BB%BA.html)
+> - [x] [Spring Cloud Alibaba整合Nacos实现配置中心](https://blog.liudongyang.top/zh/spring-cloud-alibaba/Nacos-Config-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%88%9D%E5%A7%8B%E5%8C%96.html#%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83)
+> - [ ] [Spring Cloud Alibaba整合SkyWalking实现链路追踪](https://blog.liudongyang.top/zh/spring-cloud-alibaba/%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA.html)
+> - [ ] [Spring Cloud Alibaba整合RocketMQ实现异步通信](https://blog.liudongyang.top/zh/spring-cloud-alibaba/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E6%B5%81%E6%B4%BE.html)
 
 ## 依赖环境
-* jdk 1.8
-* Nacos
-* Spring Boot 2.2.8.RELEASE
-* Spring Cloud Hoxton.SR5
-* Spring Cloud Alibaba 2.2.1.RELEASE
+
+>* 参阅[组件版本说明](https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)
+
+|依赖|版本|
+|---|---|
+| jdk                 |1.8|
+| Nacos               |2.0.0-ALPHA.2|
+| Spring Boot         |2.3.2.RELEASE|
+| Spring Cloud        |Hoxton.SR8|
+| Spring Cloud Alibaba|2.2.5.RELEASE|
 
 ## 微服务综合能力平台具体服务介绍
 
