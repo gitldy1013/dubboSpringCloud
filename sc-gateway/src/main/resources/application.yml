@@ -23,6 +23,12 @@ spring:
             - Path=/api-web/**
           filters:
             - StripPrefix=1
+        - id: quartz
+          uri: lb://cmcc-cron-dubbo
+          predicates:
+            - Path=/api-cron/**
+          filters:
+            - StripPrefix=1
         - id: rest
           uri: lb://cmcc-rest-dubbo
           predicates:

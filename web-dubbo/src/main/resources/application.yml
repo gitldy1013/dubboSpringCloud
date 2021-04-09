@@ -24,6 +24,8 @@ spring:
     static-path-pattern: /static/**
   resources:
     static-locations: classpath:/static/
+  messages:
+    basename: i18n/messages/messages
 
 file:
   upload-dir: D://UPLOAD
