@@ -72,6 +72,9 @@
 - [x] 集成支持kafka服务
 - [x] 支持http(get/post) kafka sftp(定制模板)推动方式 
 
+>* 定时任务服务列表页面
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/定时任务服务列表页面.jpg" alt="定时任务服务列表页面"></p>
+
 >* 内网部署环境
 
 |涉及spring的资产IP|所涉及系统的端口|归属部门|归属系统|
