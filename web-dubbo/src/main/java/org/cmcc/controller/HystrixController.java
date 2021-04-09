@@ -21,7 +21,7 @@ public class HystrixController {
     @GetMapping(value = "getInfo")
     public String testHystrix(){
         System.out.println("================testHystrix============");
-        String url = "http://localhost:8081/edu-teacher/user/login11";
+        String url = "http://101.200.86.90:8081/edu-teacher/user/login11";
         String result = restTemplate.getForObject(url, String.class);
         return result;
     }

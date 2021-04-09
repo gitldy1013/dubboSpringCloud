@@ -7,7 +7,7 @@ spring:
     allow-bean-definition-overriding: true
   cloud:
     nacos:
-      server-addr: 127.0.0.1:8848
+      server-addr: 101.200.86.90:8848
       username: nacos
       password: nacos
       config:
@@ -18,13 +18,13 @@ spring:
         enable-remote-sync-config: true
         group: DEFAULT_GROUP
         max-retry: 10
-        server-addr: 127.0.0.1:8848
+        server-addr: 101.200.86.90:8848
         username: nacos
         password: nacos
         file-extension: yaml
         name: "ETLMonitor-pro"
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 101.200.86.90:8848
         username: nacos
         password: nacos
         group: sftp
@@ -42,7 +42,7 @@ dubbo:
       port: 8082
       server: netty
   registry:
-    address: spring-cloud://127.0.0.1:8848
+    address: spring-cloud://101.200.86.90:8848
     group: sftp
   consumer:
     timeout: 10000

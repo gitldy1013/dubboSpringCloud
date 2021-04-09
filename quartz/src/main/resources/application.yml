@@ -5,7 +5,7 @@ spring:
     allow-bean-definition-overriding: true
   cloud:
     nacos:
-      server-addr: localhost:8848
+      server-addr: 101.200.86.90:8848
       username: nacos
       password: nacos
   datasource:
@@ -47,7 +47,7 @@ dubbo:
       name: dubbo
       port: -1
   registry:
-    address: spring-cloud://127.0.0.1:8848
+    address: spring-cloud://101.200.86.90:8848
   consumer:
     timeout: 10000
     check: off
