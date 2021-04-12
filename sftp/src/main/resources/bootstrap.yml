@@ -28,6 +28,7 @@ spring:
         username: nacos
         password: nacos
         group: sftp
+        namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
 
 dubbo:
   scan:
@@ -49,3 +50,5 @@ dubbo:
     retries: 0
   cloud:
     subscribed-services: "*"
+  config-center:
+    namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d

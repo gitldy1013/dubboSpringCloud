@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>微服务综合能力平台</title>
   <link rel="stylesheet" href="https://www.jq22.com/jquery/bootstrap-3.3.4.css">
-  <link rel="shortcut icon" href="/static/images/favicon.ico" type="images/x-icon">
-  <link rel="stylesheet" href="/static/jquery-tab/js/waves-0.7.5/waves.min.css">
-  <link rel="stylesheet" href="/static/jquery-tab/css/jquery-tab.css">
-  <link href="/static/jQuery-nav/css/jquery-accordion-menu.css" rel="stylesheet" type="text/css" />
-  <link href="/static/jQuery-nav/css/font-awesome.css" rel="stylesheet" type="text/css" />
-  <script src="/static/jQuery-nav/js/jquery-1.11.2.min.js" type="text/javascript"></script>
-  <script src="/static/jQuery-nav/js/jquery-accordion-menu.js" type="text/javascript"></script>
+  <link rel="shortcut icon" th:href="#{res_url}+'/static/images/favicon.ico'" type="images/x-icon">
+  <link rel="stylesheet" th:href="#{res_url}+'/static/jquery-tab/js/waves-0.7.5/waves.min.css'">
+  <link rel="stylesheet" th:href="#{res_url}+'/static/jquery-tab/css/jquery-tab.css'">
+  <link th:href="#{res_url}+'/static/jQuery-nav/css/jquery-accordion-menu.css'" rel="stylesheet" type="text/css" />
+  <link th:href="#{res_url}+'/static/jQuery-nav/css/font-awesome.css'" rel="stylesheet" type="text/css" />
+  <script th:src="#{res_url}+'/static/jQuery-nav/js/jquery-1.11.2.min.js'" type="text/javascript"></script>
+  <script th:src="#{res_url}+'/static/jQuery-nav/js/jquery-accordion-menu.js'" type="text/javascript"></script>
 </head>
 <script type="text/javascript">
   jQuery(document).ready(function () {
@@ -73,8 +73,8 @@
               <li><a href="javascript:;" data-url="https://blog.liudongyang.top/"><i class="fa fa-user"></i> 个人主页</a></li>
               <li><a href="javascript:;"><i class="fa fa-suitcase"></i> 通用表格数据导出服务</a>
                 <ul class="submenu">
-                  <li><a href="javascript:;" data-url="/excel/index">上传数据管理</a></li>
-                  <li><a href="javascript:;" data-url="/sftp/index">文件服务管理</a></li>
+                  <li><a href="javascript:;" th:data-url="#{server_url}+'/excel/index'">上传数据管理</a></li>
+                  <li><a href="javascript:;" th:data-url="#{server_url}+'/sftp/index'">文件服务管理</a></li>
                   <li><a href="javascript:;" data-url="http://localhost:8083">定时任务管理</a></li>
                 </ul>
               </li>
@@ -99,13 +99,14 @@
         </div>
       </div>
     </div>
-<script src="/static/jquery-tab/js/waves-0.7.5/waves.min.js"></script>
-<script src="/static/jquery-tab/js/BootstrapMenu/BootstrapMenu.min.js"></script>
-<script src="/static/jquery-tab/js/jquery-tab.js"></script>
-<script>
+<script th:src="#{res_url}+'/static/jquery-tab/js/waves-0.7.5/waves.min.js'"></script>
+<script th:src="#{res_url}+'/static/jquery-tab/js/BootstrapMenu/BootstrapMenu.min.js'"></script>
+<script th:src="#{res_url}+'/static/jquery-tab/js/jquery-tab.js'"></script>
+<script th:inline="javascript">
+  let server_url = [[#{server_url}]];
     $(function() {
       $("#tab-container").tab({
-        homeUrl: "/excel/home", // 首页地址
+        homeUrl: server_url+"/excel/home", // 首页地址
         homeName: "首页-服务介绍",  // tab 栏标题名
         bottom: 175, // 距离底部高度
         tabCallback: function(url, tab) {  // 点击 tab 后的回调函数

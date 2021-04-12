@@ -51,11 +51,12 @@
 
     <modules>
         <module>dubbo-api</module>
-        <module>web-dubbo</module>
         <module>rest-dubbo</module>
+        <module>web-dubbo</module>
         <module>quartz</module>
         <module>hnzsh</module>
         <module>sftp</module>
+        <module>static-res</module>
         <module>sc-gateway</module>
     </modules>
 

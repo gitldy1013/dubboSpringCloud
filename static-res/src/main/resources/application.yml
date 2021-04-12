@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: cmcc-static-res
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    enabled: true
+    encoding: UTF-8
+    mode: HTML
+  mvc:
+    static-path-pattern: /static/**
+server:
+  port: 8084
+

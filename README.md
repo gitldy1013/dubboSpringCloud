@@ -21,8 +21,6 @@
 
 ### 通用表格数据导出服务
 
->* [演示地址](http://nacos.liudongyang.top:8081)
-
 >* 主体功能
 
 - [x] 展示mysql数据库中的所有表信息,包含表名称及表字段;
@@ -71,6 +69,9 @@
 - [x] 定时任务的详细监控
 - [x] 集成支持kafka服务
 - [x] 支持http(get/post) kafka sftp(定制模板)推动方式 
+
+>* 定时任务服务列表页面
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/gitldy1013/dubboSpringCloud@main/docs/定时任务服务列表页面.jpg" alt="定时任务服务列表页面"></p>
 
 >* 内网部署环境
 

@@ -24,11 +24,13 @@ spring:
         username: nacos
         password: nacos
         file-extension: yaml
-        name: "hnzsh.yaml"
+        name: "hnzsh"
       discovery:
         server-addr: 127.0.0.1:8848
         username: nacos
         password: nacos
+        group: hnzsh
+        namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
 
 dubbo:
   scan:
@@ -43,9 +45,12 @@ dubbo:
       server: netty
   registry:
     address: spring-cloud://127.0.0.1:8848
+    group: hnzsh
   consumer:
     timeout: 10000
     check: off
     retries: 0
   cloud:
     subscribed-services: "*"
+  config-center:
+    namespace: f26a793b-6cc6-4142-b242-d774ec0b0916

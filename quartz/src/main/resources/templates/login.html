@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>电影资源后台管理</title>
     <!-- jquery -->
-    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/animate.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.min.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/mediaelementplayer.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/red.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/simple-line-icons.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script type="text/javascript" th:src="#{res_url}+'/static/js/jquery.min.js'"></script>
+    <link rel="stylesheet" type="text/css" th:href="#{res_url}+'/static/css/animate.min.css'"/>
+    <link rel="stylesheet" type="text/css" th:href="#{res_url}+'/static/css/bootstrap.min.css'"/>
+    <link rel="stylesheet" type="text/css" th:href="#{res_url}+'/static/css/font-awesome.min.css'"/>
+    <link rel="stylesheet" type="text/css" th:href="#{res_url}+'/static/css/mediaelementplayer.css'"/>
+    <link rel="stylesheet" type="text/css" th:href="#{res_url}+'/static/css/red.css'"/>
+    <link rel="stylesheet" type="text/css" th:href="#{res_url}+'/static/css/simple-line-icons.css'"/>
+    <link rel="stylesheet" type="text/css" th:href="#{res_url}+'/static/css/style.css'"/>
 </head><body id="mimin" class="dashboard form-signin-wrapper">
 
 <div class="container">
@@ -51,15 +51,13 @@
 
 <!-- end: Content -->
 <!-- start: Javascript -->
-<script src="asset/js/jquery.min.js"></script>
-<script src="asset/js/jquery.ui.min.js"></script>
-<script src="asset/js/bootstrap.min.js"></script>
-
-<script src="asset/js/plugins/moment.min.js"></script>
-<script src="asset/js/plugins/icheck.min.js"></script>
-
+<script th:src="#{res_url}+'/static/asset/js/jquery.min.js'"></script>
+<script th:src="#{res_url}+'/static/asset/js/jquery.ui.min.js'"></script>
+<script th:src="#{res_url}+'/static/asset/js/bootstrap.min.js'"></script>
+<script th:src="#{res_url}+'/static/asset/js/plugins/moment.min.js'"></script>
+<script th:src="#{res_url}+'/static/asset/js/plugins/icheck.min.js'"></script>
 <!-- custom -->
-<script src="asset/js/main.js"></script>
+<script th:src="#{res_url}+'/static/asset/js/main.js'"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $('input').iCheck({
