@@ -10,6 +10,8 @@ spring:
     mode: HTML
   mvc:
     static-path-pattern: /static/**
+  resources:
+    static-locations: [classpath:/static/]
 server:
   port: 8084
 
