@@ -177,6 +177,7 @@
     };
 
     function doCusUpload() {
+        doload(1);
         let $file = $("#file");
         if ($file[0].files.length === 0) {
             doRemLoad();
@@ -200,6 +201,9 @@
                 data: formData,
                 contentType: false,//由于提交的对象是FormData,所以要在这里更改上传参数的类型
                 processData: false,//提交对象是FormData,不需要对数据做任何处理
+                beforeSend: function () {
+                    doload(1);
+                },
                 success: function (data) {
                     doRemLoad();
                     $("#msgModalBody").html("文件 " + data.fileName + "已上传。<//br>" + data.msg);
@@ -372,16 +376,16 @@
                         "<td>" + result[data].sftpDir + "</td>" +
                         "<td>" + result[data].sftpHost + "</td>" +
                         "<td>" + result[data].sftpPort + "</td>" +
-                        "<td>" + result[data].cron + "</td>" +
+                        "<td>" + ((result[data].cron !== null) ? result[data].cron : '') + "</td>" +
                         "<td>" + ((result[data].sftpSql !== null) ? result[data].sftpSql : '') + "</td>" +
                         "<td><button type='button' style='margin-inline: 5px;' class='btn btn-success' onclick='doFill(&apos;" + JSON.stringify(result[data]) + "&apos;)'>测试</button>" +
                         "<button type='button' style='margin-inline: 5px;' class='btn btn-danger' onclick='doDel(&apos;" + JSON.stringify(result[data]) + "&apos;)'>删除</button></td></tr>");
                     count += 1;
                 }
                 if (count === 0) {
-                    table.html("<tr><td colspan='8'>未查询到数据</td></tr>");
+                    table.html("<tr><td colspan='9'>未查询到数据</td></tr>");
                 } else {
-                    table.append("<tr><td colspan='8'>总记录数为" + count + "条</td></tr>");
+                    table.append("<tr><td colspan='9'>总记录数为" + count + "条</td></tr>");
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {

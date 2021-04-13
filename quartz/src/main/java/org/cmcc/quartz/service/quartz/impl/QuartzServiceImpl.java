@@ -209,7 +209,7 @@ public class QuartzServiceImpl implements QuartzService, InitializingBean {
         try {
             QuartzTaskInformations quartzTaskInformation = quartzTaskInformationsService.getTaskByTaskNo(taskNo);
             if (null == quartzTaskInformation || ResultEnum.FROZEN.name().equals(quartzTaskInformation.getFrozenstatus())) {
-                logger.info("taskNo={} not exist or status is frozen!");
+                logger.info("taskNo={} not exist or status is frozen!",taskNo);
                 return null;
             }
             long currentTimeMillis = System.currentTimeMillis();
@@ -231,7 +231,7 @@ public class QuartzServiceImpl implements QuartzService, InitializingBean {
             quartzTaskRecordsService.addTaskRecords(quartzTaskRecords);
             logger.info("taskNo={},taskName={}添加执行记录表成功", quartzTaskInformation.getTaskno(), quartzTaskInformation.getTaskname());
         } catch (Exception ex) {
-            logger.error("添加执行记录表异常exceptio={}", ex);
+            logger.error("添加执行记录表异常exceptio={}", ex.getMessage());
             return null;
         }
         return quartzTaskRecords;
