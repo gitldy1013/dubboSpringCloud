@@ -23,9 +23,9 @@ else
     echo 'App is NOT running.'
     rm -f tpid
     if [ ! -n "$1" ] ;then
-        nohup java -Dfile.encoding=utf-8 -jar $RESOURCE_DIR/$RESOURCE_NAME --spring.config.location=application-pro.yml --spring.profiles.active=pro >$RESOURCE_DIR/logs/server.log 2>&1 &
+        nohup java -Dfastjson.parser.safeMode=true -Dfile.encoding=utf-8 -jar $RESOURCE_DIR/$RESOURCE_NAME --spring.config.location=application-pro.yml --spring.profiles.active=pro >$RESOURCE_DIR/logs/server.log 2>&1 &
     else
-        nohup java -Dfile.encoding=utf-8 -jar $RESOURCE_DIR/$RESOURCE_NAME --spring.config.location=application-pro.yml --spring.profiles.active=pro --dateTime=$1 >$RESOURCE_DIR/logs/server.log 2>&1 &
+        nohup java -Dfastjson.parser.safeMode=true -Dfile.encoding=utf-8 -jar $RESOURCE_DIR/$RESOURCE_NAME --spring.config.location=application-pro.yml --spring.profiles.active=pro --dateTime=$1 >$RESOURCE_DIR/logs/server.log 2>&1 &
     fi
     echo $! > tpid
     echo Start Success!
