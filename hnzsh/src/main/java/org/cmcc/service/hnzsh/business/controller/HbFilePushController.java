@@ -1,5 +1,7 @@
 package org.cmcc.service.hnzsh.business.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.cmcc.service.hnzsh.business.service.HbFilePushService;
 import org.cmcc.service.hnzsh.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +20,13 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("/hb")
+@Api(description = "和包券和包红包文件推送管理")
 @Slf4j
 public class HbFilePushController {
     @Autowired
     private HbFilePushService hbFilePushService;
 
+    @ApiOperation("和包券文件推送")
     @RequestMapping(value = "/hbqFile",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     public void hbqFilePush(String statDt){
@@ -35,6 +39,7 @@ public class HbFilePushController {
         hbFilePushService.HbqFilePush(statDt);
     }
 
+    @ApiOperation("和包红包文件推送")
     @RequestMapping(value = "/hbhbFile",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     public void hbhbFilePush(String statDt){

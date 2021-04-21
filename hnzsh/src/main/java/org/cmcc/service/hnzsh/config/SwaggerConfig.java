@@ -23,7 +23,8 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .select()
                 //扫描生成文档的包路径
-                .apis(RequestHandlerSelectors.basePackage("com.iwhalecloud.xjrh"))
+                //.apis(RequestHandlerSelectors.basePackage("com.iwhalecloud.xjrh"))
+                .apis(RequestHandlerSelectors.basePackage("org.cmcc.service"))
                 //.paths(PathSelectors.ant("/*Api/*"))//生成文档的类访问路径，就是controller类里@RequestMapping("orderApi")
                 .paths(PathSelectors.any())
                 .build();
