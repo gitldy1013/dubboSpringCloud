@@ -41,7 +41,7 @@ dubbo:
       port: -1
     rest:
       name: rest
-      port: 8082
+      port: -1
       server: netty
   registry:
     address: spring-cloud://127.0.0.1:8848
