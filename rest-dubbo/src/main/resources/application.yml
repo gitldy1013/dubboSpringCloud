@@ -27,7 +27,7 @@ spring:
     nacos:
       server-addr: localhost:8848
       username: nacos
-      password: nacos
+      password: ${NACOS_PWD}
   jpa:
     hibernate:
       ddl-auto: update

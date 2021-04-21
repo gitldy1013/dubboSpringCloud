@@ -10,7 +10,7 @@ spring:
     nacos:
       server-addr: localhost:8848
       username: nacos
-      password: nacos
+      password: ${NACOS_PWD}
   servlet:
     multipart:
       max-file-size: 100MB

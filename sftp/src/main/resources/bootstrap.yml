@@ -9,7 +9,7 @@ spring:
     nacos:
       server-addr: 127.0.0.1:8848
       username: nacos
-      password: nacos
+      password: ${NACOS_PWD}
       config:
         namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
         refresh-enabled: true
@@ -20,13 +20,13 @@ spring:
         max-retry: 10
         server-addr: 127.0.0.1:8848
         username: nacos
-        password: nacos
+        password: ${NACOS_PWD}
         file-extension: yaml
         name: "ETLMonitor-pro"
       discovery:
         server-addr: 127.0.0.1:8848
         username: nacos
-        password: nacos
+        password: ${NACOS_PWD}
         group: sftp
         namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
 
