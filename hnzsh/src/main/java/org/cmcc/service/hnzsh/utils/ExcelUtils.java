@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.springframework.util.ReflectionUtils;
 
 import java.beans.PropertyDescriptor;
 import java.io.File;
@@ -140,7 +141,7 @@ public class ExcelUtils {
                     fieldInfo = fieldInfos.get(j);
                     Field field = c.getDeclaredField(fieldInfo.getFieldName());
                     // 开启私有字段的权限
-                    field.setAccessible(true);
+                    ReflectionUtils.makeAccessible(field);
                     if (fieldInfo.enumClass != null
                             && fieldInfo.enumClass.isEnum()
                             && fieldInfo.enumField.length() > 0
@@ -242,7 +243,7 @@ public class ExcelUtils {
                     fieldInfo = fieldInfos.get(j);
                     Field field = c.getDeclaredField(fieldInfo.getFieldName());
                     // 开启私有字段的权限
-                    field.setAccessible(true);
+                    ReflectionUtils.makeAccessible(field);
                     if (fieldInfo.enumClass != null
                             && fieldInfo.enumClass.isEnum()
                             && fieldInfo.enumField.length() > 0
@@ -280,9 +281,9 @@ public class ExcelUtils {
         Enum[] inter = (Enum[]) method.invoke(null);
         for (Enum cl : inter) {
             Field f1 = cl.getClass().getDeclaredField(enumField);
-            f1.setAccessible(true);
+            ReflectionUtils.makeAccessible(f1);
             Field f2 = cl.getClass().getDeclaredField(enumShowField);
-            f2.setAccessible(true);
+            ReflectionUtils.makeAccessible(f2);
             // 如果field的值等于枚举中的值，返回需要显示的值
             if (f1.get(cl).equals(field.get(item))) {
                 return f2.get(cl);

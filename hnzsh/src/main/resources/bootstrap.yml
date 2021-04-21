@@ -11,7 +11,7 @@ spring:
     nacos:
       server-addr: 127.0.0.1:8848
       username: nacos
-      password: nacos
+      password: ${NACOS_PWD}
       config:
         namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
         refresh-enabled: true
@@ -22,13 +22,13 @@ spring:
         max-retry: 10
         server-addr: 127.0.0.1:8848
         username: nacos
-        password: nacos
+        password: ${NACOS_PWD}
         file-extension: yaml
         name: "hnzsh"
       discovery:
         server-addr: 127.0.0.1:8848
         username: nacos
-        password: nacos
+        password: ${NACOS_PWD}
         group: hnzsh
         namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
 
@@ -48,7 +48,7 @@ dubbo:
     group: hnzsh
   consumer:
     timeout: 10000
-    check: off
+    check: false
     retries: 0
   cloud:
     subscribed-services: "*"

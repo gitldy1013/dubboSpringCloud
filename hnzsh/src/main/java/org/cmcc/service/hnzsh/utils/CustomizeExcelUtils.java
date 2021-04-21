@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
+import org.springframework.util.ReflectionUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,12 +32,13 @@ public class CustomizeExcelUtils {
     * */
     public static void exportExcel(String templateFilePath, String targetFilePath, List list, Class c, String[] fieldArr,String statDt) {
         FileOutputStream out = null;
+        FileInputStream in = null;
         try {
             // 模板路径 如 D:\home\app\模板.xlsx
             File file = new File(templateFilePath);
             if (file.exists()) {
 
-                FileInputStream in = new FileInputStream(file);
+                in = new FileInputStream(file);
                 //读取excel模板
                 XSSFWorkbook wb = new XSSFWorkbook(in);
 
@@ -92,7 +94,7 @@ public class CustomizeExcelUtils {
                         for (int j = 0; j < fieldArr.length; j++) {
                             Field field = c.getDeclaredField(fieldArr[j]);
                             // 开启私有字段的权限
-                            field.setAccessible(true);
+                            ReflectionUtils.makeAccessible(field);
                             XSSFCell cell = row.createCell(j);
                             String s = field.getType().getName();
                             if ("java.math.BigDecimal".equals(s)) {
@@ -184,45 +186,18 @@ public class CustomizeExcelUtils {
                     log.error(e.toString());
                 }
             }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    log.error(e.toString());
+                }
+            }
         }
 
 
     }
 
 
-    public static void main(String[] args) {
-        User user = new User();
-        user.setCity("山东");
-        user.setStatisticDate(new Date());
-        user.setPayDate(new Date());
-        user.setPay(new BigDecimal("12.42"));
-        user.setAdjPay(new BigDecimal("16.75"));
-        user.setInf("备注啊啊啊！");
-        ArrayList<User> list = new ArrayList();
-        list.add(user);
 
-        User user1 = new User();
-        user1.setCity("上海");
-        user1.setStatisticDate(new Date());
-        user1.setPayDate(new Date());
-        user1.setPay(new BigDecimal("30.05"));
-        user1.setAdjPay(new BigDecimal("13.70"));
-        user1.setInf("上海热！");
-        list.add(user1);
-        User user3 = new User();
-        user3.setCity("上海");
-        user3.setStatisticDate(new Date());
-        user3.setPayDate(new Date());
-        user3.setPay(new BigDecimal("30.05"));
-        user3.setAdjPay(new BigDecimal("13.70"));
-        user3.setInf("上海热！");
-        list.add(user3);
-        for (User user2:list){
-            user2.setSum(user2.getPay().add(user2.getAdjPay()));
-        }
-        String[] arr = {"city", "statisticDate", "payDate", "pay", "adjPay", "sum", "inf"};
-        String templateFilePath = "E:\\XQ2021000012-和包券委托付款结算单数据出库需求分析设计说明书.xlsx";
-        String targetFilePath = "E:\\" + "送货单" + ".xlsx";
-        exportExcel(templateFilePath,targetFilePath,list, User.class, arr,"20200305");
-    }
 }

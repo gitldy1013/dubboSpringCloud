@@ -78,9 +78,9 @@ public class HbFilePushServiceImpl implements HbFilePushService {
 
         boolean isRemoteDir = SFTPUtils.operatesftp(remoteUsername, remoteHost, remotePort, remotePassword, null, remoteFileDir, null, null, null, SFTPUtils.OPERATE_MKDIR);
             if (isRemoteDir){
-                log.info("创建78服务器目录成功");
+                log.info("创建远程服务器目录成功");
             }else {
-                log.info("78服务器目录已经存在！！");
+                log.info("远程服务器目录已经存在！！");
             }
             boolean remoteFileSuccess = SFTPUtils.operatesftp(remoteUsername, remoteHost, remotePort, remotePassword, null, remoteFileDir, fileName, hbSftpConfig.getHbqTargetFilePath(), fileName, SFTPUtils.OPERATE_UPLOAD);
             if (fileSuccess&&remoteFileSuccess){
@@ -134,9 +134,9 @@ public class HbFilePushServiceImpl implements HbFilePushService {
 
             boolean isRemoteDir = SFTPUtils.operatesftp(remoteUsername, remoteHost, remotePort, remotePassword, null, remoteFilePath, null, null, null, SFTPUtils.OPERATE_MKDIR);
             if (isRemoteDir){
-                log.info("创建78服务器目录成功");
+                log.info("创建远程服务器目录成功");
             }else {
-                log.info("78服务器目录已经存在！！");
+                log.info("远程服务器目录已经存在！！");
             }
             boolean remoteFileSuccess = SFTPUtils.operatesftp(remoteUsername, remoteHost, remotePort, remotePassword, null, remoteFilePath, fileName, hbSftpConfig.getHbhbTargetFilePath(), fileName, SFTPUtils.OPERATE_UPLOAD);
             if (fileSuccess&&remoteFileSuccess){
@@ -158,15 +158,5 @@ public class HbFilePushServiceImpl implements HbFilePushService {
             }
     }
 
-    public static void main(String[] args) {
-        HbqDto hbqDto = new HbqDto();
-        //hbqDto.setPaymentDt("20200101");
-        try {
-            Field paymentDt = HbqDto.class.getDeclaredField("paymentDt");
-            paymentDt.setAccessible(true);
-            System.out.println(paymentDt.get(hbqDto));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 }
