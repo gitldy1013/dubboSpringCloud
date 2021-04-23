@@ -64,6 +64,7 @@
         <module>sftp</module>
         <module>static-res</module>
         <module>sc-gateway</module>
+        <module>crypto</module>
     </modules>
 
     <repositories>

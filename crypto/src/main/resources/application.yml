@@ -1,0 +1,5 @@
+server:
+  port: 8820
+crypto:
+  hmj:
+    secretKey: 45fac8b21c810d7e679d306a71cf1876

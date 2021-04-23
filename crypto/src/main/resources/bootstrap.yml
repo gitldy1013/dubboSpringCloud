@@ -1,0 +1,56 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: crypto-service
+  profiles:
+    active: pro
+#  main:
+#    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: ${NACOS_PWD}
+      config:
+        namespace: 565c05bb-867d-4a87-b2be-daa20b24b974
+        refresh-enabled: true
+        config-long-poll-timeout: 46000
+        config-retry-time: 2333
+        enable-remote-sync-config: true
+        group: DEFAULT_GROUP
+        max-retry: 10
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: ${NACOS_PWD}
+        file-extension: yaml
+        name: "crypto"
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: ${NACOS_PWD}
+        group: crypto
+        namespace: 565c05bb-867d-4a87-b2be-daa20b24b974
+
+dubbo:
+  scan:
+    base-packages: org.cmcc.service
+  protocols:
+    dubbo:
+      name: dubbo
+      port: -1
+    rest:
+      name: rest
+      port: -1
+      server: netty
+  registry:
+    address: spring-cloud://127.0.0.1:8848
+    group: crypto
+  consumer:
+    timeout: 10000
+    check: false
+    retries: 0
+  cloud:
+    subscribed-services: "*"
+  config-center:
+    namespace: 565c05bb-867d-4a87-b2be-daa20b24b974

@@ -34,6 +34,12 @@ public class Result<T> {
         this.data = data;
     }
 
+    public Result( T data) {
+        this.code = 200;
+        this.message = "success";
+        this.data = data;
+    }
+
     public Integer getCode() {
         return code;
     }

@@ -24,7 +24,10 @@ public enum ResultEnum {
     KAFKA(10005, "kafka"),
     SFTP(10006, "sftp"),
     SFTP_TEMP(10007, "sftp_temp"),
-    NO_DATA(1003, "无此定时任务编号");
+    NO_DATA(1003, "无此定时任务编号"),
+    PARAM_VALID_FALSE(11000, "参数校验失败"),
+    DECRYPT_TYPE_FALSE(11001, "解密类型不存在"),
+    ENCRYPT_TYPE_FALSE(11002, "加密类型不存在");
 
 
     private Integer code;
