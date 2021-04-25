@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
      * */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public Result handlerException(MethodArgumentNotValidException e){
+    public Result<ArrayList<InvalidArgumentInfo>> handlerException(MethodArgumentNotValidException e){
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         ArrayList<InvalidArgumentInfo> invalidArgList = new ArrayList<>();
         for (FieldError error:fieldErrors){
@@ -39,16 +39,16 @@ public class GlobalExceptionHandler {
             invalidArgList.add(invalidArgumentInfo);
         }
         log.error("参数校验全局异常错误信息:"+e.getMessage());
-        return new Result(ResultEnum.PARAM_VALID_FALSE.getCode(),
+        return new Result<ArrayList<InvalidArgumentInfo>>(ResultEnum.PARAM_VALID_FALSE.getCode(),
                 ResultEnum.PARAM_VALID_FALSE.getMessage(),invalidArgList);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public Result handlerException(Exception e){
+    public Result<Object> handlerException(Exception e){
         log.error("错误信息:"+e.getMessage());
 //        这里应该返回错误码和错误描述。
-        return new Result(ResultEnum.FAIL.getCode(),ResultEnum.FAIL.getMessage());
+        return new Result<Object>(ResultEnum.FAIL.getCode(),ResultEnum.FAIL.getMessage());
     }
 
 }

@@ -33,7 +33,7 @@ public class CryptoController {
 
     @ApiOperation("解密方法")
     @PostMapping(value = "decrypt")
-    public Result decrypt(@Validated @RequestBody CryptoInfo cryptoInfo) {
+    public Result<String> decrypt(@Validated @RequestBody CryptoInfo cryptoInfo) {
         String decryptData ="";
         String cryptoType = cryptoInfo.getCryptoType();
         switch (cryptoType){
@@ -41,16 +41,16 @@ public class CryptoController {
                 log.debug("执行了"+CryptoTypeEnum.getCryptoTypeEnum(cryptoType));
                 decryptData = CryptoUtils.decrypt(secretKey, cryptoInfo.getMessage());
                 break;
-             default:return new Result(ResultEnum.DECRYPT_TYPE_FALSE.getCode(),ResultEnum.DECRYPT_TYPE_FALSE.getMessage());
+             default:return new Result<String>(ResultEnum.DECRYPT_TYPE_FALSE.getCode(),ResultEnum.DECRYPT_TYPE_FALSE.getMessage());
         }
 
 
-        return new Result(decryptData);
+        return new Result<String>(decryptData);
     }
 
     @ApiOperation("加密方法")
     @PostMapping(value = "encrypt")
-    public Result encrypt(@Validated @RequestBody CryptoInfo cryptoInfo) {
+    public Result<String> encrypt(@Validated @RequestBody CryptoInfo cryptoInfo) {
         String encryptData ="";
         String cryptoType = cryptoInfo.getCryptoType();
         switch (cryptoType){
@@ -58,11 +58,11 @@ public class CryptoController {
                 log.debug("执行了"+CryptoTypeEnum.getCryptoTypeEnum(cryptoType));
                 encryptData = CryptoUtils.encrypt(secretKey, cryptoInfo.getMessage());
                 break;
-            default:return new Result(ResultEnum.ENCRYPT_TYPE_FALSE.getCode(),ResultEnum.ENCRYPT_TYPE_FALSE.getMessage());
+            default:return new Result<String>(ResultEnum.ENCRYPT_TYPE_FALSE.getCode(),ResultEnum.ENCRYPT_TYPE_FALSE.getMessage());
         }
 
 
-        return new Result(encryptData);
+        return new Result<String>(encryptData);
     }
 
     public static void main(String[] args) {
