@@ -13,7 +13,10 @@ spring:
       username: nacos
       password: ${NACOS_PWD}
       config:
-        namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
+#        测试环境
+#        namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
+#        生产环境
+        namespace: 6092dcca-58fc-423b-89f1-0cc4b5f07525
         refresh-enabled: true
         config-long-poll-timeout: 46000
         config-retry-time: 2333
@@ -24,13 +27,16 @@ spring:
         username: nacos
         password: ${NACOS_PWD}
         file-extension: yaml
-        name: "hnzsh"
+        name: "hnzsh-pro"
       discovery:
         server-addr: 127.0.0.1:8848
         username: nacos
         password: ${NACOS_PWD}
         group: hnzsh
-        namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
+#        测试环境
+#        namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
+#        生产环境
+        namespace: 6092dcca-58fc-423b-89f1-0cc4b5f07525
 
 dubbo:
   scan:
@@ -53,4 +59,7 @@ dubbo:
   cloud:
     subscribed-services: "*"
   config-center:
-    namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
+#        测试环境
+#      namespace: f26a793b-6cc6-4142-b242-d774ec0b0916
+#        生产环境
+      namespace: 6092dcca-58fc-423b-89f1-0cc4b5f07525

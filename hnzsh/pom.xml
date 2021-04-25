@@ -9,7 +9,7 @@
     </parent>
     <groupId>org.cmcc.hnzsh</groupId>
     <artifactId>hnzsh</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>hnzsh</name>
     <description>Hnzsh</description>
 
@@ -280,7 +280,7 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
     </build>
 
     <repositories>
