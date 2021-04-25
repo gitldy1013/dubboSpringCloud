@@ -17,6 +17,21 @@
 | Spring Cloud        |Hoxton.SR8|
 | Spring Cloud Alibaba|2.2.5.RELEASE|
 
+## 服务模块介绍
+
+|模块/目录名称|模块功能描述|
+|---|---|
+|docs|文档资料及数据库脚本|
+|crypto|号码借加解密服务模块|
+|dubbo-api|服务通用工具类及接口层抽取模块|
+|hnzsh|湖南中石化定制化文件数据接口服务模块|
+|sftp|sftp扫描文件服务模块|
+|quartz|异步定时任务服务模块|
+|rest-dubbo|dubbo服务统一功能模块|
+|sc-gateway|统一对外出口网关服务模块|
+|web-dubbo|视图层业务处理服务模块|
+|static-res|视图层静态资源服务模块|
+
 ## 微服务综合能力平台具体服务介绍
 
 ### 通用表格数据导出服务
