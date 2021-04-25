@@ -62,15 +62,15 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
                 <configuration>
-                    <excludes>
-                        <exclude>
-                            <dependency>
-                                <groupId>org.springframework.boot</groupId>
-                                <artifactId>spring-boot-configuration-processor</artifactId>
-                            </dependency>
-                        </exclude>
-                    </excludes>
+                    <mainClass>org.cmcc.WebDubboApp</mainClass>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <finalName>${project.artifactId}</finalName>
