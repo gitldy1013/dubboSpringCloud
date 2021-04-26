@@ -128,7 +128,7 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>ETLMonitor-1.0</finalName>
     </build>
 
     <repositories>
