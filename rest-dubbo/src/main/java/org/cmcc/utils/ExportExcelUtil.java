@@ -155,8 +155,10 @@ public class ExportExcelUtil {
             log.error("io异常", e);
         } finally {
             try {
-                out.flush();
-                out.close();
+                if(out!=null){
+                    out.flush();
+                    out.close();
+                }
             } catch (IOException e) {
                 log.error(e.getMessage());
             }
