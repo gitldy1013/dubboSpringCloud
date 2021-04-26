@@ -12,7 +12,10 @@ spring:
       username: nacos
       password: ${NACOS_PWD}
       config:
-        namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+        #测试环境
+        #namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+        #生产环境
+        namespace: 88d74fba-4272-46d1-9560-5dc64a2430b6
         refresh-enabled: true
         config-long-poll-timeout: 46000
         config-retry-time: 2333
@@ -31,7 +34,10 @@ spring:
         username: nacos
         password: ${NACOS_PWD}
         group: sftp
-        namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+        #测试环境
+        #namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+        #生产环境
+        namespace: 88d74fba-4272-46d1-9560-5dc64a2430b6
 
 dubbo:
   scan:
@@ -55,4 +61,7 @@ dubbo:
   cloud:
     subscribed-services: "*"
   config-center:
-    namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+    #测试环境
+    #namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+    #生产环境
+    namespace: 88d74fba-4272-46d1-9560-5dc64a2430b6
