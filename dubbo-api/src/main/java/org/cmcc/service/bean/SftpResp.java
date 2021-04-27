@@ -3,11 +3,12 @@ package org.cmcc.service.bean;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @ToString
-public class SftpResp {
+public class SftpResp implements Serializable {
     //请求的流水号，与请求报文内一致
     private String reqSeq;
     //发送时间

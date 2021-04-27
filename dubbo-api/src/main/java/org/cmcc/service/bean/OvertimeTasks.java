@@ -3,6 +3,7 @@ package org.cmcc.service.bean;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  */
 @Data
 @ToString
-public class OvertimeTasks {
+public class OvertimeTasks implements Serializable {
     private int id;
     //'调度任务名称'
     private String taskName;

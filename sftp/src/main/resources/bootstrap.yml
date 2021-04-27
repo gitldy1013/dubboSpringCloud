@@ -7,37 +7,37 @@ spring:
     allow-bean-definition-overriding: true
   cloud:
     nacos:
-#      server-addr: 127.0.0.1:8848
-      server-addr: 55.144.26.35:8848
+      server-addr: 127.0.0.1:8848
+#      server-addr: 55.144.26.35:8848
       username: nacos
       password: ${NACOS_PWD}
       config:
         #测试环境
-        #namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+        namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
         #生产环境
-        namespace: 88d74fba-4272-46d1-9560-5dc64a2430b6
+#        namespace: 88d74fba-4272-46d1-9560-5dc64a2430b6
         refresh-enabled: true
         config-long-poll-timeout: 46000
         config-retry-time: 2333
         enable-remote-sync-config: true
         group: DEFAULT_GROUP
         max-retry: 10
-#        server-addr: 127.0.0.1:8848
-        server-addr: 55.144.26.35:8848
+        server-addr: 127.0.0.1:8848
+#        server-addr: 55.144.26.35:8848
         username: nacos
         password: ${NACOS_PWD}
         file-extension: yaml
         name: "ETLMonitor-pro"
       discovery:
-#        server-addr: 127.0.0.1:8848
-        server-addr: 55.144.26.35:8848
+        server-addr: 127.0.0.1:8848
+#        server-addr: 55.144.26.35:8848
         username: nacos
         password: ${NACOS_PWD}
         group: sftp
         #测试环境
-        #namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
+        namespace: 514eef5f-511c-42fa-9fdf-1b336d39c38d
         #生产环境
-        namespace: 88d74fba-4272-46d1-9560-5dc64a2430b6
+#        namespace: 88d74fba-4272-46d1-9560-5dc64a2430b6
 
 dubbo:
   scan:
