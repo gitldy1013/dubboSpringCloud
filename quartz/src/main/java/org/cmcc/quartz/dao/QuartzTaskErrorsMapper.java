@@ -8,8 +8,6 @@ import org.cmcc.service.bean.QuartzTaskErrors;
 public interface QuartzTaskErrorsMapper {
     int deleteByPrimaryKey(Long id);
 
-    int deleteByTaskNo(String taskNo);
-
     int insert(QuartzTaskErrors record);
 
     int insertSelective(QuartzTaskErrors record);

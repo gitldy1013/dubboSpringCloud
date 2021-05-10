@@ -37,7 +37,7 @@ mybatis:
     default-fetch-size: 100
     default-statement-timeout: 3000
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:mapper/*.xml,classpath:mapping/**/*.xml
 
 dubbo:
   scan:
@@ -56,4 +56,12 @@ dubbo:
     subscribed-services: "cmcc-rest-dubbo"
 server:
   port: 8083
+
+actable:
+  database:
+    type: mysql
+  model:
+    pack: org.cmcc.quartz.model
+  table:
+    auto: update
 

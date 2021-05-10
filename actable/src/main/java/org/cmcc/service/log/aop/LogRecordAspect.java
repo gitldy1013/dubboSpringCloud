@@ -21,13 +21,13 @@ import java.util.Date;
 public class LogRecordAspect {
 
     // 定义切点Pointcut
-    @Pointcut("execution(* org.cmcc.service.*.controller..*.*(..))")
+    @Pointcut("(execution(* org.cmcc..*.dao..*.*(..)) || execution(* org.cmcc..*.mapper..*.*(..))) && !execution(* org.cmcc.service.log.dao..*.*(..)))")
     public void excudeService() {
     }
 
     @Around("excudeService()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-        BaseCRUDManagerImpl crudManager = SpringBeanUtil.getBean("baseCRUDManagerImpl",BaseCRUDManagerImpl.class);
+        BaseCRUDManagerImpl crudManager = SpringBeanUtil.getBean("baseCRUDManagerImpl", BaseCRUDManagerImpl.class);
         // result的值就是被拦截方法的返回值
         Object result = pjp.proceed();
         Object[] args = pjp.getArgs();
@@ -37,7 +37,7 @@ public class LogRecordAspect {
         pcacOptLog.setCreatedTime(new Date());
         pcacOptLog.setUpdatedTime(new Date());
         pcacOptLog.setUpdatedBy("cmcc");
-        pcacOptLog.setOptContent("请求参数："+ argsStr + "；响应结果：" +result.toString());
+        pcacOptLog.setOptContent("请求参数：" + argsStr + "；响应结果：" + result.toString());
         crudManager.insert(pcacOptLog);
         log.info("请求结束，controller的返回值是 " + result);
         return result;
