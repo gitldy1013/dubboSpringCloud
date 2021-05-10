@@ -57,6 +57,7 @@
 
     <modules>
         <module>dubbo-api</module>
+        <module>actable</module>
         <module>rest-dubbo</module>
         <module>web-dubbo</module>
         <module>quartz</module>
