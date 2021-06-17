@@ -26,7 +26,7 @@ public enum CryptoTypeEnum {
             return "";
         }
         for (CryptoTypeEnum cryptoTypeEnum : CryptoTypeEnum.values()) {
-            if (cryptoTypeEnum.getCode()==code) {
+            if (cryptoTypeEnum.getCode().equals(code)) {
                 return cryptoTypeEnum.getCryptoType();
             }
         }
