@@ -66,6 +66,7 @@
         <module>static-res</module>
         <module>sc-gateway</module>
         <module>crypto</module>
+        <module>es</module>
     </modules>
 
     <repositories>
