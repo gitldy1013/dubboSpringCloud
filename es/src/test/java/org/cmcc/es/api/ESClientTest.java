@@ -12,6 +12,8 @@ import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -25,6 +27,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
+import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -266,5 +269,245 @@ public class ESClientTest {
              */
         }
     }
+
+    /**
+     * match_all查询
+     */
+    @Test
+    public void matchAllQuery() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        //ES默认查询十条 如果想查询多条需要设置size
+        searchSourceBuilder.size(20);
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            7
+            f9qNN3oBwiPJbe8gOw0r:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            gdqNN3oBwiPJbe8gQw0t:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            ftqNN3oBwiPJbe8gGw2O:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            gtqNN3oBwiPJbe8gRw1M:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            g9qNN3oBwiPJbe8gSg3s:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            1:{descr=刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+            gNqNN3oBwiPJbe8gPw0j:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+             */
+        }
+    }
+
+    /**
+     * match查询
+     */
+    @Test
+    public void matchQuery() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery("descr", "九九八十一"));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            6
+            gtqNN3oBwiPJbe8gRw1M:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            g9qNN3oBwiPJbe8gSg3s:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            ftqNN3oBwiPJbe8gGw2O:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            gNqNN3oBwiPJbe8gPw0j:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            f9qNN3oBwiPJbe8gOw0r:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            gdqNN3oBwiPJbe8gQw0t:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+             */
+        }
+    }
+
+    /**
+     * 布尔match查询
+     */
+    @Test
+    public void booleanMatchQuery() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        //searchSourceBuilder.query(QueryBuilders.matchQuery("descr","刘姥姥 四大名著").operator(Operator.AND));
+        searchSourceBuilder.query(QueryBuilders.matchQuery("descr", "刘姥姥 四大名著").operator(Operator.OR));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            2
+            1:{descr=四大名著刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+            2:{descr=刘姥姥进大观园。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+             */
+        }
+    }
+
+    /**
+     * multi_match查询
+     */
+    @Test
+    public void multiMatchQuery() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.multiMatchQuery("四大名著 红楼梦", "descr", "name"));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            2
+            1:{descr=四大名著刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+            2:{descr=刘姥姥进大观园。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+             */
+        }
+    }
+
+    /**
+     * 其他查询：id的查询
+     */
+    @Test
+    public void queryById() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        GetRequest getRequest = new GetRequest(index, type, "1");
+        //2.执行查询
+        GetResponse getResponse = client.get(getRequest, RequestOptions.DEFAULT);
+        //3.输出结果
+        System.out.println(getResponse.getSourceAsMap());
+        /*
+        {descr=四大名著刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+         */
+    }
+
+    /**
+     * 其他查询：ids的查询
+     */
+    @Test
+    public void queryByIds() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.idsQuery().addIds("1", "2"));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            2
+            2:{descr=刘姥姥进大观园。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+            1:{descr=四大名著刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+            */
+        }
+    }
+
+    /**
+     * 其他查询：prefix查询
+     */
+    @Test
+    public void queryByPrefix() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.prefixQuery("descr","大名"));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            1
+            1:{descr=四大名著刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+            */
+        }
+    }
+
+    /**
+     * 其他查询：fuzzy查询
+     */
+    @Test
+    public void queryByFuzzy() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.fuzzyQuery("descr","lao").prefixLength(2));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            1
+            4:{descr=liu lao lao。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+            */
+        }
+    }
+
+
     // ==============================end 复杂查询==================================//
 }
