@@ -214,17 +214,57 @@ public class ESClientTest {
         //2.指定查询条件
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(0);
-        searchSourceBuilder.from(5);
+        searchSourceBuilder.size(5);
         searchSourceBuilder.query(QueryBuilders.termQuery("name", "西游记"));
+        searchRequest.source(searchSourceBuilder);
         //3.执行查询
         SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
         //4.输出结果
         SearchHit[] hits = search.getHits().getHits();
         for (SearchHit hit : hits) {
-            System.out.println(hit.getSourceAsMap());
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            ftqNN3oBwiPJbe8gGw2O:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            gNqNN3oBwiPJbe8gPw0j:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            f9qNN3oBwiPJbe8gOw0r:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            gdqNN3oBwiPJbe8gQw0t:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            gtqNN3oBwiPJbe8gRw1M:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+             */
         }
     }
 
-
+    /**
+     * terms查询
+     */
+    @Test
+    public void termsQuery() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.termsQuery("name", "西游记", "红楼梦"));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            f9qNN3oBwiPJbe8gOw0r:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            gdqNN3oBwiPJbe8gQw0t:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            ftqNN3oBwiPJbe8gGw2O:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            gtqNN3oBwiPJbe8gRw1M:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            g9qNN3oBwiPJbe8gSg3s:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+            1:{descr=刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+            gNqNN3oBwiPJbe8gPw0j:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+             */
+        }
+    }
     // ==============================end 复杂查询==================================//
 }
