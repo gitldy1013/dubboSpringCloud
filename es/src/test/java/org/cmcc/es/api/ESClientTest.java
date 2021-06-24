@@ -14,6 +14,8 @@ import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
@@ -23,6 +25,9 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -193,4 +198,33 @@ public class ESClientTest {
         System.out.println(bulkResponse.toString());
     }
     // ==============================end 操作文档==================================//
+
+    // ==============================start 复杂查询==================================//
+
+    /**
+     * term查询
+     */
+    @Test
+    public void termQuery() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.from(0);
+        searchSourceBuilder.from(5);
+        searchSourceBuilder.query(QueryBuilders.termQuery("name", "西游记"));
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getSourceAsMap());
+        }
+    }
+
+
+    // ==============================end 复杂查询==================================//
 }
