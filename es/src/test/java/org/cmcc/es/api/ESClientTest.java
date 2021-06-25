@@ -2,6 +2,7 @@ package org.cmcc.es.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Arrays;
 import org.cmcc.es.EsApplication;
 import org.cmcc.es.bean.Person;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -16,14 +17,14 @@ import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.*;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
@@ -31,6 +32,7 @@ import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -403,7 +405,7 @@ public class ESClientTest {
     }
 
     /**
-     * 其他查询：id的查询
+     * id的查询
      */
     @Test
     public void queryById() throws IOException {
@@ -421,7 +423,7 @@ public class ESClientTest {
     }
 
     /**
-     * 其他查询：ids的查询
+     * ids的查询
      */
     @Test
     public void queryByIds() throws IOException {
@@ -451,7 +453,7 @@ public class ESClientTest {
     }
 
     /**
-     * 其他查询：prefix查询
+     * prefix查询
      */
     @Test
     public void queryByPrefix() throws IOException {
@@ -462,7 +464,7 @@ public class ESClientTest {
         searchRequest.types(type);
         //2.指定查询条件
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.prefixQuery("descr","大名"));
+        searchSourceBuilder.query(QueryBuilders.prefixQuery("descr", "大名"));
         searchRequest.source(searchSourceBuilder);
         //3.执行查询
         SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
@@ -480,7 +482,7 @@ public class ESClientTest {
     }
 
     /**
-     * 其他查询：fuzzy查询
+     * fuzzy查询
      */
     @Test
     public void queryByFuzzy() throws IOException {
@@ -491,7 +493,7 @@ public class ESClientTest {
         searchRequest.types(type);
         //2.指定查询条件
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.fuzzyQuery("descr","lao").prefixLength(2));
+        searchSourceBuilder.query(QueryBuilders.fuzzyQuery("descr", "lao").prefixLength(2));
         searchRequest.source(searchSourceBuilder);
         //3.执行查询
         SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
@@ -506,6 +508,172 @@ public class ESClientTest {
             4:{descr=liu lao lao。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
             */
         }
+    }
+
+    /**
+     * wildcard查询
+     */
+    @Test
+    public void queryByWildCard() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.wildcardQuery("descr", "*laolao"));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            1
+            3:{descr=liulaolao进大观园。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+            */
+        }
+    }
+
+    /**
+     * range查询
+     */
+    @Test
+    public void queryByRange() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.rangeQuery("count").gte(1000001).lte(1000002));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            1
+            1:{descr=四大名著刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+            */
+        }
+    }
+
+
+    /**
+     * Regexp查询
+     */
+    @Test
+    public void queryByRegexp() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.regexpQuery("descr", "123[0-9]{6}"));
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            1
+            5:{descr=123000000liu lao lao。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+            */
+        }
+    }
+
+
+    /**
+     * Scroll分页查询
+     */
+    @Test
+    public void queryByScroll() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定scroll信息
+        searchRequest.scroll(TimeValue.timeValueMillis(10L));
+        //3.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.size(6);
+        searchSourceBuilder.sort("count", SortOrder.DESC);
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+        searchRequest.source(searchSourceBuilder);
+        //4.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //5.得到scrollId 并输出首页结果
+        String scrollId = search.getScrollId();
+        System.out.println("========首页========");
+        SearchHit[] hits = search.getHits().getHits();
+        for (SearchHit hit : hits) {
+            System.out.println(hit.getId() + ":" + hit.getSourceAsMap());
+        }
+        int page = 1;
+        while (true) {
+            //6.循环 - 创建SearchScrollRequest
+            SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
+            //7.指定scrollId的生存时间
+            scrollRequest.scroll(TimeValue.timeValueMinutes(10L));
+            //8.执行查询获取返回结果
+            SearchResponse searchResponse = client.scroll(scrollRequest, RequestOptions.DEFAULT);
+            //9.判断结果 输出结果
+            SearchHit[] searchHits = searchResponse.getHits().getHits();
+            if (!Arrays.isNullOrEmpty(searchHits)) {
+                page += 1;
+                System.out.println("======第" + page + "页=======");
+                for (SearchHit searchHit : searchHits) {
+                    System.out.println(searchHit.getId() + ":" + searchHit.getSourceAsMap());
+                }
+            } else {
+                //10.数据结果已经为空终止循环
+                System.out.println("=======结束========");
+                break;
+            }
+        }
+        //11.创建ClearScrollRequest对象
+        ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
+        //12.指定scrollId
+        clearScrollRequest.addScrollId(scrollId);
+        //13.执行删除
+        ClearScrollResponse clearScrollResponse = client.clearScroll(clearScrollRequest, RequestOptions.DEFAULT);
+        //14.输出结果
+        System.out.println("删除scroll结果：" + clearScrollResponse.isSucceeded());
+        /*
+        ========首页========
+        5:{descr=123000000liu lao lao。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+        2:{descr=刘姥姥进大观园。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+        4:{descr=liu lao lao。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+        3:{descr=liulaolao进大观园。, author=曹雪芹, name=红楼梦, count=123456789, on-sale=2011-12-13}
+        1:{descr=四大名著刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+        f9qNN3oBwiPJbe8gOw0r:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+        ======第2页=======
+        gdqNN3oBwiPJbe8gQw0t:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+        ftqNN3oBwiPJbe8gGw2O:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+        KPwBPXoBpklwLylkcN6G:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+        gtqNN3oBwiPJbe8gRw1M:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+        g9qNN3oBwiPJbe8gSg3s:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+        gNqNN3oBwiPJbe8gPw0j:{descr=九九八十一难, author=吴承恩, name=西游记, count=1000000, on-sale=2000-01-10}
+        =======结束========
+        删除scroll结果：true
+         */
     }
 
 
