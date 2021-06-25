@@ -30,6 +30,8 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -674,6 +676,25 @@ public class ESClientTest {
         =======结束========
         删除scroll结果：true
          */
+    }
+
+    /**
+     * DeleteByQuery查询
+     */
+    @Test
+    public void deleteByQuery() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建DeleteByQueryRequest对象
+        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(index);
+        deleteByQueryRequest.types(type);
+        //2.指定查询条件
+        deleteByQueryRequest.setQuery(QueryBuilders.rangeQuery("count").gte(1000001));
+        //3.执行查询
+        BulkByScrollResponse bulkByScrollResponse = client.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        System.out.println(bulkByScrollResponse.toString());
+        //BulkByScrollResponse[took=27ms,timed_out=false,sliceId=null,updated=0,created=0,deleted=3,batches=1,versionConflicts=0,noops=0,retries=0,throttledUntil=0s,bulk_failures=[],search_failures=[]]
     }
 
 
