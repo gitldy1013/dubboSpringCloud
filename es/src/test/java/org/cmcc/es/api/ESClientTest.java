@@ -28,6 +28,7 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
@@ -698,5 +699,38 @@ public class ESClientTest {
     }
 
 
+    /**
+     * Bool查询
+     */
+    @Test
+    public void boolQuery() throws IOException {
+        index = "book";
+        type = "novel";
+        //1.创建Request对象
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        //2.指定查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        boolQueryBuilder.should(QueryBuilders.termQuery("term", "九九八十一难"))
+                .should(QueryBuilders.termQuery("author", "吴承恩"))
+                .mustNot(QueryBuilders.matchQuery("descr", "liu"))
+                .must(QueryBuilders.rangeQuery("count").gte(1000001).lte(123456789));
+        searchSourceBuilder.query(boolQueryBuilder);
+        searchRequest.source(searchSourceBuilder);
+        //3.执行查询
+        SearchResponse search = client.search(searchRequest, RequestOptions.DEFAULT);
+        //4.输出结果
+        SearchHit[] hits = search.getHits().getHits();
+        System.out.println(hits.length);
+        for (SearchHit hit : hits) {
+            String id = hit.getId();
+            System.out.println(id + ":" + hit.getSourceAsMap());
+            /*
+            1
+            1:{descr=四大名著刘姥姥进大观园, author=施耐庵, name=红楼梦, count=1000001, on-sale=2001-01-10}
+            */
+        }
+    }
     // ==============================end 复杂查询==================================//
 }
